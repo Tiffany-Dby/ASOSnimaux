@@ -1,0 +1,28 @@
+@use "../../styles/mixins" as mxn;
+
+.articles {
+  .content-wrapper {
+    @include mxn.flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .articles-wrapper {
+    @include mxn.flex;
+    flex: auto;
+    gap: 2rem;
+  }
+
+  &>div:has(.btn) {
+    padding-bottom: var(--padding-xs);
+  }
+
+  .btn-wrapper {
+    @include mxn.btnStylish;
+  }
+
+  &:has(.article:hover) .article:not(:hover) img {
+    filter: grayscale(100%) brightness(80%);
+    // opacity: 0.80;
+  }
+}

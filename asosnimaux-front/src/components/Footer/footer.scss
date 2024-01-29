@@ -1,0 +1,48 @@
+@use "../../styles/mixins" as mxn;
+
+.footer {
+  background-color: var(--dark-brown);
+  box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.25);
+  padding: var(--padding-s);
+  color: white;
+
+  &__img>a {
+    display: flex;
+    justify-content: center;
+
+    img {
+      min-width: 180px;
+      max-width: 250px;
+    }
+  }
+
+  div:has(.footer__links) {
+    @include mxn.container;
+  }
+
+  &__links {
+    padding-top: var(--padding-l);
+
+    li {
+      padding-top: var(--padding-xs);
+    }
+
+    a {
+      color: var(--white);
+      transition: color .5s ease;
+
+      &:hover {
+        color: var(--accent);
+      }
+    }
+
+    .social-media-list {
+      min-width: 180px;
+      max-width: 250px;
+
+      img {
+        filter: brightness(0) saturate(100%) invert(69%) sepia(58%) saturate(427%) hue-rotate(327deg) brightness(101%) contrast(98%);
+      }
+    }
+  }
+}

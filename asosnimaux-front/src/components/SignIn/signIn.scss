@@ -1,0 +1,30 @@
+@use "../../styles/mixins" as mxn;
+
+.signIn-wrapper {
+  @include mxn.container;
+
+  form {
+    @include mxn.container("400px");
+    @include mxn.flex;
+    justify-content: center;
+    gap: 2.25rem;
+  }
+
+  .btn-wrapper {
+    @include mxn.btnStylish;
+  }
+
+  .redirect {
+    margin-top: 2rem;
+    text-align: center;
+
+    a {
+      color: var(--dark-brown);
+      transition: color .3s ease;
+
+      &:hover {
+        color: var(--accent);
+      }
+    }
+  }
+}

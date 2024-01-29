@@ -1,0 +1,27 @@
+@use "../../styles/mixins" as mxn;
+
+.schedules {
+  table {
+    margin: 0 auto;
+    border-collapse: collapse;
+
+    th {
+      width: 50%;
+      text-align: left;
+
+      &:nth-child(2) {
+        text-align: right;
+      }
+    }
+
+    td {
+      border-bottom: solid .1rem var(--accent);
+      padding-top: var(--padding-xs);
+
+      &:nth-child(even) {
+        text-align: right;
+        padding-left: var(--padding-l);
+      }
+    }
+  }
+}

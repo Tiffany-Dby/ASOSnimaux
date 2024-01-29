@@ -1,0 +1,64 @@
+@use "../../styles/mixins" as mxn;
+
+.user {
+  &__content-wrapper {
+    @include mxn.flex;
+    justify-content: center;
+  }
+
+  .articles-wrapper {
+    width: 100%;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .content {
+    width: 100%;
+    padding-bottom: var(--padding-xs);
+
+    &__header {
+      @include mxn.flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &>div {
+        display: flex;
+        gap: .5rem;
+      }
+    }
+  }
+
+  &__username,
+  &__email,
+  &__password,
+  &__testimonies {
+    @include mxn.container("400px", var(--padding-xs) var(--padding-s));
+    border-radius: var(--radius-l);
+    background-color: var(--secondary-50);
+    box-shadow: var(--box-shadow-2-2-5);
+    margin-bottom: 2rem;
+  }
+
+  .icon {
+    background-color: transparent;
+    max-width: 3.2rem;
+
+    &:hover {
+      transform: scale(1.15);
+    }
+  }
+
+  .btn-wrapper {
+    @include mxn.btnSimple;
+    margin-top: 5rem;
+
+    .btn {
+      background-color: var(--dark-red);
+      box-shadow: var(--shadow-border-m) var(--dark-red);
+    }
+
+  }
+}

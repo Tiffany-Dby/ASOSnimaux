@@ -1,0 +1,13 @@
+@use "../../styles/mixins" as mxn;
+
+.contact {
+  .contact__details {
+    @include mxn.flex("column", "nowrap");
+    gap: .5rem;
+    text-align: center;
+
+    a {
+      color: var(--primary);
+    }
+  }
+}

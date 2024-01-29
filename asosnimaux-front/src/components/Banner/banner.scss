@@ -1,0 +1,39 @@
+@use "../../styles/mixins" as mxn;
+
+.banner {
+  @include mxn.container;
+  height: 100vh;
+  width: 100%;
+  background: url(../../assets/banner-bg.png) no-repeat left -350px top 80px, url(../../assets/Paw-bg.svg) no-repeat left/cover fixed;
+  background-size: 900px;
+
+  &__header {
+    @include mxn.container("650px");
+    @include mxn.flex("column", "nowrap");
+    margin-bottom: 3rem;
+  }
+
+  &__logo {
+    img {
+      max-width: 400px;
+    }
+  }
+
+  &__text {
+    @include mxn.container("450px");
+    text-align: center;
+
+    p {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  &__buttons {
+    @include mxn.flex;
+    justify-content: space-around;
+
+    .btn-wrapper {
+      @include mxn.btnStylish;
+    }
+  }
+}

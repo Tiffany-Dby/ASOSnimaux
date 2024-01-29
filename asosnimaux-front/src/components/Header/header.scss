@@ -1,0 +1,30 @@
+@use "../../styles/mixins" as mxn;
+
+.header {
+  position: relative;
+  // width: 100%;
+  z-index: 2;
+  padding: var(--padding-s);
+  background-color: var(--secondary);
+  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.25);
+
+  &,
+  &__icons {
+    @include mxn.flex("row", "nowrap");
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__icons {
+    gap: 1rem;
+  }
+
+  &__img {
+    width: 60px;
+    height: 60px;
+
+    img {
+      object-fit: contain;
+    }
+  }
+}

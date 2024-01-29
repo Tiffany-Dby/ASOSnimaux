@@ -1,0 +1,38 @@
+@use "../../styles/mixins" as mxn;
+
+.title-wrapper {
+  @include mxn.title;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: var(--font-size-xxl);
+  }
+
+  h2 {
+    font-size: var(--font-size-xl);
+  }
+}
+
+.user,
+.articles,
+.animals-wrapper,
+.location,
+.schedules,
+.contact,
+.socialmedia {
+  @include mxn.container;
+  padding-bottom: var(--padding-m);
+}
+
+section:nth-child(odd) {
+  background-color: var(--secondary-50);
+}
+
+section:last-of-type {
+  padding-bottom: var(--padding-l);
+}
+
+.animals-wrapper:has(.animal:hover) .animal:not(:hover) {
+  // filter: blur(.2rem);
+  opacity: 0.25;
+}

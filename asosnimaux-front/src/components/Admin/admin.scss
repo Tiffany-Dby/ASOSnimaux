@@ -1,0 +1,65 @@
+@use "../../styles/mixins" as mxn;
+
+.admin {
+  @include mxn.container;
+
+  h2 {
+    margin-bottom: 2rem;
+  }
+
+  .new-article,
+  .all-articles {
+    @include mxn.container("800px");
+    background-color: transparent;
+  }
+
+  form,
+  .articles-overview__wrapper {
+    @include mxn.container("600px");
+    @include mxn.flex("column", "nowrap");
+    gap: 3rem;
+    background-color: var(--secondary-50);
+    border-radius: var(--radius-m);
+    box-shadow: var(--box-shadow-2-2-5);
+  }
+
+  form {
+    padding: var(--padding-xl) var(--padding-l);
+
+    .input__wrapper:has(textarea) label {
+      top: -20px;
+    }
+
+    textarea {
+      min-width: 100%;
+      max-width: 100%;
+    }
+
+    .btn-wrapper {
+      @include mxn.btnSimple;
+      margin: 0 auto;
+    }
+  }
+
+  .article-overview {
+    @include mxn.flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--padding-xxs);
+
+    .icons-wrapper {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+
+      .icon {
+        background-color: transparent;
+        max-width: 3.2rem;
+
+        &:hover {
+          transform: scale(1.15);
+        }
+      }
+    }
+  }
+}

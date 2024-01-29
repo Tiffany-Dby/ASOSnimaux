@@ -1,0 +1,39 @@
+@use "../../styles/mixins" as mxn;
+
+.article {
+  border-radius: var(--radius-s);
+  box-shadow: var(--box-shadow-2-2-5);
+  background-color: var(--white);
+  cursor: pointer;
+  transition: all .5s ease;
+
+  &:hover img {
+    transform: scale(1.15);
+  }
+
+  &__img {
+    overflow: hidden;
+
+    img {
+      border-radius: var(--radius-s) var(--radius-s) 0 0;
+      display: block;
+      transition: all .5s ease;
+    }
+  }
+
+  &__content {
+    padding: var(--padding-xs);
+
+    &__title {
+      font-size: var(--font-size-l);
+    }
+
+    &__date {
+      font-size: var(--font-size-s);
+    }
+
+    &__text {
+      padding-top: var(--padding-xs);
+    }
+  }
+}
