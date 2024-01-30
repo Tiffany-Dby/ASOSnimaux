@@ -113,6 +113,8 @@
     background-color: transparent;
     box-shadow: var(--shadow-border-m) var(--dark-brown);
     font-size: var(--font-size-s);
+    text-decoration: none;
+    color: var(--dark-brown);
     cursor: pointer;
   }
 
@@ -120,9 +122,11 @@
     content: "";
     grid-area: 1/1;
     border-radius: var(--radius-xxs);
-    box-shadow: 0px 0px 0px 2px var(--secondary125);
+    // box-shadow: 0px 0px 0px 2px var(--secondary125);
+    border: solid .5rem var(--secondary125);
     background-color: var(--secondary125);
-    transform: translate(-.65rem, .65rem);
+    // transform: translate(-.65rem, .65rem);
+    transform: translate(-.85rem, .85rem);
     transition: all .5s;
   }
 

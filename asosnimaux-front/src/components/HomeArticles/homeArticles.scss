@@ -9,8 +9,8 @@
 
   .articles-wrapper {
     @include mxn.flex;
-    flex: auto;
-    gap: 2rem;
+    justify-content: center;
+    gap: 3rem;
   }
 
   &>div:has(.btn) {

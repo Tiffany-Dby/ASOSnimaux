@@ -1,3 +1,4 @@
+import { APP_ROUTES } from "../../constants/route.const";
 import Button from "../Button/Button";
 import "./banner.scss";
 
@@ -15,7 +16,10 @@ const Banner = () => {
           <p>Donnons-leur autant qu'ils nous apportent !</p>
           <div className="banner__buttons">
             <Button btnStyle="" text="Je donne" />
-            <Button btnStyle="" text="J'adopte" />
+            {/* <Button btnStyle="" text="J'adopte" /> */}
+            <div className="btn-wrapper">
+              <a className="btn" href={APP_ROUTES.ADOPTION}>J'adopte</a>
+            </div>
           </div>
         </div>
 

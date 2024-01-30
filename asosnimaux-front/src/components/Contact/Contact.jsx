@@ -5,7 +5,6 @@ const Contact = () => {
     <>
       <div className="title-wrapper">
         <h2>Contact</h2>
-        <div className="title__decoration"></div>
       </div>
 
       <div className="contact__details">

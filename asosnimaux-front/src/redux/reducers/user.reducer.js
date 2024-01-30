@@ -1,12 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const USER_STATE = {
+  user: {
+    login: "",
+    username: "",
+    email: ""
+  },
   signInForm: {
     login: "",
     password: ""
   },
   signInLoading: false,
   signInError: null,
+  signUpForm: {
+    username: "",
+    email: "",
+    password: ""
+  },
+  signUpLoading: false,
+  signUpError: null
 }
 
 const userSlice = createSlice({
@@ -14,13 +26,16 @@ const userSlice = createSlice({
   initialState: USER_STATE,
   reducers: {
     setUser: (state, action) => {
-      const { login } = action.payload;
+      const { login, email, username } = action.payload;
       return {
         ...state,
+        signUpLoading: false,
         signInLoading: false,
         user: {
           ...state.user,
-          login
+          login,
+          email,
+          username
         }
       }
     },
@@ -52,9 +67,33 @@ const userSlice = createSlice({
         signInError: action.payload.error,
         signInLoading: false,
       }
+    },
+    updateSignUpForm: (state, action) => {
+      const { input, value } = action.payload;
+      return {
+        ...state,
+        signInError: null,
+        signUpForm: {
+          ...state.signUpForm,
+          [input]: value
+        }
+      }
+    },
+    startSignUpLoading: (state, action) => {
+      return { ...state, signUpLoading: true }
+    },
+    stopSignUpLoading: (state, action) => {
+      return { ...state, signUpLoading: false }
+    },
+    setSignUpError: (state, action) => {
+      return {
+        ...state,
+        signUpError: action.payload.error,
+        signUpLoading: false
+      }
     }
   }
 });
 
-export const { setUser, updateSignInForm, startSignInLoading, stopSignInLoading, setSignInError } = userSlice.actions;
+export const { setUser, updateSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError } = userSlice.actions;
 export default userSlice.reducer;

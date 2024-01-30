@@ -4,20 +4,19 @@ import "./signIn.scss";
 import { signInThunk } from "../../api/user.api";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSignInForm } from "../../redux/reducers/user.reducer";
+import { APP_ROUTES } from "../../constants/route.const.js"
 
 const SignIn = () => {
   const dispatch = useDispatch();
 
-  const { signInForm, signInLoading, signInError } = useSelector(store => store.userState);
+  const { signInForm, signInLoading, signInError } = useSelector(state => state.userReducer);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(signInThunk());
   }
 
-  const updateForm = (value, input) => {
-    dispatch(updateSignInForm({ value, input }));
-  }
+  const updateForm = (input, value) => dispatch(updateSignInForm({ input, value }));
 
   return (
     <>
@@ -26,14 +25,14 @@ const SignIn = () => {
           <h1>Se connecter</h1>
         </div>
         <form onSubmit={handleSubmit}>
-          <Input label="Email ou Pseudo" id="login" required={true} value={signInForm.login} onChange={value => updateForm(value, "login")} />
-          <Input label="Mot de passe" id="password" type="password" required={true} value={signInForm.password} onChange={value => updateForm(value, "password")} />
+          <Input label="Email ou Pseudo" id="login" required={true} value={signInForm.login} onChange={value => updateForm("login", value)} />
+          <Input label="Mot de passe" id="password" type="password" required={true} value={signInForm.password} onChange={value => updateForm("password", value)} />
           <Button btnStyle="" text="Connexion" type="submit" />
         </form>
 
         <div className="redirect">
           <p>Pas encore un(e) Ami'nimaux ?</p>
-          <a href="#">S'inscrire</a>
+          <a href={APP_ROUTES.SIGN_UP}>S'inscrire</a>
         </div>
       </div>
     </>

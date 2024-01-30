@@ -4,8 +4,12 @@
   @include mxn.container;
   height: 100vh;
   width: 100%;
-  background: url(../../assets/banner-bg.png) no-repeat left -350px top 80px, url(../../assets/Paw-bg.svg) no-repeat left/cover fixed;
+  background: url(../../assets/banner-bg.png) no-repeat left -350px top 80px;
   background-size: 900px;
+
+  @media screen and (min-width: 767px) {
+    background-position: left -280px top 120px;
+  }
 
   &__header {
     @include mxn.container("650px");
@@ -17,6 +21,12 @@
     img {
       max-width: 400px;
     }
+  }
+
+  a {
+    @include mxn.btnStylish;
+    text-decoration: none;
+    color: var(--dark-brown);
   }
 
   &__text {

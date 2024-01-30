@@ -6,7 +6,6 @@ const SocialMedia = () => {
     <>
       <div className="title-wrapper">
         <h2>Réseaux Sociaux</h2>
-        <div className="title__decoration"></div>
       </div>
 
       <div className="socialmedia__details">

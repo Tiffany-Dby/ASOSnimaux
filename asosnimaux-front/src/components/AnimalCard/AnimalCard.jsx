@@ -1,4 +1,5 @@
 import Icon from "../Icon/Icon";
+import { FaHeart, FaMars, FaVenus } from "react-icons/fa6";
 import "./animalCard.scss";
 
 const AnimalCard = ({ imgUrl, imgAlt, animalName }) => {
@@ -6,13 +7,13 @@ const AnimalCard = ({ imgUrl, imgAlt, animalName }) => {
     <>
       <article className="animal">
         <span className="reserved">Réservé</span>
-        <Icon iconStyle={" animal__follow-icon"} imgUrl={"/heart.svg"} imgAlt={"Icone de favoris en forme de coeur"} />
+        <FaHeart className="icon heart animal__follow-icon" color="var(--light-grey)" />
         <div className="animal__img">
           <img src={imgUrl} alt={imgAlt} />
         </div>
         <div className="animal__infos">
           <h2 className="animal__name">{animalName}</h2>
-          <img className="animal__sex" src="/male.svg" alt="Icone mâle" />
+          <FaMars size={22} color="#0099ff" />
         </div>
       </article>
     </>

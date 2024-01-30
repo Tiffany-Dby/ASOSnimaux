@@ -1,12 +1,9 @@
 import "./burger.scss";
 
-const Burger = ({ handleBurger }) => {
+const Burger = ({ toggleClass, handleBurger }) => {
   return (
     <>
-      <div className="burger" onClick={handleBurger}>
-        <span></span>
-        <span></span>
-        <span></span>
+      <div className={`burger${toggleClass}`} onClick={handleBurger}>
         <span></span>
       </div>
     </>

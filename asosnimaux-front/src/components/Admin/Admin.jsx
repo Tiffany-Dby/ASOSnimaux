@@ -1,6 +1,7 @@
 import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
 import Input from "../Input/Input";
+import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import "./admin.scss";
 
 const Admin = ({ count, title, date }) => {
@@ -39,8 +40,10 @@ const Admin = ({ count, title, date }) => {
                 </div>
               </div>
               <div className="icons-wrapper">
-                <Icon iconStyle={""} imgUrl="/pencil.svg" imgAlt="Icone de crayon" />
-                <Icon iconStyle={""} imgUrl="/delete.svg" imgAlt="Icone de suppression" />
+                <FaPencil className="manage-icons" />
+                <FaTrashCan className="manage-icons" color="var(--dark-red)" />
+                {/* <Icon iconStyle={""} imgUrl="/pencil.svg" imgAlt="Icone de crayon" /> */}
+                {/* <Icon iconStyle={""} imgUrl="/delete.svg" imgAlt="Icone de suppression" /> */}
               </div>
             </article>
           </div>

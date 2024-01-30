@@ -33,6 +33,7 @@
     textarea {
       min-width: 100%;
       max-width: 100%;
+      min-height: 200px;
     }
 
     .btn-wrapper {
@@ -50,16 +51,7 @@
     .icons-wrapper {
       display: flex;
       align-items: center;
-      gap: .5rem;
-
-      .icon {
-        background-color: transparent;
-        max-width: 3.2rem;
-
-        &:hover {
-          transform: scale(1.15);
-        }
-      }
+      gap: 1.5rem;
     }
   }
 }

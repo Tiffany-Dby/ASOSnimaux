@@ -1,18 +1,1 @@
 @use "../../styles/mixins" as mxn;
-
-.icon {
-  @include mxn.flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 4rem;
-  height: 4rem;
-  background-color: var(--primary);
-  padding: .8rem .6rem;
-  border-radius: 50%;
-  cursor: pointer;
-
-  img {
-    object-fit: contain;
-  }
-}

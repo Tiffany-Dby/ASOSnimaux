@@ -5,7 +5,6 @@ const Schedules = () => {
     <>
       <div className="title-wrapper">
         <h2>Horaires</h2>
-        <div className="title__decoration"></div>
       </div>
       <table>
         <thead>

@@ -4,20 +4,37 @@
   &__nav {
     position: absolute;
     z-index: -1;
+    top: -400%;
+    right: 0;
     width: 100%;
-    top: 100%;
-    left: 0;
     background-color: var(--secondary-50);
     padding: var(--padding-s);
-    box-shadow: inset 0px 4px 5px 0px rgba(0, 0, 0, 0.25), 0px 4px 5px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.25);
+    transition: all .5s ease;
+
+    @media screen and (min-width: 767px) {
+      position: static;
+      z-index: 2;
+      background-color: var(--secondary);
+      box-shadow: none;
+      padding: 0 var(--padding-s);
+    }
+
+    &.nav-open {
+      top: 100%;
+    }
   }
 
   &__links {
     @include mxn.flex("column", "nowrap");
     gap: 2rem;
-    font-size: var(--font-size-m);
+    font-size: var(--font-size-n);
     font-weight: var(--fw-bold);
     text-align: center;
+
+    @media screen and (min-width: 767px) {
+      @include mxn.flex("row", "nowrap");
+    }
 
     a {
       text-decoration: none;

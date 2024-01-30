@@ -2,26 +2,61 @@
 
 .header {
   position: relative;
-  // width: 100%;
   z-index: 2;
-  padding: var(--padding-s);
-  background-color: var(--secondary);
-  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.25);
 
-  &,
+  &__wrapper {
+    @include mxn.flex;
+    @include mxn.container;
+    justify-content: space-between;
+  }
+
+
   &__icons {
     @include mxn.flex("row", "nowrap");
     justify-content: space-between;
     align-items: center;
   }
 
+  &__background {
+    background-color: var(--secondary);
+    box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.25);
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    @media screen and (min-width: 767px) {}
+  }
+
+  .icon__wrapper {
+    @include mxn.flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+
+    a {
+      @include mxn.flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
   &__icons {
     gap: 1rem;
+
+    .icon:hover {
+      transform: scale(1.1);
+    }
+
+    @media screen and (min-width: 767px) {
+      @include mxn.flex("row-reverse", "nowrap");
+    }
   }
 
   &__img {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
 
     img {
       object-fit: contain;

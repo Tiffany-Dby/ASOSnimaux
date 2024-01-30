@@ -1,4 +1,7 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { APP_ROUTES } from "../../constants/route.const.js"
 import Admin from '../Admin/Admin';
+import Adoption from '../Adoption/Adoption';
 import AnimalCard from '../AnimalCard/AnimalCard';
 import Article from '../Article/Article';
 import Banner from '../Banner/Banner';
@@ -22,51 +25,87 @@ import './App.scss';
 const App = () => {
   return (
     <>
-      <Header />
-      {/* <Admin />
-      <Banner />
+      <BrowserRouter>
+        <Header />
+        <main>
+          <Routes>
+            {/* <Admin />
+      
 
-      <User username={"Tiffany"} />
+      
 
       <div className="title-wrapper">
         <h1>Ami'nimaux</h1>
       </div>
 
-      <Filters />
+      <Filters /> */}
+            <Route
+              path={APP_ROUTES.SIGN_UP}
+              element={
+                <>
+                  <section className="signUp">
+                    <SignUp />
+                  </section>
+                </>
+              }
+            />
+            <Route
+              path={APP_ROUTES.SIGN_IN}
+              element={
+                <>
+                  <section className="signIn">
+                    <SignIn />
+                  </section>
+                </>
+              }
+            />
+            <Route
+              path={APP_ROUTES.HOME}
+              element={
+                <>
+                  <Banner />
+                  <section className="articles">
+                    <HomeArticles />
+                  </section>
+                  <section className="location">
+                    <Location />
+                  </section>
+                  <section className="schedules">
+                    <Schedules />
+                  </section>
+                  <section id="contact" className="contact">
+                    <Contact />
+                  </section>
+                  <section className="socialmedia">
+                    <SocialMedia />
+                  </section>
+                </>
+              }
+            />
+            <Route
+              path={APP_ROUTES.ACCOUNT}
+              element={
+                <>
+                  <User username={"Tiffany"} />
+                </>
+              }
+            />
+            <Route
+              path={"*"}
+              element={
+                <main style={{ padding: "1rem" }}>
+                  <h1>Oops !</h1>
+                  <em>Erreur : 404</em>
+                  <p>Cette page n'existe pas.</p>
+                </main>
+              }
+            />
+            {/*<Adoption /> */}
+          </Routes>
+        </main>
+        <Footer />
 
-      <section className="signUp">
-        <SignUp />
-      </section> */}
-
-      <section className="SignIn">
-        <SignIn />
-      </section>
-
-      {/* <section className="animals-wrapper">
-        <AnimalCard imgUrl={"/equipe.jpg"} animalName="Pichu" />
-      </section>
-
-      <section className="articles">
-        <HomeArticles />
-      </section>
-
-      <section className="location">
-        <Location />
-      </section>
-
-      <section className="schedules">
-        <Schedules />
-      </section>
-
-      <section className="contact">
-        <Contact />
-      </section>
-
-      <section className="socialmedia">
-        <SocialMedia />
-      </section> */}
-
-      <Footer />
+      </BrowserRouter>
     </>
   )
 }

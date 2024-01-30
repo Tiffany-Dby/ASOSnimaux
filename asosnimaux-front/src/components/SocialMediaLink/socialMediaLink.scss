@@ -2,23 +2,19 @@
 
 .social-media-list {
   @include mxn.flex;
-  gap: 1.5rem;
-  transition: all .7s ease;
+  gap: 1rem;
+  transition: all .5s ease;
 
   &:has(li:hover) li:not(:hover) {
-    opacity: .65;
+    opacity: .80;
+    transform: scale(.80)
+  }
+
+  a {
+    color: var(--dark-brown);
   }
 
   &>li {
-    @include mxn.grow;
     transition: all .3s ease;
-
-    &:hover {
-      transform: scale(1.1);
-    }
-
-    img {
-      object-fit: contain;
-    }
   }
 }

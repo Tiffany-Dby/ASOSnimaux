@@ -42,13 +42,8 @@
     margin-bottom: 2rem;
   }
 
-  .icon {
-    background-color: transparent;
-    max-width: 3.2rem;
-
-    &:hover {
-      transform: scale(1.15);
-    }
+  & div:has(.manage-icons) {
+    gap: 1.5rem;
   }
 
   .btn-wrapper {

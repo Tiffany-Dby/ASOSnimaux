@@ -5,6 +5,7 @@
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr) 0.65fr;
   column-gap: 1.2rem;
+  background-color: var(--white);
 
   box-shadow: var(--box-shadow-2-2-5);
   border-radius: var(--radius-xs);
@@ -12,10 +13,19 @@
   cursor: pointer;
   transition: all .5s;
 
-  &:hover {
-    & img:not(.animal__sex) {
-      transform: scale(1.15);
-    }
+  &:hover img,
+  &:hover .heart {
+    transform: scale(1.15);
+  }
+
+  @media screen and (min-width: 600px) {
+    @include mxn.grow;
+    min-width: calc(280px - var(--padding-s));
+    max-width: 50%;
+  }
+
+  @media screen and (min-width: 767px) {
+    min-width: calc(350px - var(--padding-s));
   }
 
   .reserved {
@@ -38,11 +48,7 @@
 
     &.icon {
       background-color: var(--white);
-
-      img {
-        transition: all .3s ease;
-        filter: brightness(0) saturate(100%) invert(97%) sepia(1%) saturate(2453%) hue-rotate(190deg) brightness(112%) contrast(70%);
-      }
+      transition: all .3s ease;
     }
   }
 

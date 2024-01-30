@@ -5,7 +5,6 @@ const Location = () => {
     <>
       <div className="title-wrapper">
         <h2>Localisation</h2>
-        <div className="title__decoration"></div>
       </div>
 
       <div className="location__content">

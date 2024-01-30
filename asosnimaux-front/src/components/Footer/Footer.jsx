@@ -1,3 +1,4 @@
+import { APP_ROUTES } from "../../constants/route.const";
 import SocialMediaLink from "../SocialMediaLink/SocialMediaLink";
 import "./footer.scss";
 
@@ -6,12 +7,12 @@ const Footer = () => {
     <>
       <footer className="footer">
         <div className="footer__img">
-          <a href="#">
+          <a href="#topPage">
             <img src="/logo-dm.svg" alt="Logo ASOS'nimaux" />
           </a>
         </div>
 
-        <div>
+        <nav>
           <ul className="footer__links">
             <li><a href="#">Plan du site</a></li>
             <li><a href="#">Nous rejoindre</a></li>
@@ -21,12 +22,12 @@ const Footer = () => {
             <li><a href="#">Mentions légales</a></li>
             <li><a href="#">Adresse</a></li>
             <li><a href="#">Horaires</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href={`${APP_ROUTES.HOME}#contact`}>Contact</a></li>
             <li><p>Réseaux Sociaux :</p>
               <SocialMediaLink />
             </li>
           </ul>
-        </div>
+        </nav>
       </footer>
     </>
   )

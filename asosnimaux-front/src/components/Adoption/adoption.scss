@@ -1,0 +1,13 @@
+@use "../../styles/mixins" as mxn;
+
+.animals {
+  &__wrapper {
+    @include mxn.flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  p {
+    margin-bottom: 2rem;
+  }
+}
