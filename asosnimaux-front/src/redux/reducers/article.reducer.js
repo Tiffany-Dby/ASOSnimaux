@@ -1,84 +1,108 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const ARTICLE_STATE = {
-  articlesOverview: [],
-  articlesLoading: false,
-  articlesError: null,
-  newArticle: {
-    name: "",
-    location: "",
-    description: "",
-    picture_url: ""
+  articles: {
+    overview: [],
+    all: [],
+    one: {
+      name: "",
+      date: "",
+      location: "",
+      description: "",
+      picture_url: "",
+      picture_caption: ""
+    },
+    new: {
+      name: "",
+      location: "",
+      description: "",
+      picture_url: "",
+      picture_caption: ""
+    },
   },
-  newArticleLoading: false,
-  newArticleError: false
+  overviewLoading: false,
+  overviewError: null,
+  newLoading: false,
+  newError: null,
+  allLoading: false,
+  allError: null,
+  oneLoading: false,
+  oneError: null
 }
 
 const articleSlice = createSlice({
   name: "article",
   initialState: ARTICLE_STATE,
   reducers: {
-    setArticlesOverview: (state, action) => {
+    setOverview: (state, action) => {
       return {
         ...state,
-        articlesOverview: action.payload.articles,
-        articlesLoading: false,
+        articles: {
+          ...state.articles,
+          overview: action.payload.articles
+        },
+        overviewError: null,
+        overviewLoading: false
       }
     },
-    startArticlesLoading: (state, action) => {
+    startOverviewLoading: (state, action) => {
       return {
         ...state,
-        articlesLoading: true,
+        overviewLoading: true,
       }
     },
-    stopArticlesLoading: (state, action) => {
+    stopOverviewLoading: (state, action) => {
       return {
         ...state,
-        articlesLoading: false,
+        overviewLoading: false,
       }
     },
-    setArticlesError: (state, action) => {
+    setOverviewError: (state, action) => {
       return {
         ...state,
-        articlesError: action.payload.error,
-        articlesLoading: false,
+        overviewError: action.payload.error,
+        overviewLoading: false,
       }
     },
-    setnewArticle: (state, action) => {
+    setNew: (state, action) => {
       const { name, location, description, picture_url } = action.payload;
       return {
         ...state,
-        newArticleLoading: false,
-        newArticleError: null,
-        newArticle: {
-          name,
-          location,
-          description,
-          picture_url
-        }
+        articles: {
+          ...state.articles,
+          new: {
+            name,
+            location,
+            description,
+            picture_url,
+            picture_caption
+          }
+        },
+        newError: null,
+        newLoading: false
       }
     },
-    startNewArticleLoading: (state, action) => {
+    startNewLoading: (state, action) => {
       return {
         ...state,
-        newArticleLoading: true
+        newLoading: true
       }
     },
-    stopNewArticleLoading: (state, action) => {
+    stopNewLoading: (state, action) => {
       return {
         ...state,
-        newArticleLoading: false
+        newLoading: false
       }
     },
-    setNewArticleError: (state, action) => {
+    setNewError: (state, action) => {
       return {
         ...state,
-        newArticleError: action.payload.error,
-        newArticleLoading: false
+        newError: action.payload.error,
+        newLoading: false
       }
     }
   }
 });
 
-export const { setArticlesOverview, startArticlesLoading, stopArticlesLoading, setArticlesError, setnewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError } = articleSlice.actions;
+export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNew, startNewLoading, stopNewLoading, setNewError } = articleSlice.actions;
 export default articleSlice.reducer;

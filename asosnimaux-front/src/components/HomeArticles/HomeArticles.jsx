@@ -6,7 +6,7 @@ import "./homeArticles.scss";
 import { setToLocalDate } from "../../utils/date.utils";
 
 const HomeArticles = () => {
-  const { articlesOverview } = useSelector(state => state.articleReducer);
+  const { overview } = useSelector(state => state.articleReducer.articles);
 
   return (
     <>
@@ -15,7 +15,7 @@ const HomeArticles = () => {
       </div>
       <div className="content-wrapper">
         <div className="articles-wrapper">
-          {articlesOverview.map((article, index) => (
+          {overview.map((article, index) => (
             <Article key={index} artclStyle="" imgUrl={article.picture_url} imgAlt={article.picture_caption} title={article.name} date={setToLocalDate(article.date)} text={article.truncated_description} />
           ))}
         </div>
