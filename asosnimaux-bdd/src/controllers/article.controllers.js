@@ -1,7 +1,9 @@
 import { ArticleDB } from "../databases/article.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
+import { mkdir } from "node:fs/promises";
+import formidable from "formidable";
 
-const create = async ({ body: { name, location, description, pictureURL, pictureCaption, userID } }, res) => {
+const create_ = async ({ body: { name, location, description, pictureURL, pictureCaption, userID } }, res) => {
   const areStrings = areStringsFilled([name, location, description, pictureURL, pictureCaption]);
 
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
@@ -11,6 +13,47 @@ const create = async ({ body: { name, location, description, pictureURL, picture
   const { result, error } = response;
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `New article successfully created`, result });
+}
+
+const create = async (req, res) => {
+  const form = formidable({
+    uploadDir: "./articles",
+    keepExtensions: true,
+    createDirsFromUploads: true,
+    filter: opts => {
+      const { name, mimetype, originalFilename } = opts;
+      return mimetype === "image/png" || mimetype === "image/jpg" || mimetype === "image/jpeg";
+    }
+  });
+
+  let fields = null;
+  let files = null;
+
+  try {
+    [fields, files] = await form.parse(req);
+  }
+  catch (err) {
+    console.log("err =>", err.message);
+  }
+
+  console.log("fields", fields);
+  console.log("files", files);
+
+  if (!files.newArticleImg) return res.json({ message: "Something went wrong, check files" });
+
+  const { userID } = req.body;
+  const { name, location, description, pictureCaption } = fields;
+  const article = {
+    userID,
+    name: name[0],
+    location: location[0],
+    description: description[0],
+    picture_url: files.newArticleImg.path,
+    pictureCaption: pictureCaption[0],
+  }
+
+
+  return res.json({ message: article });
 }
 
 const readAll = async (req, res) => {

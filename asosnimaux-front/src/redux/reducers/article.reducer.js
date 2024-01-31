@@ -12,7 +12,7 @@ const ARTICLE_STATE = {
       picture_url: "",
       picture_caption: ""
     },
-    new: {
+    newArticle: {
       name: "",
       location: "",
       description: "",
@@ -22,8 +22,8 @@ const ARTICLE_STATE = {
   },
   overviewLoading: false,
   overviewError: null,
-  newLoading: false,
-  newError: null,
+  newArticleLoading: false,
+  newArticleError: null,
   allLoading: false,
   allError: null,
   oneLoading: false,
@@ -64,13 +64,13 @@ const articleSlice = createSlice({
         overviewLoading: false,
       }
     },
-    setNew: (state, action) => {
+    setNewArticle: (state, action) => {
       const { name, location, description, picture_url } = action.payload;
       return {
         ...state,
         articles: {
           ...state.articles,
-          new: {
+          newArticle: {
             name,
             location,
             description,
@@ -78,31 +78,44 @@ const articleSlice = createSlice({
             picture_caption
           }
         },
-        newError: null,
-        newLoading: false
+        newArticleError: null,
+        newArticleLoading: false
       }
     },
-    startNewLoading: (state, action) => {
+    startNewArticleLoading: (state, action) => {
       return {
         ...state,
-        newLoading: true
+        newArticleLoading: true
       }
     },
-    stopNewLoading: (state, action) => {
+    stopNewArticleLoading: (state, action) => {
       return {
         ...state,
-        newLoading: false
+        newArticleLoading: false
       }
     },
-    setNewError: (state, action) => {
+    setNewArticleError: (state, action) => {
       return {
         ...state,
-        newError: action.payload.error,
-        newLoading: false
+        newArticleError: action.payload.error,
+        newArticleLoading: false
+      }
+    },
+    updateFormNewArticle: (state, action) => {
+      const { input, value } = action.payload;
+      return {
+        ...state,
+        articles: {
+          ...state.articles,
+          newArticle: {
+            ...state.articles.newArticle,
+            [input]: value
+          }
+        }
       }
     }
   }
 });
 
-export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNew, startNewLoading, stopNewLoading, setNewError } = articleSlice.actions;
+export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle } = articleSlice.actions;
 export default articleSlice.reducer;
