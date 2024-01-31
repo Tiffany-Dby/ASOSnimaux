@@ -31,6 +31,7 @@ const userSlice = createSlice({
         ...state,
         signUpLoading: false,
         signInLoading: false,
+        signInError: null,
         user: {
           ...state.user,
           login,
@@ -58,7 +59,7 @@ const userSlice = createSlice({
     stopSignInLoading: (state, action) => {
       return {
         ...state,
-        signInLoading: true
+        signInLoading: false
       }
     },
     setSignInError: (state, action) => {
@@ -72,7 +73,6 @@ const userSlice = createSlice({
       const { input, value } = action.payload;
       return {
         ...state,
-        signInError: null,
         signUpForm: {
           ...state.signUpForm,
           [input]: value

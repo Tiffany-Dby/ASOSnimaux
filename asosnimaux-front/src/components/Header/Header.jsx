@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
 import { updateWindowSize } from "../../redux/reducers/window.reducer";
-
 import "./header.scss";
 import { APP_ROUTES } from "../../constants/route.const";
 import { clearStorage, getFromStorage } from "../../utils/storage.utils";
@@ -15,7 +14,6 @@ const Header = () => {
   const { isMobileMenuOpen } = useSelector(state => state.headerReducer);
   const { width } = useSelector(state => state.windowReducer);
   const token = getFromStorage("token");
-  // console.log(token);
 
   useEffect(() => {
     const handleResize = () => {

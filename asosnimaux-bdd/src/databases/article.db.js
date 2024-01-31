@@ -1,17 +1,17 @@
 import query from "./init.db.js";
 import { v4 as uuidv4 } from "uuid";
 
-const create = async (name, location = "ASOS'nimaux", description, userID) => {
+const create = async (name, location = "ASOS'nimaux", description, pictureURL = "/articles/equipe.jpg", pictureCaption = "Une femme et son chien", userID) => {
   const sql = `
-    INSERT INTO events (id, date, name, location, description, user_id)
-    VALUES (?, NOW(), ?, ?, ?, ?)
+    INSERT INTO events (id, date, name, location, description, picture_url, picture_caption, user_id)
+    VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)
   `;
 
   let result = [];
   let error = null;
   try {
     const id = uuidv4();
-    result = await query(sql, [id, name, location, description, userID]);
+    result = await query(sql, [id, name, location, description, pictureURL, pictureCaption, userID]);
   }
   catch (err) {
     error = err.message;
@@ -23,7 +23,7 @@ const create = async (name, location = "ASOS'nimaux", description, userID) => {
 
 const readAll = async () => {
   const sql = `
-    SELECT id, date, name, location, description
+    SELECT id, date, name, location, description, picture_url, picture_caption
     FROM events
   `;
 
@@ -42,7 +42,7 @@ const readAll = async () => {
 
 const read = async () => {
   const sql = `
-    SELECT id, date, name, location,
+    SELECT id, date, name, location, picture_url, picture_caption,
     CASE 
         WHEN LENGTH(description) > 100 
         THEN CONCAT(SUBSTRING(description, 1, 100), '...') 
@@ -68,7 +68,7 @@ const read = async () => {
 
 const readOne = async (articleID) => {
   const sql = `
-    SELECT id, date, name, location, description
+    SELECT id, date, name, location, description, picture_url, picture_caption
     FROM events
     WHERE id = ?
   `;

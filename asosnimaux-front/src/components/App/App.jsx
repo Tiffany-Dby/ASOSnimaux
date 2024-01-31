@@ -1,5 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/route.const.js"
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getArticleThunk } from "../../api/article.api.js";
+import './App.scss';
 import Admin from '../Admin/Admin';
 import Adoption from '../Adoption/Adoption';
 import AnimalCard from '../AnimalCard/AnimalCard';
@@ -20,25 +24,24 @@ import SignIn from '../SignIn/SignIn';
 import SignUp from '../SignUp/SignUp';
 import SocialMedia from '../SocialMedia/SocialMedia';
 import User from '../User/User';
-import './App.scss';
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  // Articles overview (HomeArticles)
+  useEffect(() => {
+    dispatch(getArticleThunk());
+  }, []);
+
   return (
     <>
       <BrowserRouter>
         <Header />
         <main>
+          <Admin />
           <Routes>
-            {/* <Admin />
-      
-
-      
-
-      <div className="title-wrapper">
-        <h1>Ami'nimaux</h1>
-      </div>
-
-      <Filters /> */}
+            {/* 
+                <Filters /> */}
             <Route
               path={APP_ROUTES.SIGN_UP}
               element={
@@ -91,6 +94,14 @@ const App = () => {
               }
             />
             <Route
+              path={APP_ROUTES.ADOPTION}
+              element={
+                <>
+                  <Adoption />
+                </>
+              }
+            />
+            <Route
               path={"*"}
               element={
                 <main style={{ padding: "1rem" }}>
@@ -100,7 +111,6 @@ const App = () => {
                 </main>
               }
             />
-            {/*<Adoption /> */}
           </Routes>
         </main>
         <Footer />

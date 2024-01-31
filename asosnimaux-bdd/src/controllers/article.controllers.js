@@ -1,12 +1,12 @@
 import { ArticleDB } from "../databases/article.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
 
-const create = async ({ body: { name, location, description, userID } }, res) => {
-  const areStrings = areStringsFilled([name, location, description]);
+const create = async ({ body: { name, location, description, pictureURL, pictureCaption, userID } }, res) => {
+  const areStrings = areStringsFilled([name, location, description, pictureURL, pictureCaption]);
 
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
-  const response = await ArticleDB.create(name, location, description, userID);
+  const response = await ArticleDB.create(name, location, description, pictureURL, pictureCaption, userID);
 
   const { result, error } = response;
 
@@ -39,7 +39,9 @@ const readOne = async ({ params: { articleID } }, res) => {
     date: result[0].date,
     name: result[0].name,
     location: result[0].location,
-    description: result[0].description
+    description: result[0].description,
+    pictureURL: result[0].pictureURL,
+    pictureCaption: result[0].pictureCaption
   }
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request on article with id ${articleID} successful`, article });

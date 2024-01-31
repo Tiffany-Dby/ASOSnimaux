@@ -1,0 +1,13 @@
+.input {
+  &__label:has(+ .input-file) {
+    top: -45%;
+  }
+
+  &__wrapper {
+
+    .input-file {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px transparent;
+    }
+  }
+}

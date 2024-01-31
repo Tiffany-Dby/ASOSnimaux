@@ -1,18 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { APP_ROUTES } from "../../constants/route.const";
 import Article from "../Article/Article";
 import Button from "../Button/Button";
 import "./homeArticles.scss";
-import { getArticleThunk } from "../../api/article.api";
-import { useEffect } from "react";
+import { setToLocalDate } from "../../utils/date.utils";
 
 const HomeArticles = () => {
-  const dispatch = useDispatch();
   const { articlesOverview } = useSelector(state => state.articleReducer);
-
-  useEffect(() => {
-    dispatch(getArticleThunk());
-  }, [dispatch]);
 
   return (
     <>
@@ -22,10 +16,9 @@ const HomeArticles = () => {
       <div className="content-wrapper">
         <div className="articles-wrapper">
           {articlesOverview.map((article, index) => (
-            <Article key={index} artclStyle="" imgUrl={""} imgAlt={""} title={article.name} date={article.date} text={article.description} />
+            <Article key={index} artclStyle="" imgUrl={article.picture_url} imgAlt={article.picture_caption} title={article.name} date={setToLocalDate(article.date)} text={article.truncated_description} />
           ))}
         </div>
-        {/* <Button btnStyle="" text="Voir plus d'articles" /> */}
         <div className="btn-wrapper">
           <a className="btn" href={APP_ROUTES.ARTICLES}>Voir plus d'articles</a>
         </div>

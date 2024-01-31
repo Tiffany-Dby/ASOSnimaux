@@ -3,6 +3,7 @@ import Icon from "../Icon/Icon";
 import Input from "../Input/Input";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import "./admin.scss";
+import InputFile from "../InputFile/InputFile";
 
 const Admin = ({ count, title, date }) => {
   return (
@@ -18,6 +19,7 @@ const Admin = ({ count, title, date }) => {
           <form>
             <Input label="Titre" id="title" />
             <Input label="Localisation" id="location" />
+            <InputFile label="Choisir une image" id="image" />
             <div className="input__wrapper">
               <label className="input__label" htmlFor="article">Contenu</label>
               <textarea className="input" name="article" id="article"></textarea>

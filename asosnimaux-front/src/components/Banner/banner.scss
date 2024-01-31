@@ -23,10 +23,8 @@
     }
   }
 
-  a {
+  .btn-wrapper {
     @include mxn.btnStylish;
-    text-decoration: none;
-    color: var(--dark-brown);
   }
 
   &__text {
