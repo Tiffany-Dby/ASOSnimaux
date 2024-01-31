@@ -17,7 +17,7 @@ const create_ = async ({ body: { name, location, description, pictureURL, pictur
 
 const create = async (req, res) => {
   const form = formidable({
-    uploadDir: "./articles",
+    uploadDir: "./public/articles",
     keepExtensions: true,
     createDirsFromUploads: true,
     filter: opts => {
