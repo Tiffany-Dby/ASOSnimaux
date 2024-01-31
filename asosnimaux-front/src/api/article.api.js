@@ -20,10 +20,8 @@ export const postArticleThunk = (file) => async (dispatch, getState) => {
   const token = getFromStorage("token");
   if (newArticleLoading) return;
 
-  const fd = setFormData({
-    ...newArticle,
-    picture_url: file
-  });
+  const fd = setFormData(newArticle, "picture_url");
+
   console.log(fd)
 
   dispatch(startNewArticleLoading());
