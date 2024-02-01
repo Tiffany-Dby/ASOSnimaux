@@ -97,9 +97,7 @@ const update = async (name, location, description, articleID) => {
   let result = [];
   let error = null;
   try {
-    console.log(articleID);
     result = await query(sql, [name, location, description, articleID])
-    console.log("result db :", result);
     if (result.affectedRows !== 1) throw new Error(`Something went wrong couldn't update article`);
   }
   catch (err) {
@@ -116,16 +114,24 @@ const deleteOne = async (articleID) => {
     WHERE id = ?
   `;
 
+  const imgPathSql = `
+    SELECT picture_url
+    FROM events
+    WHERE id = ?
+  `;
+
   let result = [];
+  let imgPathResult = [];
   let error = null;
   try {
-    result = await query(sql, [articleID])
+    imgPathResult = await query(imgPathSql, [articleID]);
+    result = await query(sql, [articleID]);
   }
   catch (err) {
     error = err.message;
   }
   finally {
-    return { result, error };
+    return { result, imgPathResult, error };
   }
 }
 

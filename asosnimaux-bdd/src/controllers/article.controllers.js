@@ -1,8 +1,9 @@
 import { ArticleDB } from "../databases/article.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
 import { mkdir } from "node:fs/promises";
+import { unlink } from 'node:fs';
 import formidable from "formidable";
-import { setImgUrl } from "../utils/formidable.utils.js";
+import { setDeleteImgUrl, setImgUrl } from "../utils/formidable.utils.js";
 
 const create_ = async ({ body: { name, location, description, pictureURL, pictureCaption, userID } }, res) => {
   const areStrings = areStringsFilled([name, location, description, pictureURL, pictureCaption]);
@@ -21,8 +22,9 @@ const create = async (req, res) => {
     uploadDir: "./public/articles",
     keepExtensions: true,
     createDirsFromUploads: true,
+    maxFileSize: 1024 * 1024,
     filter: opts => {
-      const { name, mimetype, originalFilename } = opts;
+      const { mimetype } = opts;
       return mimetype === "image/png" || mimetype === "image/jpg" || mimetype === "image/jpeg";
     }
   });
@@ -35,12 +37,13 @@ const create = async (req, res) => {
   }
   catch (err) {
     console.log("err =>", err.message);
+    return res.status(500).json({ message: "Error parsing form" });
   }
 
   console.log("fields", fields);
   console.log("files", files);
 
-  if (!files.newArticleImg) return res.json({ message: "Something went wrong, check files" });
+  if (!files.newArticleImg) return res.status(400).json({ message: "Something went wrong, check files mimetype" });
 
   const { userID } = req.body;
   const filePath = files.newArticleImg[0].filepath;
@@ -117,7 +120,20 @@ const update = async ({ body: { name, location, description, articleID } }, res)
 const deleteOne = async ({ params: { articleID } }, res) => {
   const response = await ArticleDB.deleteOne(articleID);
 
-  const error = response.error;
+  const { imgPathResult, error } = response;
+
+  try {
+    if (!error) {
+      const setPath = setDeleteImgUrl(imgPathResult[0].picture_url)
+      unlink(setPath, (err) => {
+        if (err) throw err;
+        console.log(`${setPath} was successfully deleted`);
+      });
+    }
+  }
+  catch (e) {
+    console.log(e.message);
+  }
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Article with id ${articleID} deleted successfully` });
 }

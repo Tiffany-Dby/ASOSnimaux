@@ -56,8 +56,8 @@ const Admin = ({ count, title, date }) => {
           <h2>Tous les articles ({all.length})</h2>
 
           <div className="articles-overview__wrapper">
-            {all.map((a, index) => (
-              <article key={index} className="article-overview">
+            {all.map((a) => (
+              <article key={a.id} className="article-overview">
                 <div className="article-overview__content">
                   <div className="article-overview__title">
                     <h3>{a.name}</h3>
