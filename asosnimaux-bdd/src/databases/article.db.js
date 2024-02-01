@@ -1,7 +1,8 @@
 import query from "./init.db.js";
 import { v4 as uuidv4 } from "uuid";
 
-const create = async (name, location = "ASOS'nimaux", description, pictureURL = "/articles/equipe.jpg", pictureCaption = "Une femme et son chien", userID) => {
+const create = async (article, userID) => {
+  const { name, location, description, picture_url, picture_caption } = article;
   const sql = `
     INSERT INTO events (id, date, name, location, description, picture_url, picture_caption, user_id)
     VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)
@@ -11,7 +12,7 @@ const create = async (name, location = "ASOS'nimaux", description, pictureURL = 
   let error = null;
   try {
     const id = uuidv4();
-    result = await query(sql, [id, name, location, description, pictureURL, pictureCaption, userID]);
+    result = await query(sql, [id, name, location, description, picture_url, picture_caption, userID]);
   }
   catch (err) {
     error = err.message;

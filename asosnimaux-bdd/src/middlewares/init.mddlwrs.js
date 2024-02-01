@@ -7,6 +7,7 @@ const initMiddlewares = (app) => {
   app.use(express.urlencoded({ extended: true }));
   app.use(cors({ origin: "*" }));
   app.use(helmet());
+  app.use(express.static('public'));
 }
 
 export default initMiddlewares;

@@ -35,6 +35,7 @@ const articleSlice = createSlice({
   initialState: ARTICLE_STATE,
   reducers: {
     setOverview: (state, action) => {
+      console.log(action.payload.articles)
       return {
         ...state,
         articles: {
@@ -65,7 +66,7 @@ const articleSlice = createSlice({
       }
     },
     setNewArticle: (state, action) => {
-      const { name, location, description, picture_url } = action.payload;
+      const { name, location, description, picture_url, picture_caption } = action.payload;
       return {
         ...state,
         articles: {

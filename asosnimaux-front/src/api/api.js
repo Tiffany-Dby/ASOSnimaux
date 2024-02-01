@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:9000/";
+import { APP_ROUTES } from "../constants/route.const.js"
 
 const getRequest = async (url, token) => {
   const config = {
@@ -31,7 +31,7 @@ const request = async (url, config) => {
   let status = -1;
 
   try {
-    const response = await fetch(`${API_URL}${url}`, config);
+    const response = await fetch(`${APP_ROUTES.API_URL}${url}`, config);
     status = response.status;
     result = await response.json();
     if (status >= 400) throw new Error(`Error ${status}: ${result?.message}`);

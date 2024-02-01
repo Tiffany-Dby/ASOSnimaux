@@ -2,6 +2,7 @@ import { ArticleDB } from "../databases/article.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
 import { mkdir } from "node:fs/promises";
 import formidable from "formidable";
+import { setImgUrl } from "../utils/formidable.utils.js";
 
 const create_ = async ({ body: { name, location, description, pictureURL, pictureCaption, userID } }, res) => {
   const areStrings = areStringsFilled([name, location, description, pictureURL, pictureCaption]);
@@ -42,18 +43,28 @@ const create = async (req, res) => {
   if (!files.newArticleImg) return res.json({ message: "Something went wrong, check files" });
 
   const { userID } = req.body;
-  const { name, location, description, pictureCaption } = fields;
+  const filePath = files.newArticleImg[0].filepath;
+  const picture_url = setImgUrl(filePath, "articles");
+  const { name, location, description, picture_caption } = fields;
+
+  const areStrings = areStringsFilled([name[0], location[0], description[0], picture_url, picture_caption[0]]);
+  if (!areStrings) return res.status(403).json({ message: `Missing data` });
+
   const article = {
-    userID,
     name: name[0],
     location: location[0],
     description: description[0],
-    picture_url: files.newArticleImg.path,
-    pictureCaption: pictureCaption[0],
+    picture_url,
+    picture_caption: picture_caption[0],
   }
 
+  console.log("picture_url : ", picture_url)
 
-  return res.json({ message: article });
+  const response = await ArticleDB.create(article, userID);
+
+  const { error } = response;
+
+  return res.status(error ? 500 : 200).json({ message: error ? error : `New article successfully created`, article });
 }
 
 const readAll = async (req, res) => {

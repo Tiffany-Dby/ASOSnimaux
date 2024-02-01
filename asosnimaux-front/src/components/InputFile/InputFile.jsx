@@ -1,11 +1,11 @@
 // import "../Input/input.scss";
 import "./inputFile.scss";
 
-const InputFile = ({ id, label, value, onChange }) => {
+const InputFile = ({ id, label, onChange }) => {
 
   const handleChange = (e) => {
-    const selectedFile = e.target.files[0];
-    onChange(selectedFile);
+    const file = e.target.files[0];
+    onChange(file);
   };
 
   return (

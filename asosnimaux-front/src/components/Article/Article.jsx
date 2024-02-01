@@ -6,7 +6,7 @@ const Article = ({ artclStyle, imgUrl, imgAlt, title, date, text }) => {
     <>
       <article className={`article${artclStyle}`}>
         <div className="article__img">
-          <img src={imgUrl} alt={imgAlt} />
+          <img crossorigin="anonymous" src={imgUrl} alt={imgAlt} />
         </div>
         <div className="article__content">
           <div>

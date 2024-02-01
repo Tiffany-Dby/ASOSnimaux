@@ -7,15 +7,19 @@ import InputFile from "../InputFile/InputFile";
 import { useDispatch, useSelector } from "react-redux";
 import { postArticleThunk } from "../../api/article.api";
 import { updateFormNewArticle } from "../../redux/reducers/article.reducer";
+import { useState } from "react";
 
 const Admin = ({ count, title, date }) => {
   const dispatch = useDispatch();
 
-  const { newArticle } = useSelector(state => state.articleReducer.articles);
+  const { articles, newArticleLoading, newArticleError } = useSelector(state => state.articleReducer);
+  const { newArticle } = articles;
+
+  const [file, setFile] = useState(null);
 
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(postArticleThunk());
+    dispatch(postArticleThunk(file));
   }
 
   const updateForm = (input, value) => dispatch(updateFormNewArticle({ input, value }));
@@ -33,11 +37,11 @@ const Admin = ({ count, title, date }) => {
           <form onSubmit={handleSubmit}>
             <Input label="Titre" id="name" required={true} value={newArticle.name} onChange={value => updateForm("name", value)} />
             <Input label="Localisation" id="location" value={newArticle.location} onChange={value => updateForm("location", value)} />
-            <InputFile label="Choisir une image" id="picture_url" value={newArticle.picture_url} onChange={value => updateForm("picture_url", value)} />
+            <InputFile label="Choisir une image" id="picture_url" value={newArticle.picture_url} onChange={file => setFile(file)} />
             <Input label="Description de l'image" id="picture_caption" value={newArticle.picture_caption} onChange={value => updateForm("picture_caption", value)} />
             <div className="input__wrapper">
               <label className="input__label" htmlFor="description">Contenu</label>
-              <textarea className="input" name="description" id="description" value={newArticle.description} onChange={e => updateForm("description", e.target.value)}></textarea>
+              <textarea className="input" name="description" id="description" value={newArticle.description || ""} onChange={e => updateForm("description", e.target.value)}></textarea>
             </div>
             <Button btnStyle="" text="Valider" type="submit" />
           </form>

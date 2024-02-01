@@ -1,3 +1,4 @@
+import { APP_ROUTES } from "../constants/route.const.js";
 import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError } from "../redux/reducers/article.reducer"
 import { getRequest, postRequest } from "./api";
 import { setFormData } from "../utils/formidable.utils.js"
@@ -11,32 +12,36 @@ export const getArticleThunk = () => async (dispatch, getState) => {
   const { result, error, status } = await getRequest("articles/overview");
   if (!result?.message || status >= 400 || !!error) return dispatch(setOverviewError({ error: `Something went wrong : ${error}` }));
 
-  dispatch(setOverview({ articles: result.result }));
+  dispatch(setOverview({
+    articles: result.result.map(article => {
+      return { ...article, picture_url: `${APP_ROUTES.API_URL}${article.picture_url}` }
+    })
+  }));
 }
 
 export const postArticleThunk = (file) => async (dispatch, getState) => {
-  const { newArticle } = getState().articleReducer.articles;
-  const { newArticleLoading } = getState().articleReducer;
+  const { articles, newArticleLoading } = getState().articleReducer;
+  const { newArticle } = articles;
   const token = getFromStorage("token");
   if (newArticleLoading) return;
 
-  const fd = setFormData(newArticle, "picture_url");
-
-  console.log(fd)
+  const fd = setFormData({
+    ...newArticle,
+    newArticleImg: file
+  });
 
   dispatch(startNewArticleLoading());
   const { result, error, status } = await postRequest("articles/", fd, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setNewArticleError({ error: `Something went wrong : ${error}` }));
 
-  console.log(result)
+  const article = {
+    name: result.article.name,
+    location: result.article.location,
+    description: result.article.description,
+    picture_caption: result.article.picture_caption,
+  }
+  console.log("result: ", result)
+  console.log("article: ", article)
 
-  // const article = {
-  //   name: result.result.message.name,
-  //   location: result.result.message.location,
-  //   description: result.result.message.description,
-  //   picture_url: result.result.message.picture_url,
-  //   picture_caption: result.result.message.picture_caption,
-  // }
-
-  // dispatch(setNewArticle({ article }));
+  dispatch(setNewArticle({ article }));
 }
