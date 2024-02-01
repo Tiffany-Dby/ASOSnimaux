@@ -5,9 +5,11 @@ import { signInThunk } from "../../api/user.api";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSignInForm } from "../../redux/reducers/user.reducer";
 import { APP_ROUTES } from "../../constants/route.const.js"
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { signInForm, signInLoading, signInError } = useSelector(state => state.userReducer);
 
@@ -18,6 +20,10 @@ const SignIn = () => {
 
   const updateForm = (input, value) => dispatch(updateSignInForm({ input, value }));
 
+  const handleRedirect = () => {
+
+  }
+
   return (
     <>
       <div className="signIn-wrapper">
@@ -27,7 +33,7 @@ const SignIn = () => {
         <form onSubmit={handleSubmit}>
           <Input label="Email ou Pseudo" id="login" required={true} value={signInForm.login} onChange={value => updateForm("login", value)} />
           <Input label="Mot de passe" id="password" type="password" required={true} value={signInForm.password} onChange={value => updateForm("password", value)} />
-          <Button btnStyle="" text="Connexion" type="submit" />
+          <Button btnStyle="" text="Connexion" type="submit" btnClick={handleRedirect} />
         </form>
 
         <div className="redirect">

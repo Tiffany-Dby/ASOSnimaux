@@ -4,7 +4,8 @@ const USER_STATE = {
   user: {
     login: "",
     username: "",
-    email: ""
+    email: "",
+    role: ""
   },
   signInForm: {
     login: "",
@@ -26,7 +27,7 @@ const userSlice = createSlice({
   initialState: USER_STATE,
   reducers: {
     setUser: (state, action) => {
-      const { login, email, username } = action.payload;
+      const { login, email, username, role } = action.payload;
       return {
         ...state,
         signUpLoading: false,
@@ -36,7 +37,8 @@ const userSlice = createSlice({
           ...state.user,
           login,
           email,
-          username
+          username,
+          role
         }
       }
     },

@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getArticleThunk } from "../../api/article.api.js";
+import { getOverviewThunk } from "../../api/article.api.js";
 import './App.scss';
 import Admin from '../Admin/Admin';
 import Adoption from '../Adoption/Adoption';
@@ -30,7 +30,7 @@ const App = () => {
 
   // Articles overview (HomeArticles)
   useEffect(() => {
-    dispatch(getArticleThunk());
+    dispatch(getOverviewThunk());
   }, []);
 
   return (
@@ -40,8 +40,7 @@ const App = () => {
         <main>
           <Admin />
           <Routes>
-            {/* 
-                <Filters /> */}
+            {/*<Filters /> */}
             <Route
               path={APP_ROUTES.SIGN_UP}
               element={

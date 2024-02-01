@@ -21,7 +21,6 @@ const User = ({ username, imgUrl, imgAlt, email, date, testimonie }) => {
                 <div className="content__header">
                   <p>Pseudo</p>
                   <FaPencil className="manage-icons" />
-                  {/* <Icon iconStyle={""} imgUrl="/pencil.svg" imgAlt="Icone de crayon" /> */}
                 </div>
                 <div className="content">
                   <p>{username}</p>
@@ -31,7 +30,6 @@ const User = ({ username, imgUrl, imgAlt, email, date, testimonie }) => {
                 <div className="content__header">
                   <p>Email</p>
                   <FaPencil className="manage-icons" />
-                  {/* <Icon iconStyle={""} imgUrl="/pencil.svg" imgAlt="Icone de crayon" /> */}
                 </div>
                 <div className="content">
                   <p>{email}Lorem_ipsum@dolor.sit</p>
@@ -45,7 +43,6 @@ const User = ({ username, imgUrl, imgAlt, email, date, testimonie }) => {
                 <div className="content__header">
                   <p>Mot de passe</p>
                   <FaPencil className="manage-icons" />
-                  {/* <Icon iconStyle={""} imgUrl="/pencil.svg" imgAlt="Icone de crayon" /> */}
                 </div>
               </div>
             </article>
@@ -58,8 +55,6 @@ const User = ({ username, imgUrl, imgAlt, email, date, testimonie }) => {
                   <div>
                     <FaPencil className="manage-icons" />
                     <FaTrashCan className="manage-icons" color="var(--dark-red)" />
-                    {/* <Icon iconStyle={""} imgUrl="/pencil.svg" imgAlt="Icone de crayon" /> */}
-                    {/* <Icon iconStyle={""} imgUrl="/delete.svg" imgAlt="Icone de suppression" /> */}
                   </div>
                 </div>
                 <div className="content">

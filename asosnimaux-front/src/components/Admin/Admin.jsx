@@ -5,17 +5,22 @@ import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import "./admin.scss";
 import InputFile from "../InputFile/InputFile";
 import { useDispatch, useSelector } from "react-redux";
-import { postArticleThunk } from "../../api/article.api";
+import { getAllArticlesThunk, postArticleThunk } from "../../api/article.api";
 import { updateFormNewArticle } from "../../redux/reducers/article.reducer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { setToLocalDate } from "../../utils/date.utils";
 
 const Admin = ({ count, title, date }) => {
   const dispatch = useDispatch();
 
   const { articles, newArticleLoading, newArticleError } = useSelector(state => state.articleReducer);
-  const { newArticle } = articles;
+  const { newArticle, all } = articles;
 
   const [file, setFile] = useState(null);
+
+  useEffect(() => {
+    dispatch(getAllArticlesThunk());
+  }, [newArticle])
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -48,23 +53,25 @@ const Admin = ({ count, title, date }) => {
         </section>
 
         <section className="all-articles">
-          <h2>Tous les articles ({count})</h2>
+          <h2>Tous les articles ({all.length})</h2>
 
           <div className="articles-overview__wrapper">
-            <article className="article-overview">
-              <div className="article-overview__content">
-                <div className="article-overview__title">
-                  <h3>{title}Test</h3>
+            {all.map((a, index) => (
+              <article key={index} className="article-overview">
+                <div className="article-overview__content">
+                  <div className="article-overview__title">
+                    <h3>{a.name}</h3>
+                  </div>
+                  <div className="article-overview__date">
+                    <p>{setToLocalDate(a.date)}</p>
+                  </div>
                 </div>
-                <div className="article-overview__date">
-                  <p>{date}28/01/2014</p>
+                <div className="icons-wrapper">
+                  <FaPencil className="manage-icons" />
+                  <FaTrashCan className="manage-icons" color="var(--dark-red)" />
                 </div>
-              </div>
-              <div className="icons-wrapper">
-                <FaPencil className="manage-icons" />
-                <FaTrashCan className="manage-icons" color="var(--dark-red)" />
-              </div>
-            </article>
+              </article>
+            ))}
           </div>
         </section>
       </div>

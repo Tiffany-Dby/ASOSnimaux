@@ -32,7 +32,12 @@
     overflow: hidden;
 
     img {
-      max-height: 300px;
+      height: 250px;
+
+      @media screen and (min-width: 767px) {
+        height: 300px;
+      }
+
       border-radius: var(--radius-s) var(--radius-s) 0 0;
       display: block;
       transition: all .5s ease;

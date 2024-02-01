@@ -26,7 +26,7 @@ const Header = () => {
       window.removeEventListener("resize", handleResize);
     }
 
-  }, [dispatch])
+  }, []);
 
   const handleBurgerClick = () => {
     dispatch(toggleMobileMenu(!isMobileMenuOpen));

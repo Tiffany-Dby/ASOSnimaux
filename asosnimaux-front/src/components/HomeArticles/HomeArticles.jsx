@@ -4,7 +4,6 @@ import Article from "../Article/Article";
 import Button from "../Button/Button";
 import "./homeArticles.scss";
 import { setToLocalDate } from "../../utils/date.utils";
-import { useEffect } from "react";
 
 const HomeArticles = () => {
   const { articles } = useSelector(state => state.articleReducer);

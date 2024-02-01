@@ -10,9 +10,11 @@ export const signInThunk = () => async (dispatch, getState) => {
   const { result, error, status } = await postRequest("users/sign-in", signInForm);
   console.log(result);
   if (!result?.message || status >= 400 || !!error) return dispatch(setSignInError({ error: `Something went wrong : ${error}` }));
-  dispatch(setUser({ login: result.message.login }));
   const { token } = result.user;
   setToStorage("token", token);
+  console.log(result)
+
+  dispatch(setUser({ login: result.message.login, role: result.message.userRole }));
 }
 
 export const signUpThunk = () => async (dispatch, getState) => {

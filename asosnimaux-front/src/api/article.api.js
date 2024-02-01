@@ -1,10 +1,21 @@
 import { APP_ROUTES } from "../constants/route.const.js";
-import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError } from "../redux/reducers/article.reducer"
+import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll } from "../redux/reducers/article.reducer"
 import { getRequest, postRequest } from "./api";
 import { setFormData } from "../utils/formidable.utils.js"
 import { getFromStorage } from "../utils/storage.utils.js";
 
-export const getArticleThunk = () => async (dispatch, getState) => {
+export const getAllArticlesThunk = () => async (dispatch, getState) => {
+  const { allLoading, allError } = getState().articleReducer;
+  if (allLoading) return;
+
+  dispatch(startAllLoading());
+  const { result, error, status } = await getRequest("articles/all");
+  if (!result?.message || status >= 400 || !!error) return dispatch(setAll({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setAll({ all: result.result }));
+}
+
+export const getOverviewThunk = () => async (dispatch, getState) => {
   const { overviewLoading } = getState().articleReducer;
   if (overviewLoading) return;
 
@@ -13,7 +24,7 @@ export const getArticleThunk = () => async (dispatch, getState) => {
   if (!result?.message || status >= 400 || !!error) return dispatch(setOverviewError({ error: `Something went wrong : ${error}` }));
 
   dispatch(setOverview({
-    articles: result.result.map(article => {
+    overview: result.result.map(article => {
       return { ...article, picture_url: `${APP_ROUTES.API_URL}${article.picture_url}` }
     })
   }));
@@ -40,8 +51,6 @@ export const postArticleThunk = (file) => async (dispatch, getState) => {
     description: result.article.description,
     picture_caption: result.article.picture_caption,
   }
-  console.log("result: ", result)
-  console.log("article: ", article)
 
   dispatch(setNewArticle({ article }));
 }

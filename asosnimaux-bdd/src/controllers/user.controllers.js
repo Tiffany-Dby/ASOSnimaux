@@ -52,6 +52,7 @@ const signIn = async ({ body: { login, password } }, res) => {
   const pwDB = user.password;
   const username = user.username;
   const email = user.email;
+  const userRole = user.user_role;
 
   const arePwSame = await compareHash(password, pwDB);
 
@@ -59,7 +60,7 @@ const signIn = async ({ body: { login, password } }, res) => {
 
   const token = jwtSign(userID);
 
-  return res.status(200).json({ message: `Authentication succeeded`, user: { userID, username, email, token } })
+  return res.status(200).json({ message: `Authentication succeeded`, user: { userID, username, email, userRole, token } })
 }
 
 const readUsersTestimonies = async ({ body: { userID } }, res) => {

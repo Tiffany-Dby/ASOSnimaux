@@ -35,12 +35,11 @@ const articleSlice = createSlice({
   initialState: ARTICLE_STATE,
   reducers: {
     setOverview: (state, action) => {
-      console.log(action.payload.articles)
       return {
         ...state,
         articles: {
           ...state.articles,
-          overview: action.payload.articles
+          overview: action.payload.overview
         },
         overviewError: null,
         overviewLoading: false
@@ -114,9 +113,39 @@ const articleSlice = createSlice({
           }
         }
       }
+    },
+    setAll: (state, action) => {
+      return {
+        ...state,
+        articles: {
+          ...state.articles,
+          all: action.payload.all
+        },
+        allError: null,
+        allLoading: false
+      }
+    },
+    startAllLoading: (state, action) => {
+      return {
+        ...state,
+        allLoading: true
+      }
+    },
+    stopAllLoading: (state, action) => {
+      return {
+        ...state,
+        allLoading: false
+      }
+    },
+    setAllError: (state, action) => {
+      return {
+        ...state,
+        allError: action.payload.error,
+        allLoading: false
+      }
     }
   }
 });
 
-export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle } = articleSlice.actions;
+export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle, setAll, startAllLoading, stopAllLoading, setAllError } = articleSlice.actions;
 export default articleSlice.reducer;

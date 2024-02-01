@@ -18,6 +18,10 @@
     @include mxn.container("600px");
     @include mxn.flex("column", "nowrap");
     gap: 3rem;
+  }
+
+  form,
+  .article-overview {
     background-color: var(--secondary-50);
     border-radius: var(--radius-m);
     box-shadow: var(--box-shadow-2-2-5);
@@ -43,13 +47,14 @@
   }
 
   .article-overview {
-    @include mxn.flex;
+    @include mxn.flex("row", "nowrap");
+    gap: 5rem;
     justify-content: space-between;
     align-items: center;
-    padding: var(--padding-xxs);
+    padding: var(--padding-s);
 
     .icons-wrapper {
-      display: flex;
+      @include mxn.flex("column", "nowrap");
       align-items: center;
       gap: 1.5rem;
     }
