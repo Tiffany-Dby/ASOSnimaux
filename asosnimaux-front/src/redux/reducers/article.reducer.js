@@ -27,7 +27,9 @@ const ARTICLE_STATE = {
   allLoading: false,
   allError: null,
   oneLoading: false,
-  oneError: null
+  oneError: null,
+  deleteLoading: false,
+  deleteError: null
 }
 
 const articleSlice = createSlice({
@@ -150,27 +152,37 @@ const articleSlice = createSlice({
       }
     },
     setDelete: (state, action) => {
+      const { id } = action.payload;
       return {
-
+        ...state,
+        articles: {
+          ...state.articles,
+          all: state.articles.all.filter(article => article.id !== id)
+        },
+        deleteLoading: false
       }
     },
     setStartDeleteLoading: (state, action) => {
       return {
-
+        ...state,
+        deleteLoading: true,
       }
     },
     setStopDeleteLoading: (state, action) => {
       return {
-
+        ...state,
+        deleteLoading: false,
       }
     },
     setDeleteError: (state, action) => {
       return {
-
+        ...state,
+        deleteError: action.payload.error,
+        deleteLoading: false
       }
     }
   }
 });
 
-export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle, setAll, startAllLoading, stopAllLoading, setAllError } = articleSlice.actions;
+export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle, setAll, startAllLoading, stopAllLoading, setAllError, setDelete, setStartDeleteLoading, setStopDeleteLoading, setDeleteError } = articleSlice.actions;
 export default articleSlice.reducer;

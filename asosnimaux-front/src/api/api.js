@@ -25,6 +25,17 @@ const postRequest = async (url, body = {}, token) => {
   return await request(url, config);
 }
 
+const deleteRequest = async (url, token) => {
+  const config = {
+    method: "DELETE",
+    headers: { "Content-type": "application/json; charset=UTF-8" }
+  }
+
+  if (token) config.headers.Authorization = token;
+
+  return await request(url, config);
+}
+
 const request = async (url, config) => {
   let result = [];
   let error = null;
@@ -44,4 +55,4 @@ const request = async (url, config) => {
   }
 }
 
-export { getRequest, postRequest };
+export { getRequest, postRequest, deleteRequest };

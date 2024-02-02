@@ -1,6 +1,6 @@
 import { APP_ROUTES } from "../constants/route.const.js";
-import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll } from "../redux/reducers/article.reducer"
-import { getRequest, postRequest } from "./api";
+import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll, setStartDeleteLoading, setDeleteError, setDelete } from "../redux/reducers/article.reducer"
+import { deleteRequest, getRequest, postRequest } from "./api";
 import { setFormData } from "../utils/formidable.utils.js"
 import { getFromStorage } from "../utils/storage.utils.js";
 
@@ -56,6 +56,14 @@ export const postArticleThunk = (file) => async (dispatch, getState) => {
   }));
 }
 
-export const deleteArticleThunk = () => async (dispatch, getState) => {
+export const deleteArticleThunk = (id) => async (dispatch, getState) => {
+  const { deleteLoading } = getState().articleReducer;
+  const token = getFromStorage("token");
+  if (deleteLoading) return;
 
+  dispatch(setStartDeleteLoading());
+  const { result, error, status } = await deleteRequest(`articles/${id}`, token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setDeleteError({ error: `Something went wrong: ${error}` }));
+
+  dispatch(setDelete({ id }));
 }

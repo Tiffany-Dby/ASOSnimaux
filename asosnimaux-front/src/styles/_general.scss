@@ -59,6 +59,7 @@ p {
   height: 2rem;
   width: 2rem;
   cursor: pointer;
+  transition: all .3s ease;
 
   &:hover {
     transform: scale(1.2);
@@ -69,6 +70,7 @@ p {
   height: 3.5rem;
   width: 3.5rem;
   cursor: pointer;
+  transition: all .3s ease;
 }
 
 .heart {

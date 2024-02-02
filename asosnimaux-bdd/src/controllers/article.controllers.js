@@ -1,7 +1,6 @@
 import { ArticleDB } from "../databases/article.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
-import { mkdir } from "node:fs/promises";
-import { unlink } from 'node:fs';
+import { mkdir, unlink } from "node:fs/promises";
 import formidable from "formidable";
 import { setDeleteImgUrl, setImgUrl } from "../utils/formidable.utils.js";
 

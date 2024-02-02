@@ -5,12 +5,12 @@ import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import "./admin.scss";
 import InputFile from "../InputFile/InputFile";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllArticlesThunk, postArticleThunk } from "../../api/article.api";
+import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk } from "../../api/article.api";
 import { updateFormNewArticle } from "../../redux/reducers/article.reducer";
 import { useEffect, useState } from "react";
 import { setToLocalDate } from "../../utils/date.utils";
 
-const Admin = ({ count, title, date }) => {
+const Admin = () => {
   const dispatch = useDispatch();
 
   const { articles, newArticleLoading, newArticleError } = useSelector(state => state.articleReducer);
@@ -28,6 +28,10 @@ const Admin = ({ count, title, date }) => {
   }
 
   const updateForm = (input, value) => dispatch(updateFormNewArticle({ input, value }));
+
+  const handleDelete = (id) => {
+    dispatch(deleteArticleThunk(id))
+  }
 
   return (
     <>
@@ -68,7 +72,7 @@ const Admin = ({ count, title, date }) => {
                 </div>
                 <div className="icons-wrapper">
                   <FaPencil className="manage-icons" />
-                  <FaTrashCan className="manage-icons" color="var(--dark-red)" />
+                  <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleDelete(a.id)} />
                 </div>
               </article>
             ))}
