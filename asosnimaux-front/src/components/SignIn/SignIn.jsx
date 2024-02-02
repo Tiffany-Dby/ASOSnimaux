@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateSignInForm } from "../../redux/reducers/user.reducer";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { signInForm, signInLoading, signInError } = useSelector(state => state.userReducer);
+  const { signInForm, signInLoading, signInError, isAuth } = useSelector(state => state.userReducer);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,8 +22,16 @@ const SignIn = () => {
   const updateForm = (input, value) => dispatch(updateSignInForm({ input, value }));
 
   const handleRedirect = () => {
-
+    if (isAuth) {
+      navigate(APP_ROUTES.HOME, { replace: true });
+    }
   }
+
+  useEffect(() => {
+    if (isAuth) {
+      navigate(APP_ROUTES.HOME, { replace: true });
+    }
+  }, [isAuth]);
 
   return (
     <>

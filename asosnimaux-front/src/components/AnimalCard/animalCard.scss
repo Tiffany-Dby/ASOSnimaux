@@ -53,13 +53,13 @@
   }
 
   .heart {
-    height: 4.2rem;
-    width: 4.2rem;
+    height: 5rem;
+    width: 5rem;
   }
 
   &__img {
     grid-column: 1/-1;
-    grid-row: 1/-2;
+    grid-row: 1/-1;
 
     width: calc(100% - var(--padding-xs) * 2);
     margin: 0 auto;
@@ -72,7 +72,7 @@
   }
 
   &__infos {
-    @include mxn.flex();
+    @include mxn.flex;
     align-items: center;
     gap: 2rem;
     grid-column: 2/4;

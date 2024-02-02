@@ -3,7 +3,7 @@ import { postRequest } from "./api";
 import { setToStorage } from "../utils/storage.utils.js";
 
 export const signInThunk = () => async (dispatch, getState) => {
-  const { signInForm, signInLoading } = getState().userReducer;
+  const { signInForm, signInLoading, user } = getState().userReducer;
   if (signInLoading) return;
 
   dispatch(startSignInLoading());
@@ -14,7 +14,8 @@ export const signInThunk = () => async (dispatch, getState) => {
   const { token } = result.user;
   setToStorage("token", token);
 
-  dispatch(setUser({ user: { id: result.user.userID, username: result.user.username, email: result.user.email, role: result.user.userRole } }));
+  dispatch(setUser({ id: result.user.userID, username: result.user.username, email: result.user.email, role: result.user.userRole }));
+  setToStorage("user", result.user)
 }
 
 export const signUpThunk = () => async (dispatch, getState) => {

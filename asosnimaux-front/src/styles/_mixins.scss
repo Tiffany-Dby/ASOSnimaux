@@ -65,7 +65,7 @@
 @mixin title {
   position: relative;
   display: grid;
-  justify-content: start;
+  justify-content: center;
 
   &::after {
     content: url(../../assets/Paw.svg);

@@ -8,12 +8,15 @@ import { updateWindowSize } from "../../redux/reducers/window.reducer";
 import "./header.scss";
 import { APP_ROUTES } from "../../constants/route.const";
 import { clearStorage, getFromStorage } from "../../utils/storage.utils";
+import { setUser, setisAuth } from "../../redux/reducers/user.reducer";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isMobileMenuOpen } = useSelector(state => state.headerReducer);
   const { width } = useSelector(state => state.windowReducer);
-  const token = getFromStorage("token");
+  const { isAuth } = useSelector(state => state.userReducer);
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,6 +35,21 @@ const Header = () => {
     dispatch(toggleMobileMenu(!isMobileMenuOpen));
   }
 
+  const handleSignOut = () => {
+    dispatch(setUser({ id: "", username: "", email: "", role: "" }));
+    clearStorage();
+    dispatch(setisAuth(false));
+    if (isAuth) {
+      navigate(APP_ROUTES.SIGN_IN, { replace: true });
+    }
+  }
+
+  useEffect(() => {
+    if (isAuth) {
+      navigate(APP_ROUTES.SIGN_IN, { replace: true });
+    }
+  }, []);
+
   return (
     <>
       <header id="topPage" className="header">
@@ -48,12 +66,12 @@ const Header = () => {
               </a>
             </div>
             <div className="icon__wrapper">
-              {token ?
+              {isAuth ?
                 <>
                   <a href={APP_ROUTES.ACCOUNT}>
                     <FaCircleUser className="icon" color="var(--primary)" />
                   </a>
-                  <FaPowerOff className="icon" color="var(--primary)" onClick={clearStorage} />
+                  <FaPowerOff className="icon" color="var(--primary)" onClick={handleSignOut} />
                 </>
                 :
                 <a href={APP_ROUTES.SIGN_IN}>

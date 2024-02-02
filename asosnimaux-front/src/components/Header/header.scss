@@ -45,6 +45,15 @@
   &__icons {
     gap: 1rem;
 
+    a .icon:not(.heart) {
+      background-color: var(--accent);
+      border-radius: 50%;
+    }
+
+    .heart {
+      fill: var(--accent);
+    }
+
     .icon:hover {
       transform: scale(1.1);
     }

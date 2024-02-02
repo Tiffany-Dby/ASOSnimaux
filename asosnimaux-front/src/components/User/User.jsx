@@ -1,14 +1,20 @@
 import Button from "../Button/Button";
+import Dialog from "../Dialog/Dialog";
 import Icon from "../Icon/Icon";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import "./user.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
-const User = ({ username, imgUrl, imgAlt, email, date, testimonie }) => {
+const User = ({ imgUrl, imgAlt, date, testimonie }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector(state => state.userReducer);
+
   return (
     <>
       <section className="user">
         <div className="title-wrapper">
-          <h1>Bonjour {username}</h1>
+          <h1>Bonjour {user.username}</h1>
         </div>
         <div className="user__avatar">
           <img src={imgUrl} alt={imgAlt} />
@@ -23,7 +29,7 @@ const User = ({ username, imgUrl, imgAlt, email, date, testimonie }) => {
                   <FaPencil className="manage-icons" />
                 </div>
                 <div className="content">
-                  <p>{username}</p>
+                  <p>{user.username}</p>
                 </div>
               </div>
               <div className="user__email">
@@ -32,7 +38,7 @@ const User = ({ username, imgUrl, imgAlt, email, date, testimonie }) => {
                   <FaPencil className="manage-icons" />
                 </div>
                 <div className="content">
-                  <p>{email}Lorem_ipsum@dolor.sit</p>
+                  <p>{user.email}</p>
                 </div>
               </div>
             </article>

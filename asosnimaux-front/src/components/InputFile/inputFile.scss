@@ -1,6 +1,8 @@
+@use "../../styles/mixins" as mxn;
+
 .input {
   &__label:has(+ .input-file) {
-    top: -45%;
+    top: -53%;
   }
 
   &__wrapper {

@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getOverviewThunk } from "../../api/article.api.js";
 import './App.scss';
 import Admin from '../Admin/Admin';
@@ -24,9 +24,19 @@ import SignIn from '../SignIn/SignIn';
 import SignUp from '../SignUp/SignUp';
 import SocialMedia from '../SocialMedia/SocialMedia';
 import User from '../User/User';
+import { getFromStorage } from "../../utils/storage.utils.js";
+import { setUser, setisAuth } from "../../redux/reducers/user.reducer.js";
 
 const App = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const isUserAuth = getFromStorage("user");
+    if (isUserAuth) {
+      dispatch(setUser({ id: isUserAuth.userID, username: isUserAuth.username, email: isUserAuth.email, role: isUserAuth.role }));
+      dispatch(setisAuth(true));
+    }
+  }, [])
 
   // Articles overview (HomeArticles)
   useEffect(() => {
@@ -38,7 +48,6 @@ const App = () => {
       <BrowserRouter>
         <Header />
         <main>
-          <Admin />
           <Routes>
             {/*<Filters /> */}
             <Route
@@ -88,7 +97,7 @@ const App = () => {
               path={APP_ROUTES.ACCOUNT}
               element={
                 <>
-                  <User username={"Tiffany"} />
+                  <User />
                 </>
               }
             />
@@ -113,7 +122,6 @@ const App = () => {
           </Routes>
         </main>
         <Footer />
-
       </BrowserRouter>
     </>
   )

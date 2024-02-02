@@ -7,6 +7,7 @@ const USER_STATE = {
     email: "",
     role: ""
   },
+  isAuth: false,
   signInForm: {
     login: "",
     password: ""
@@ -27,7 +28,7 @@ const userSlice = createSlice({
   initialState: USER_STATE,
   reducers: {
     setUser: (state, action) => {
-      const { login, email, username, role } = action.payload;
+      const { id, email, username, role } = action.payload;
       return {
         ...state,
         signUpLoading: false,
@@ -39,7 +40,8 @@ const userSlice = createSlice({
           username,
           email,
           role
-        }
+        },
+        isAuth: true
       }
     },
     updateSignInForm: (state, action) => {
@@ -93,9 +95,15 @@ const userSlice = createSlice({
         signUpError: action.payload.error,
         signUpLoading: false
       }
+    },
+    setisAuth: (state, action) => {
+      return {
+        ...state,
+        isAuth: action.payload
+      }
     }
   }
 });
 
-export const { setUser, updateSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError } = userSlice.actions;
+export const { setUser, updateSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setisAuth } = userSlice.actions;
 export default userSlice.reducer;
