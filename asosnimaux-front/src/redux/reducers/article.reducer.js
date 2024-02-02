@@ -5,6 +5,7 @@ const ARTICLE_STATE = {
     overview: [],
     all: [],
     one: {
+      id: "",
       name: "",
       date: "",
       location: "",
@@ -15,9 +16,8 @@ const ARTICLE_STATE = {
     newArticle: {
       name: "",
       location: "",
-      description: "",
-      picture_url: "",
-      picture_caption: ""
+      picture_caption: "",
+      description: ""
     },
   },
   overviewLoading: false,
@@ -65,18 +65,23 @@ const articleSlice = createSlice({
       }
     },
     setNewArticle: (state, action) => {
-      const { name, location, description, picture_url, picture_caption } = action.payload;
+      const { id, name, date, location, description, picture_url, picture_caption } = action.payload;
       return {
         ...state,
         articles: {
           ...state.articles,
-          newArticle: {
-            name,
-            location,
-            description,
-            picture_url,
-            picture_caption
-          }
+          all: [
+            ...state.articles.all,
+            {
+              id,
+              name,
+              date,
+              location,
+              description,
+              picture_url,
+              picture_caption
+            }
+          ]
         },
         newArticleError: null,
         newArticleLoading: false
@@ -142,6 +147,26 @@ const articleSlice = createSlice({
         ...state,
         allError: action.payload.error,
         allLoading: false
+      }
+    },
+    setDelete: (state, action) => {
+      return {
+
+      }
+    },
+    setStartDeleteLoading: (state, action) => {
+      return {
+
+      }
+    },
+    setStopDeleteLoading: (state, action) => {
+      return {
+
+      }
+    },
+    setDeleteError: (state, action) => {
+      return {
+
       }
     }
   }

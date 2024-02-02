@@ -65,9 +65,14 @@ const create = async (req, res) => {
 
   const response = await ArticleDB.create(article, userID);
 
-  const { error } = response;
+  const { error, insertedId } = response;
 
-  return res.status(error ? 500 : 200).json({ message: error ? error : `New article successfully created`, article });
+  const createdArticle = await ArticleDB.readOne(insertedId);
+  const err = createdArticle.error;
+  const result = createdArticle.result;
+  console.log(result);
+
+  return res.status(error ? 500 : 200).json({ message: error ? error : `New article successfully created`, article: result });
 }
 
 const readAll = async (req, res) => {
@@ -124,11 +129,9 @@ const deleteOne = async ({ params: { articleID } }, res) => {
 
   try {
     if (!error) {
-      const setPath = setDeleteImgUrl(imgPathResult[0].picture_url)
-      unlink(setPath, (err) => {
-        if (err) throw err;
-        console.log(`${setPath} was successfully deleted`);
-      });
+      const PicturePath = setDeleteImgUrl(imgPathResult[0].picture_url)
+      const r = await unlink(PicturePath);
+      console.log(`${PicturePath} was successfully deleted`);
     }
   }
   catch (e) {

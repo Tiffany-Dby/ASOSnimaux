@@ -45,12 +45,17 @@ export const postArticleThunk = (file) => async (dispatch, getState) => {
   const { result, error, status } = await postRequest("articles/", fd, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setNewArticleError({ error: `Something went wrong : ${error}` }));
 
-  const article = {
-    name: result.article.name,
-    location: result.article.location,
-    description: result.article.description,
-    picture_caption: result.article.picture_caption,
-  }
+  dispatch(setNewArticle({
+    id: result.article[0].id,
+    date: result.article[0].date,
+    name: result.article[0].name,
+    location: result.article[0].location,
+    description: result.article[0].description,
+    picture_url: result.article[0].picture_url,
+    picture_caption: result.article[0].picture_caption
+  }));
+}
 
-  dispatch(setNewArticle({ article }));
+export const deleteArticleThunk = () => async (dispatch, getState) => {
+
 }

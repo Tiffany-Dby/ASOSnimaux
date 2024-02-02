@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const USER_STATE = {
   user: {
-    login: "",
+    id: "",
     username: "",
     email: "",
     role: ""
@@ -35,9 +35,9 @@ const userSlice = createSlice({
         signInError: null,
         user: {
           ...state.user,
-          login,
-          email,
+          id,
           username,
+          email,
           role
         }
       }

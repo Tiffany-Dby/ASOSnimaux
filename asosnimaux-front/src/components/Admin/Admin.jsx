@@ -20,7 +20,7 @@ const Admin = ({ count, title, date }) => {
 
   useEffect(() => {
     dispatch(getAllArticlesThunk());
-  }, [newArticle])
+  }, [])
 
   const handleSubmit = e => {
     e.preventDefault();

@@ -7,14 +7,14 @@ export const signInThunk = () => async (dispatch, getState) => {
   if (signInLoading) return;
 
   dispatch(startSignInLoading());
+
   const { result, error, status } = await postRequest("users/sign-in", signInForm);
-  console.log(result);
   if (!result?.message || status >= 400 || !!error) return dispatch(setSignInError({ error: `Something went wrong : ${error}` }));
+
   const { token } = result.user;
   setToStorage("token", token);
-  console.log(result)
 
-  dispatch(setUser({ login: result.message.login, role: result.message.userRole }));
+  dispatch(setUser({ user: { id: result.user.userID, username: result.user.username, email: result.user.email, role: result.user.userRole } }));
 }
 
 export const signUpThunk = () => async (dispatch, getState) => {
@@ -22,6 +22,7 @@ export const signUpThunk = () => async (dispatch, getState) => {
   if (signUpLoading) return;
 
   dispatch(startSignUpLoading());
+
   const { result, error, status } = await postRequest("users", signUpForm);
   console.log(result);
   if (!result?.message || status >= 400 || !!error) return dispatch(setSignUpError({ error: `Something went wrong : ${error}` }));

@@ -8,17 +8,20 @@ const create = async (article, userID) => {
     VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)
   `;
 
+
   let result = [];
+  let insertedId = [];
   let error = null;
   try {
     const id = uuidv4();
     result = await query(sql, [id, name, location, description, picture_url, picture_caption, userID]);
+    insertedId = id;
   }
   catch (err) {
     error = err.message;
   }
   finally {
-    return { result, error };
+    return { result, insertedId, error };
   }
 }
 
@@ -126,6 +129,7 @@ const deleteOne = async (articleID) => {
   try {
     imgPathResult = await query(imgPathSql, [articleID]);
     result = await query(sql, [articleID]);
+    if (result.affectedRows !== 1) throw new Error(`Something went wrong couldn't delete article`);
   }
   catch (err) {
     error = err.message;
