@@ -20,7 +20,14 @@ const USER_STATE = {
     password: ""
   },
   signUpLoading: false,
-  signUpError: null
+  signUpError: null,
+  dialogForms: {
+    username: "",
+    email: "",
+    password: ""
+  },
+  dialogLoading: false,
+  dialogError: null
 }
 
 const userSlice = createSlice({
@@ -101,9 +108,19 @@ const userSlice = createSlice({
         ...state,
         isAuth: action.payload
       }
+    },
+    updateFormDialog: (state, action) => {
+      const { input, value } = action.payload;
+      return {
+        ...state,
+        dialogForms: {
+          ...state.dialogForms,
+          [input]: value
+        }
+      }
     }
   }
 });
 
-export const { setUser, updateSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setisAuth } = userSlice.actions;
+export const { setUser, updateSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setisAuth, updateFormDialog } = userSlice.actions;
 export default userSlice.reducer;

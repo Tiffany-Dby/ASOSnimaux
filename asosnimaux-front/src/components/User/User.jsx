@@ -5,10 +5,14 @@ import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import "./user.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { updateFormDialog } from "../../redux/reducers/user.reducer";
 
 const User = ({ imgUrl, imgAlt, date, testimonie }) => {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.userReducer);
+  const { isOpen } = useSelector(state => state.dialogReducer);
+
+  const updateForm = (input, value) => dispatch(updateSignUpForm({ input, value }));
 
   return (
     <>
