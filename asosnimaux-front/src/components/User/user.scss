@@ -1,18 +1,31 @@
 @use "../../styles/mixins" as mxn;
 
 .user {
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
   &__content-wrapper {
     @include mxn.flex;
     justify-content: center;
   }
 
-  .articles-wrapper {
-    width: 100%;
+  &__greetings {
+    @include mxn.container("400px", 0);
+
+    h2 {
+      text-align: left;
+      margin-bottom: 0;
+    }
+
+    .title-wrapper {
+      justify-content: start;
+    }
   }
 
-  h2 {
-    text-align: center;
-    margin-bottom: 1rem;
+  .articles-wrapper {
+    width: 100%;
   }
 
   .content {

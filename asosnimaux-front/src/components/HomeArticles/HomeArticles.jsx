@@ -1,13 +1,20 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { APP_ROUTES } from "../../constants/route.const";
 import Article from "../Article/Article";
 import Button from "../Button/Button";
 import "./homeArticles.scss";
 import { setToLocalDate } from "../../utils/date.utils";
+import { useEffect } from "react";
+import { getOverviewThunk } from "../../api/article.api";
 
 const HomeArticles = () => {
+  const dispatch = useDispatch();
   const { articles } = useSelector(state => state.articleReducer);
   const { overview } = articles;
+
+  useEffect(() => {
+    dispatch(getOverviewThunk());
+  }, []);
 
   return (
     <>

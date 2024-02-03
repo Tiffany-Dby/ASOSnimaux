@@ -1,3 +1,69 @@
 @use "../../styles/mixins" as mxn;
 
-dialog {}
+dialog {
+  width: 95%;
+  max-width: 380px;
+  border-radius: var(--radius-l);
+  border: 0;
+  box-shadow: var(--shadow-border-s) var(--secondary125);
+
+  &[open] {
+    animation: open .5s ease;
+  }
+
+  &.hide {
+    animation: hide .5s ease;
+  }
+
+  form {
+    @include mxn.flex("column", "nowrap");
+    gap: 1rem;
+    padding-bottom: var(--padding-s);
+  }
+
+  &::backdrop {
+    background-color: hsla(0, 0%, 0%, 0.55);
+    backdrop-filter: blur(.075rem);
+  }
+
+  .btns-wrapper {
+    @include mxn.flex;
+    margin-top: 2rem;
+    justify-content: space-evenly;
+  }
+
+  .btn-wrapper {
+    @include mxn.btnSimple;
+
+    &:nth-child(2) .btn {
+      background-color: var(--dark-red);
+      box-shadow: var(--shadow-border-m) var(--dark-red);
+    }
+  }
+
+}
+
+@keyframes open {
+  from {
+    transform: translateY(-60vh);
+    opacity: 0;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+
+@keyframes hide {
+  from {
+    transform: none;
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(-60vh);
+    opacity: 0;
+  }
+}

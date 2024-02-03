@@ -6,5 +6,6 @@ export const APP_ROUTES = {
   ADOPTION: "/adoption",
   ARTICLE: "/article",
   ARTICLES: "/articles",
-  ACCOUNT: "/account"
+  ACCOUNT: "/account",
+  ADMIN: "/admin"
 };

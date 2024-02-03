@@ -1,24 +1,57 @@
 import Button from "../Button/Button";
 import Dialog from "../Dialog/Dialog";
-import Icon from "../Icon/Icon";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import "./user.scss";
 import { useDispatch, useSelector } from "react-redux";
+import { resetDialogForm, updateDialogForm } from "../../redux/reducers/user.reducer";
+import { createPortal } from "react-dom";
+import Input from "../Input/Input";
+import { setInputFields, toggleDialog } from "../../redux/reducers/dialog.reducer";
+import { updateUsernameThunk } from "../../api/user.api";
 import { useEffect } from "react";
-import { updateFormDialog } from "../../redux/reducers/user.reducer";
 
 const User = ({ imgUrl, imgAlt, date, testimonie }) => {
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.userReducer);
-  const { isOpen } = useSelector(state => state.dialogReducer);
+  const { user, dialogForms } = useSelector(state => state.userReducer);
+  const { input } = useSelector(state => state.dialogReducer);
 
-  const updateForm = (input, value) => dispatch(updateSignUpForm({ input, value }));
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (input.id === "username") {
+      dispatch(updateUsernameThunk("username"));
+    }
+    else if (input.id === "email") {
+      dispatch(updateUsernameThunk("email"));
+    }
+    else if (input.id === "password") {
+      dispatch(updateUsernameThunk("password"));
+    }
+  }
+
+  const handleDialog = (input, value) => {
+    dispatch(resetDialogForm());
+    dispatch(setInputFields({ label: input.label, id: input.id, type: input.type }));
+    dispatch(updateDialogForm({ input, value }));
+    dispatch(toggleDialog());
+  }
+
+  const handleDialogClose = () => {
+    dispatch(toggleDialog());
+  }
+
+  const updateForm = (input, value) => dispatch(updateDialogForm({ input, value }));
 
   return (
     <>
       <section className="user">
         <div className="title-wrapper">
-          <h1>Bonjour {user.username}</h1>
+          <h1>Dashboard</h1>
+        </div>
+        <div className="user__greetings">
+          <h2>Bonjour</h2>
+          <div className="title-wrapper">
+            <h2>{user.username}</h2>
+          </div>
         </div>
         <div className="user__avatar">
           <img src={imgUrl} alt={imgAlt} />
@@ -30,7 +63,7 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
               <div className="user__username">
                 <div className="content__header">
                   <p>Pseudo</p>
-                  <FaPencil className="manage-icons" />
+                  <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Pseudo", id: "username", type: "text" })} />
                 </div>
                 <div className="content">
                   <p>{user.username}</p>
@@ -39,7 +72,7 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
               <div className="user__email">
                 <div className="content__header">
                   <p>Email</p>
-                  <FaPencil className="manage-icons" />
+                  <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Email", id: "email", type: "email" })} />
                 </div>
                 <div className="content">
                   <p>{user.email}</p>
@@ -52,7 +85,7 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
               <div className="user__password">
                 <div className="content__header">
                   <p>Mot de passe</p>
-                  <FaPencil className="manage-icons" />
+                  <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Mot de passe", id: "password", type: "password" })} />
                 </div>
               </div>
             </article>
@@ -63,7 +96,7 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
                 <div className="content__header">
                   <p>Témoignage du {date}</p>
                   <div>
-                    <FaPencil className="manage-icons" />
+                    <FaPencil className="manage-icons" onClick={handleDialog} />
                     <FaTrashCan className="manage-icons" color="var(--dark-red)" />
                   </div>
                 </div>
@@ -76,6 +109,20 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
 
           <Button btnStyle={""} text="Supprimer le compte" />
         </div>
+        {createPortal(
+          <Dialog>
+            <form onSubmit={handleSubmit}>
+              <div className="title-wrapper">
+                <h2>Mettre à jour</h2>
+              </div>
+              <Input label={input.label} id={input.id} type={input.type} value={dialogForms[input.id]} onChange={(value) => updateForm(input.id, value)} />
+              <div className="btns-wrapper">
+                <Button btnStyle="" text="Valider" type="submit" btnClick={handleDialogClose} />
+                <Button btnStyle={""} text="Annuler" btnClick={handleDialogClose} />
+              </div>
+            </form>
+          </Dialog>
+          , document.body)}
       </section>
     </>
   );

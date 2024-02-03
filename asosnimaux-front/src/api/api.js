@@ -25,6 +25,18 @@ const postRequest = async (url, body = {}, token) => {
   return await request(url, config);
 }
 
+const putRequest = async (url, body = {}, token) => {
+  const config = {
+    method: "PUT",
+    body: JSON.stringify(body),
+    headers: { "Content-type": "application/json; charset=UTF-8" }
+  }
+
+  if (token) config.headers.Authorization = token;
+
+  return await request(url, config)
+}
+
 const deleteRequest = async (url, token) => {
   const config = {
     method: "DELETE",
@@ -55,4 +67,4 @@ const request = async (url, config) => {
   }
 }
 
-export { getRequest, postRequest, deleteRequest };
+export { getRequest, postRequest, putRequest, deleteRequest };

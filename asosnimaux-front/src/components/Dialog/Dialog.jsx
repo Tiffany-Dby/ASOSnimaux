@@ -1,31 +1,27 @@
-import { useDispatch, useSelector } from "react-redux";
-import Button from "../Button/Button";
-import Input from "../Input/Input";
+import { useSelector } from "react-redux";
 import "./dialog.scss";
-import { toggleDialog } from "../../redux/reducers/dialog.reducer";
+import { useEffect, useRef } from "react";
 
-const Dialog = () => {
-  const dispatch = useDispatch();
+const Dialog = ({ children }) => {
   const { isOpen } = useSelector(state => state.dialogReducer);
+  const dialogRef = useRef(null);
 
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    dispatch(toggleDialog());
-  }
-
-  const handleClose = () => {
-    dispatch(toggleDialog());
-  }
+  useEffect(() => {
+    if (dialogRef.current) {
+      if (isOpen) {
+        dialogRef.current.showModal();
+      } else {
+        setTimeout(() => {
+          dialogRef.current.close();
+        }, 480)
+      }
+    }
+  }, [isOpen]);
 
   return (
     <>
-      <dialog open={isOpen}>
-        <form onSubmit={handleSubmit}>
-          <h2>Mettre à jour</h2>
-          <Input />
-          <Button btnStyle="" text="Valider" type="submit" btnClick={handleClose} />
-        </form>
+      <dialog id="dialog" ref={dialogRef} className={isOpen ? "" : "hide"}>
+        {children}
       </dialog>
     </>
   )

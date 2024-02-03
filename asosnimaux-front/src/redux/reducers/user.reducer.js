@@ -41,6 +41,7 @@ const userSlice = createSlice({
         signUpLoading: false,
         signInLoading: false,
         signInError: null,
+        dialogLoading: false,
         user: {
           ...state.user,
           id,
@@ -109,7 +110,7 @@ const userSlice = createSlice({
         isAuth: action.payload
       }
     },
-    updateFormDialog: (state, action) => {
+    updateDialogForm: (state, action) => {
       const { input, value } = action.payload;
       return {
         ...state,
@@ -118,9 +119,32 @@ const userSlice = createSlice({
           [input]: value
         }
       }
+    },
+    resetDialogForm: (state, action) => {
+      return {
+        ...state,
+        dialogForms: {
+          username: "",
+          email: "",
+          password: ""
+        }
+      }
+    },
+    startDialogLoading: (state, action) => {
+      return { ...state, dialogLoading: true }
+    },
+    stopDialogLoading: (state, action) => {
+      return { ...state, dialogLoading: false }
+    },
+    setDialogError: (state, action) => {
+      return {
+        ...state,
+        dialogError: action.payload.error,
+        dialogLoading: false
+      }
     }
   }
 });
 
-export const { setUser, updateSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setisAuth, updateFormDialog } = userSlice.actions;
+export const { setUser, updateSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setisAuth, updateDialogForm, resetDialogForm, startDialogLoading, stopDialogLoading, setDialogError } = userSlice.actions;
 export default userSlice.reducer;

@@ -2,7 +2,7 @@
 
 .social-media-list {
   @include mxn.flex;
-  gap: 1rem;
+  gap: .5rem;
   transition: all .5s ease;
 
   &:has(li:hover) li:not(:hover) {
