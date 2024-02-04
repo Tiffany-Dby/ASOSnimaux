@@ -24,7 +24,8 @@ const USER_STATE = {
   dialogForms: {
     username: "",
     email: "",
-    password: ""
+    oldPassword: "",
+    newPassword: ""
   },
   dialogLoading: false,
   dialogError: null

@@ -7,5 +7,6 @@ export const APP_ROUTES = {
   ARTICLE: "/article",
   ARTICLES: "/articles",
   ACCOUNT: "/account",
-  ADMIN: "/admin"
+  ADMIN: "/admin",
+  ASSOCIATION: "/association"
 };

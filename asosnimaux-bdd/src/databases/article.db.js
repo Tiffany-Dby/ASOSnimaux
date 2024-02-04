@@ -54,7 +54,7 @@ const read = async () => {
     END AS truncated_description
     FROM events
     ORDER BY date DESC
-    LIMIT 5
+    LIMIT 4
   `;
 
   let result = [];

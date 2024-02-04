@@ -13,17 +13,6 @@
   }
 }
 
-main {
-  max-width: 1000px;
-  margin: 0 auto;
-  // background: url(../../assets/Paw-bg.svg) no-repeat left/cover fixed;
-  background-size: 1000px 1000px;
-
-  @media screen and (min-width: 767px) {
-    // background: url(../../assets/Paw-bg.svg) no-repeat 60% 150px/contain fixed;
-  }
-}
-
 .user,
 .articles,
 .animals,
@@ -31,13 +20,13 @@ main {
 .schedules,
 .contact,
 .socialmedia {
-  @include mxn.container;
+  // @include mxn.container;
   padding-bottom: var(--padding-m);
 }
 
-section:nth-child(even) {
-  background-color: var(--secondary-50);
-}
+// section:nth-child(even) {
+//   background-color: var(--secondary-50);
+// }
 
 section:last-of-type {
   padding-bottom: var(--padding-l);

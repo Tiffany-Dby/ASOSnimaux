@@ -3,7 +3,7 @@ import { APP_ROUTES } from "../../constants/route.const";
 import Article from "../Article/Article";
 import Button from "../Button/Button";
 import "./homeArticles.scss";
-import { setToLocalDate } from "../../utils/date.utils";
+import { setToLocalDate, setToLocalDateLong } from "../../utils/date.utils";
 import { useEffect } from "react";
 import { getOverviewThunk } from "../../api/article.api";
 

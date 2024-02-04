@@ -121,6 +121,20 @@ const articleSlice = createSlice({
         }
       }
     },
+    resetFormNewArticle: (state, action) => {
+      return {
+        ...state,
+        articles: {
+          ...state.articles,
+          newArticle: {
+            name: "",
+            location: "",
+            picture_caption: "",
+            description: ""
+          }
+        }
+      }
+    },
     setAll: (state, action) => {
       return {
         ...state,
@@ -184,5 +198,5 @@ const articleSlice = createSlice({
   }
 });
 
-export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle, setAll, startAllLoading, stopAllLoading, setAllError, setDelete, setStartDeleteLoading, setStopDeleteLoading, setDeleteError } = articleSlice.actions;
+export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle, resetFormNewArticle, setAll, startAllLoading, stopAllLoading, setAllError, setDelete, setStartDeleteLoading, setStopDeleteLoading, setDeleteError } = articleSlice.actions;
 export default articleSlice.reducer;

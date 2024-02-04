@@ -7,24 +7,27 @@ import { resetDialogForm, updateDialogForm } from "../../redux/reducers/user.red
 import { createPortal } from "react-dom";
 import Input from "../Input/Input";
 import { setInputFields, toggleDialog } from "../../redux/reducers/dialog.reducer";
-import { updateUsernameThunk } from "../../api/user.api";
+import { updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { APP_ROUTES } from "../../constants/route.const";
 
 const User = ({ imgUrl, imgAlt, date, testimonie }) => {
   const dispatch = useDispatch();
-  const { user, dialogForms } = useSelector(state => state.userReducer);
+  const navigate = useNavigate();
+  const { user, dialogForms, isAuth } = useSelector(state => state.userReducer);
   const { input } = useSelector(state => state.dialogReducer);
 
   const handleSubmit = e => {
     e.preventDefault();
     if (input.id === "username") {
-      dispatch(updateUsernameThunk("username"));
+      dispatch(updateUsernameThunk());
     }
     else if (input.id === "email") {
-      dispatch(updateUsernameThunk("email"));
+      dispatch(updateUsernameThunk());
     }
-    else if (input.id === "password") {
-      dispatch(updateUsernameThunk("password"));
+    else if (input.id === "newPassword") {
+      dispatch(updatePasswordThunk());
     }
   }
 
@@ -85,7 +88,7 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
               <div className="user__password">
                 <div className="content__header">
                   <p>Mot de passe</p>
-                  <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Mot de passe", id: "password", type: "password" })} />
+                  <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Nouveau mot de passe", id: "newPassword", type: "password" })} />
                 </div>
               </div>
             </article>
@@ -115,6 +118,9 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
               <div className="title-wrapper">
                 <h2>Mettre à jour</h2>
               </div>
+              {input.id === "newPassword" &&
+                <Input label={"Ancien mot de passe"} id={"oldPassword"} type={"password"} value={dialogForms.oldPassword} onChange={(value) => updateForm("oldPassword", value)} />
+              }
               <Input label={input.label} id={input.id} type={input.type} value={dialogForms[input.id]} onChange={(value) => updateForm(input.id, value)} />
               <div className="btns-wrapper">
                 <Button btnStyle="" text="Valider" type="submit" btnClick={handleDialogClose} />

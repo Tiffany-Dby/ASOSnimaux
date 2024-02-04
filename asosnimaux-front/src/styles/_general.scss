@@ -12,12 +12,19 @@ body {
   line-height: 1.618;
   font-size: var(--font-size-n);
   -webkit-font-smoothing: antialiased;
-  background-color: var(--white);
   color: var(--dark-brown);
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   flex: 1 0;
+  background: url(../assets/Paw-bg.svg) no-repeat left top 0/1000px 1000px;
+  background-color: var(--secondary-25);
+
+
+  @media screen and (min-width: 767px) {
+    background: url(../assets/Paw-bg.svg) no-repeat right 35% top 0/1100px 1000px;
+    background-color: var(--secondary-25);
+  }
 }
 
 #root {

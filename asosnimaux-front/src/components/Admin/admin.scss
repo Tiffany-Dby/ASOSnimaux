@@ -9,8 +9,7 @@
 
   .new-article,
   .all-articles {
-    @include mxn.container("800px");
-    background-color: transparent;
+    @include mxn.container("800px", 0);
   }
 
   form,
@@ -28,7 +27,7 @@
   }
 
   form {
-    padding: var(--padding-xl) var(--padding-l);
+    padding: var(--padding-l) var(--padding-m);
 
     .input__wrapper:has(textarea) label {
       top: -20px;

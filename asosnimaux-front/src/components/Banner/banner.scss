@@ -3,6 +3,8 @@
 .banner {
   @include mxn.container;
   height: 100vh;
+  min-height: 600px;
+  max-height: 950px;
   width: 100%;
   background: url(../../assets/banner-bg.png) no-repeat left -350px top 80px;
   background-size: 900px;

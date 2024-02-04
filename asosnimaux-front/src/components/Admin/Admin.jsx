@@ -9,6 +9,9 @@ import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk } from "../..
 import { updateFormNewArticle } from "../../redux/reducers/article.reducer";
 import { useEffect, useState } from "react";
 import { setToLocalDate } from "../../utils/date.utils";
+import { createPortal } from "react-dom";
+import Dialog from "../Dialog/Dialog";
+import { toggleDialog } from "../../redux/reducers/dialog.reducer";
 
 const Admin = () => {
   const dispatch = useDispatch();
@@ -17,6 +20,7 @@ const Admin = () => {
   const { newArticle, all } = articles;
 
   const [file, setFile] = useState(null);
+  const [articleId, setArticleId] = useState(null);
 
   useEffect(() => {
     dispatch(getAllArticlesThunk());
@@ -29,8 +33,20 @@ const Admin = () => {
 
   const updateForm = (input, value) => dispatch(updateFormNewArticle({ input, value }));
 
-  const handleDelete = (id) => {
-    dispatch(deleteArticleThunk(id))
+  const handleArticleIdForDeletion = (id) => {
+    setArticleId(id)
+    dispatch(toggleDialog());
+  }
+
+  const handleConfirmedDeletion = () => {
+    dispatch(deleteArticleThunk(articleId));
+    setArticleId(null);
+    dispatch(toggleDialog());
+  }
+
+  const handleCancelDeletion = () => {
+    dispatch(toggleDialog());
+    setArticleId(null);
   }
 
   return (
@@ -72,11 +88,20 @@ const Admin = () => {
                 </div>
                 <div className="icons-wrapper">
                   <FaPencil className="manage-icons" />
-                  <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleDelete(a.id)} />
+                  <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleArticleIdForDeletion(a.id)} />
                 </div>
               </article>
             ))}
           </div>
+          {createPortal(
+            <Dialog>
+              <p>Voulez-vous vraiment supprimer cet article ?</p>
+              <div className="btns-wrapper">
+                <Button btnStyle={""} text="Confirmer" btnClick={handleConfirmedDeletion} />
+                <Button btnStyle={""} text="Annuler" btnClick={handleCancelDeletion} />
+              </div>
+            </Dialog>
+            , document.body)}
         </section>
       </div>
     </>

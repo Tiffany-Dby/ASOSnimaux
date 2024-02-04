@@ -17,7 +17,7 @@ dialog {
 
   form {
     @include mxn.flex("column", "nowrap");
-    gap: 1rem;
+    gap: 2rem;
     padding-bottom: var(--padding-s);
   }
 
@@ -45,7 +45,7 @@ dialog {
 
 @keyframes open {
   from {
-    transform: translateY(-60vh);
+    transform: translateY(-100vh);
     opacity: 0;
   }
 
@@ -63,7 +63,7 @@ dialog {
   }
 
   to {
-    transform: translateY(-60vh);
+    transform: translateY(-100vh);
     opacity: 0;
   }
 }

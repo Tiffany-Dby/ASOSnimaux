@@ -29,6 +29,9 @@ const App = () => {
       dispatch(setUser({ id: isUserAuth.userID, username: isUserAuth.username, email: isUserAuth.email, role: isUserAuth.userRole }));
       dispatch(setisAuth(true));
     }
+    else {
+      dispatch(setisAuth(false));
+    }
   }, [])
 
   return (
@@ -94,7 +97,6 @@ const App = () => {
                 path={APP_ROUTES.ADMIN}
                 element={
                   <>
-
                     <Admin />
                   </>
                 }

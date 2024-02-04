@@ -1,5 +1,5 @@
 import { APP_ROUTES } from "../constants/route.const.js";
-import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll, setStartDeleteLoading, setDeleteError, setDelete } from "../redux/reducers/article.reducer"
+import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll, setStartDeleteLoading, setDeleteError, setDelete, resetFormNewArticle } from "../redux/reducers/article.reducer"
 import { deleteRequest, getRequest, postRequest } from "./api";
 import { setFormData } from "../utils/formidable.utils.js"
 import { getFromStorage } from "../utils/storage.utils.js";
@@ -54,6 +54,8 @@ export const postArticleThunk = (file) => async (dispatch, getState) => {
     picture_url: result.article[0].picture_url,
     picture_caption: result.article[0].picture_caption
   }));
+
+  dispatch(resetFormNewArticle());
 }
 
 export const deleteArticleThunk = (id) => async (dispatch, getState) => {

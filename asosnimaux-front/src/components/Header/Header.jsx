@@ -4,7 +4,7 @@ import { FaCircleUser, FaHeart, FaPowerOff } from "react-icons/fa6";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
-import { updateWindowSize } from "../../redux/reducers/window.reducer";
+import { updateScroll, updateWindowSize } from "../../redux/reducers/window.reducer";
 import "./header.scss";
 import { APP_ROUTES } from "../../constants/route.const";
 import { clearStorage, getFromStorage } from "../../utils/storage.utils";
@@ -15,21 +15,22 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isMobileMenuOpen } = useSelector(state => state.headerReducer);
-  const { width } = useSelector(state => state.windowReducer);
+  const { width, scrollY } = useSelector(state => state.windowReducer);
   const { isAuth } = useSelector(state => state.userReducer);
 
   useEffect(() => {
-    const handleResize = () => {
-      dispatch(updateWindowSize({ width: window.innerWidth }))
-    }
+    const handleResize = () => dispatch(updateWindowSize({ width: window.innerWidth }));
+    const handleScroll = () => dispatch(updateScroll({ scrollY: window.scrollY }));
 
     window.addEventListener("resize", handleResize);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleScroll);
     }
-
   }, []);
+
 
   const handleBurgerClick = () => {
     dispatch(toggleMobileMenu(!isMobileMenuOpen));
@@ -56,7 +57,7 @@ const Header = () => {
         <div className="header__wrapper">
           <div className="header__img">
             <a href={APP_ROUTES.HOME}>
-              <img src="/logo-lm-mobile.svg" alt="Logo ASOS'nimaux" />
+              <img src={width < 900 ? "/logo-lm-mobile.svg" : "/logo-lm.svg"} alt="Logo ASOS'nimaux" />
             </a>
           </div>
           <div className="header__icons">
@@ -81,7 +82,7 @@ const Header = () => {
             </div>
             {width < 767 && <Burger toggleClass={isMobileMenuOpen ? " open" : ""} handleBurger={handleBurgerClick} />}
             <HeaderNav toggleClass={isMobileMenuOpen ? "nav-open" : ""} />
-            <span className="header__background"></span>
+            <span className={`header__background${scrollY > 1 ? ' shadow' : ''}`}></span>
           </div>
         </div>
       </header>

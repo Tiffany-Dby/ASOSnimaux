@@ -10,7 +10,7 @@
   flex-grow: #{$size};
 }
 
-@mixin container($width: "1000px", $padding: var(--padding-s)) {
+@mixin container($width: "1300px", $padding: var(--padding-s)) {
   width: 100%;
   margin: 0 auto;
   max-width: #{$width};
@@ -111,10 +111,10 @@
     border: none;
     border-radius: var(--radius-xxs);
     background-color: transparent;
-    box-shadow: var(--shadow-border-m) var(--dark-brown);
+    box-shadow: var(--shadow-border-m) var(--primary-50);
     font-size: var(--font-size-s);
     text-decoration: none;
-    color: var(--dark-brown);
+    color: var(--secondary-50);
     cursor: pointer;
   }
 
@@ -122,8 +122,8 @@
     content: "";
     grid-area: 1/1;
     border-radius: var(--radius-xxs);
-    box-shadow: 0px 0px 0px 2px var(--secondary125);
-    background-color: var(--secondary125);
+    box-shadow: 0px 0px 0px 2px var(--dark-brown);
+    background-color: var(--dark-brown);
     transform: translate(-.65rem, .65rem);
     transition: all .5s;
   }
@@ -131,4 +131,39 @@
   &:hover::after {
     transform: translate(0, 0);
   }
+}
+
+@mixin loading {
+  display: grid;
+  grid-area: 1/1;
+  content: '';
+  width: calc(6*30px);
+  height: 50px;
+  color: var(--accent);
+  filter: drop-shadow(30px 25px 0 currentColor) drop-shadow(60px 0 0 currentColor) drop-shadow(120px 0 0 currentColor);
+  clip-path: inset(0 100% 0 0);
+  animation: laodingPaws 2s infinite steps(7);
+
+
+  &::before {
+    grid-area: 1/1;
+    content: "";
+    width: 30px;
+    height: 25px;
+    --c: no-repeat radial-gradient(farthest-side, currentColor 92%, #0000);
+    background:
+      var(--c) left /55% 55%,
+      var(--c) top 2% right 40%/27% 22%,
+      var(--c) top 23% right 5%/28% 24%,
+      var(--c) top 58% right 5%/26% 24%,
+      var(--c) bottom 12% right 30%/25% 20%;
+  }
+
+  @keyframes laodingPaws {
+    100% {
+      clip-path: inset(0 -30px 0 0)
+    }
+  }
+
+
 }

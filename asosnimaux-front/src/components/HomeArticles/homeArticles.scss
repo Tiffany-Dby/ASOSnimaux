@@ -1,16 +1,26 @@
 @use "../../styles/mixins" as mxn;
 
 .articles {
+  background-color: var(--secondary-50);
+
   .content-wrapper {
+    @include mxn.container;
     @include mxn.flex;
     justify-content: center;
-    gap: 2rem;
+    gap: 3rem;
   }
 
   .articles-wrapper {
     @include mxn.flex;
     justify-content: center;
     gap: 3rem;
+
+    @media screen and (min-width: 767px) {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: auto;
+      width: 100%;
+    }
   }
 
   &>div:has(.btn) {
