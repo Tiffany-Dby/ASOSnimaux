@@ -8,6 +8,7 @@ const USER_STATE = {
     role: ""
   },
   isAuth: false,
+  isTokenChecked: false,
   signInForm: {
     login: "",
     password: ""

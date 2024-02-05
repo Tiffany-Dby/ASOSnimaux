@@ -1,0 +1,36 @@
+@use "../../styles/mixins" as mxn;
+
+.error {
+  padding: var(--padding-m);
+  text-align: center;
+
+  h1 {
+    font-size: calc(3rem + .6vmin);
+  }
+
+  strong {
+    font-size: var(--font-size-m);
+  }
+
+  ul {
+    @include mxn.flex;
+    justify-content: center;
+    gap: 3rem;
+  }
+
+  img {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .btn-wrapper {
+    @include mxn.btnSimple;
+    margin-top: 2rem;
+  }
+
+  a {
+    text-decoration: none;
+    display: block;
+  }
+
+}

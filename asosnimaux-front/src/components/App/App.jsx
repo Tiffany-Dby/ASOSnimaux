@@ -18,6 +18,7 @@ import SocialMedia from '../SocialMedia/SocialMedia';
 import User from '../User/User';
 import { getFromStorage } from "../../utils/storage.utils.js";
 import { setUser, setisAuth } from "../../redux/reducers/user.reducer.js";
+import Error from '../Error/Error.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -113,11 +114,9 @@ const App = () => {
             <Route
               path={"*"}
               element={
-                <main style={{ padding: "1rem" }}>
-                  <h1>Oops !</h1>
-                  <em>Erreur : 404</em>
-                  <p>Cette page n'existe pas.</p>
-                </main>
+                <>
+                  <Error />
+                </>
               }
             />
           </Routes>

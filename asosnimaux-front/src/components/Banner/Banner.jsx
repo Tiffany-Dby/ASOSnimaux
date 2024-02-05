@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/route.const";
 import Button from "../Button/Button";
 import "./banner.scss";
@@ -15,10 +16,11 @@ const Banner = () => {
         <div className="banner__text">
           <p>Donnons-leur autant qu'ils nous apportent !</p>
           <div className="banner__buttons">
-            <Button btnStyle="" text="Je donne" />
-            {/* <Button btnStyle="" text="J'adopte" /> */}
             <div className="btn-wrapper">
-              <a className="btn" href={APP_ROUTES.ADOPTION}>J'adopte</a>
+              <Link className="btn" to={APP_ROUTES.DONATION}>Je donne</Link>
+            </div>
+            <div className="btn-wrapper">
+              <Link className="btn" to={APP_ROUTES.ADOPTION}>J'adopte</Link>
             </div>
           </div>
         </div>

@@ -1,29 +1,33 @@
 import { APP_ROUTES } from "../../constants/route.const";
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import "./headerNav.scss";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
 
 const HeaderNav = ({ toggleClass }) => {
   const dispatch = useDispatch();
-  const location = useLocation();
+  const { user } = useSelector(state => state.userReducer);
 
-  const isActive = (path) => {
-    return location.pathname === path;
+  const checkActiveLink = ({ isActive }) => {
+    return isActive ? 'active' : '';
   }
 
-  const handleCloseMobileMenuAfterClick = () => {
+  const handleCloseClickOnLink = () => {
     dispatch(toggleMobileMenu());
   }
 
   return (
     <>
       <nav className={`header__nav ${toggleClass}`}>
-        <ul className="header__links">
-          <li><Link className={isActive(APP_ROUTES.HOME) ? 'active' : ''} to={APP_ROUTES.HOME} onClick={handleCloseMobileMenuAfterClick}>Accueil</Link></li>
-          <li><Link className={isActive(APP_ROUTES.ASSOCIATION) ? 'active' : ''} to={APP_ROUTES.ASSOCIATION} onClick={handleCloseMobileMenuAfterClick}>L'Association</Link></li>
-          <li><Link className={isActive(APP_ROUTES.ADOPTION) ? 'active' : ''} to={APP_ROUTES.ADOPTION} onClick={handleCloseMobileMenuAfterClick}>Adoption</Link></li>
-          <li><Link className={isActive(APP_ROUTES.ARTICLES) ? 'active' : ''} to={APP_ROUTES.ARTICLES} onClick={handleCloseMobileMenuAfterClick}>Actualités</Link></li>
-          <li><Link className={isActive(APP_ROUTES.ADMIN) ? 'active' : ''} to="" onClick={handleCloseMobileMenuAfterClick}>Contact</Link></li>
+        <ul className="header__links" onClick={handleCloseClickOnLink}>
+          <li><NavLink className={checkActiveLink} to={APP_ROUTES.HOME} >Accueil</NavLink></li>
+          <li><NavLink className={checkActiveLink} to={APP_ROUTES.ASSOCIATION} >L'Association</NavLink></li>
+          <li><NavLink className={checkActiveLink} to={APP_ROUTES.ADOPTION} >Adoption</NavLink></li>
+          <li><NavLink className={checkActiveLink} to={APP_ROUTES.ARTICLES} >Actualités</NavLink></li>
+          <li><NavLink className={checkActiveLink} to="" >Contact</NavLink></li>
+          {user.role === 'admin' &&
+            <li><NavLink className={checkActiveLink} to={APP_ROUTES.ADMIN} >Admin</NavLink></li>}
         </ul>
       </nav >
     </>

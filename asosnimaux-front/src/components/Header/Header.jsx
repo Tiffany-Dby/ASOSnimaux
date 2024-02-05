@@ -1,7 +1,7 @@
 import Burger from "../Burger/Burger";
 import HeaderNav from "../HeaderNav/HeaderNav";
 import { FaCircleUser, FaHeart, FaPowerOff } from "react-icons/fa6";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
 import { updateScroll, updateWindowSize } from "../../redux/reducers/window.reducer";
@@ -9,11 +9,12 @@ import "./header.scss";
 import { APP_ROUTES } from "../../constants/route.const";
 import { clearStorage, getFromStorage } from "../../utils/storage.utils";
 import { setUser, setisAuth } from "../../redux/reducers/user.reducer";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { isMobileMenuOpen } = useSelector(state => state.headerReducer);
   const { width, scrollY } = useSelector(state => state.windowReducer);
   const { isAuth } = useSelector(state => state.userReducer);
@@ -56,28 +57,28 @@ const Header = () => {
       <header id="topPage" className="header">
         <div className="header__wrapper">
           <div className="header__img">
-            <a href={APP_ROUTES.HOME}>
+            <Link to={APP_ROUTES.HOME}>
               <img src={width < 900 ? "/logo-lm-mobile.svg" : "/logo-lm.svg"} alt="Logo ASOS'nimaux" />
-            </a>
+            </Link>
           </div>
           <div className="header__icons">
             <div className="icon__wrapper">
-              <a href="">
+              <Link to={APP_ROUTES.FAVORITES}>
                 <FaHeart className="icon heart" color="var(--secondary)" />
-              </a>
+              </Link>
             </div>
             <div className="icon__wrapper">
               {isAuth ?
                 <>
-                  <a href={APP_ROUTES.ACCOUNT}>
+                  <Link to={APP_ROUTES.ACCOUNT}>
                     <FaCircleUser className="icon" color="var(--primary)" />
-                  </a>
+                  </Link>
                   <FaPowerOff className="icon" color="var(--primary)" onClick={handleSignOut} />
                 </>
                 :
-                <a href={APP_ROUTES.SIGN_IN}>
+                <Link to={APP_ROUTES.SIGN_IN}>
                   <FaCircleUser className="icon" color="var(--primary)" />
-                </a>
+                </Link>
               }
             </div>
             {width < 767 && <Burger toggleClass={isMobileMenuOpen ? " open" : ""} handleBurger={handleBurgerClick} />}
