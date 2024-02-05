@@ -12,7 +12,7 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { signInForm, signInLoading, signInError, isAuth } = useSelector(state => state.userReducer);
+  const { signInForm, signInLoading, signInError, isAuth, user } = useSelector(state => state.userReducer);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,6 +32,10 @@ const SignIn = () => {
       navigate(APP_ROUTES.HOME, { replace: true });
     }
   }, [isAuth]);
+
+  useEffect(() => {
+    console.log("Sign in", user)
+  }, []);
 
   return (
     <>

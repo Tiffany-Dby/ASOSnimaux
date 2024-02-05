@@ -1,6 +1,6 @@
 import "./button.scss";
 
-const Button = ({ type, disabled, btnStyle, btnClick, text }) => {
+const Button = ({ type, disabled, btnStyle, formMethod, btnClick, text }) => {
 
   return (
     <div className="btn-wrapper">

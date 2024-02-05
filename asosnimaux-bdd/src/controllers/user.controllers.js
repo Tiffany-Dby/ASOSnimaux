@@ -37,7 +37,14 @@ const readOne = async ({ body: { userID } }, res) => {
   const response = await UserDB.readOne(userID);
   const { result, error } = response;
 
-  return res.status(error ? 500 : 200).json({ message: error ? error : `Request on user ${userID} successful`, result });
+  const user = {
+    userID: result[0].id,
+    username: result[0].username,
+    email: result[0].email,
+    userRole: result[0].user_role
+  }
+
+  return res.status(error ? 500 : 200).json({ message: error ? error : `Request on user ${userID} successful`, user });
 }
 
 const signIn = async ({ body: { login, password } }, res) => {

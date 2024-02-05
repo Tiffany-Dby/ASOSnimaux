@@ -29,7 +29,9 @@ const USER_STATE = {
     newPassword: ""
   },
   dialogLoading: false,
-  dialogError: null
+  dialogError: null,
+  getUserLoading: false,
+  getUserError: null
 }
 
 const userSlice = createSlice({
@@ -44,6 +46,7 @@ const userSlice = createSlice({
         signInLoading: false,
         signInError: null,
         dialogLoading: false,
+        getUserLoading: false,
         user: {
           ...state.user,
           id,
@@ -61,6 +64,15 @@ const userSlice = createSlice({
         signInForm: {
           ...state.signInForm,
           [input]: value
+        }
+      }
+    },
+    resetSignInForm: (state, action) => {
+      return {
+        ...state,
+        signInForm: {
+          login: "",
+          password: ""
         }
       }
     },
@@ -144,9 +156,28 @@ const userSlice = createSlice({
         dialogError: action.payload.error,
         dialogLoading: false
       }
+    },
+    startGetUserLoading: (state, action) => {
+      return { ...state, getUserLoading: true }
+    },
+    stopGetUserLoading: (state, action) => {
+      return { ...state, getUserLoading: false }
+    },
+    setGetUserError: (state, action) => {
+      return {
+        ...state,
+        getUserError: action.payload.error,
+        getUserLoading: false
+      }
+    },
+    setTokenCheck: (state, action) => {
+      return {
+        ...state,
+        isTokenChecked: true
+      }
     }
   }
 });
 
-export const { setUser, updateSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setisAuth, updateDialogForm, resetDialogForm, startDialogLoading, stopDialogLoading, setDialogError } = userSlice.actions;
+export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setisAuth, updateDialogForm, resetDialogForm, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, setTokenCheck } = userSlice.actions;
 export default userSlice.reducer;
