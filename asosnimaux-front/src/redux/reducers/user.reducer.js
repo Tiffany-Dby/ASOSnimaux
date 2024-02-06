@@ -8,7 +8,6 @@ const USER_STATE = {
     role: ""
   },
   isAuth: false,
-  isTokenChecked: false,
   signInForm: {
     login: "",
     password: ""
@@ -169,15 +168,9 @@ const userSlice = createSlice({
         getUserError: action.payload.error,
         getUserLoading: false
       }
-    },
-    setTokenCheck: (state, action) => {
-      return {
-        ...state,
-        isTokenChecked: true
-      }
     }
   }
 });
 
-export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setisAuth, updateDialogForm, resetDialogForm, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, setTokenCheck } = userSlice.actions;
+export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setisAuth, updateDialogForm, resetDialogForm, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError } = userSlice.actions;
 export default userSlice.reducer;

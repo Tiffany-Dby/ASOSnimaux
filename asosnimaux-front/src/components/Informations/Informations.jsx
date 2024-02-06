@@ -26,10 +26,10 @@ const Informations = () => {
   return (
     <>
       <section className="informations">
+        <div className="title-wrapper">
+          <h2>Informations</h2>
+        </div>
         <div className="informations__wrapper">
-          <div className="title-wrapper">
-            <h2>Informations</h2>
-          </div>
           <Map />
           <Address />
           <Contact />

@@ -2,6 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const DIALOG_STATE = {
   isOpen: false,
+  isNewForm: false,
+  isDeleteForm: false,
+  isUpdateForm: false,
   input: {
     label: "",
     id: "",
@@ -16,6 +19,12 @@ const dialogSlice = createSlice({
     toggleDialog: (state, action) => {
       state.isOpen = !state.isOpen;
     },
+    closeDialog: (state, action) => {
+      state.isOpen = false;
+      state.isNewForm = false;
+      state.isDeleteForm = false;
+      state.isUpdateForm = false;
+    },
     setInputFields: (state, action) => {
       const { label, id, type } = action.payload;
       return {
@@ -27,9 +36,21 @@ const dialogSlice = createSlice({
           type
         }
       }
-    }
+    },
+    setIsNewForm: (state, action) => {
+      state.isOpen = true;
+      state.isNewForm = true;
+    },
+    setIsDeleteForm: (state, action) => {
+      state.isOpen = true;
+      state.isDeleteForm = true;
+    },
+    setIsUpdateForm: (state, action) => {
+      state.isOpen = true;
+      state.isUpdateForm = true;
+    },
   }
 });
 
-export const { toggleDialog, setInputFields } = dialogSlice.actions;
+export const { toggleDialog, setInputFields, closeDialog, setIsNewForm, setIsDeleteForm, setIsUpdateForm } = dialogSlice.actions;
 export default dialogSlice.reducer;

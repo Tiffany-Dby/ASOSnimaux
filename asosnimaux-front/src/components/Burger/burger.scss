@@ -17,6 +17,10 @@
     border-radius: var(--radius-l);
     background-color: var(--primary);
     transition: all .6s ease;
+
+    @media screen and (min-width: 767px) {
+      background-color: transparent;
+    }
   }
 
   span::before,

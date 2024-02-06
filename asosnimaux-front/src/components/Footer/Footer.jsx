@@ -7,7 +7,6 @@ import { useRef } from "react";
 const Footer = () => {
   const topPageRef = useRef();
 
-
   const handleScrollToTopPage = () => {
     if (topPageRef.current) topPageRef.current.scrollIntoView();
   }

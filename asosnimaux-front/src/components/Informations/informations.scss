@@ -1,19 +1,22 @@
 @use "../../styles/mixins" as mxn;
 
 .informations {
+  @include mxn.flex("column", "nowrap");
+  gap: 1rem;
 
   &__wrapper {
-    // @include mxn.flex("column", "nowrap");
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
-    @include mxn.container;
+    @include mxn.container($padding: 0);
+
+    @media screen and (min-width: 400px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
 
     @media screen and (min-width: 767px) {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       grid-template-areas:
-        "ttl ttl ttl ttl"
         "map map map map"
         "map map map map"
         "add con sch sch"
@@ -23,7 +26,6 @@
 
     @media screen and (min-width: 1024px) {
       grid-template-areas:
-        "ttl ttl ttl ttl"
         "map map map sch"
         "map map map sch"
         "add con img img"
@@ -31,16 +33,10 @@
     }
   }
 
-  .title-wrapper {
-    grid-column: 1/-1;
-
-    @media screen and (min-width: 767px) {
-      grid-area: ttl;
-    }
-  }
-
   .map {
-    grid-column: 1/-1;
+    @media screen and (min-width: 400px) {
+      grid-column: 1/-1;
+    }
 
     @media screen and (min-width: 767px) {
       grid-area: map;
@@ -48,24 +44,19 @@
   }
 
   .address {
-    grid-column: 1/-1;
-
-    @media screen and (min-width: 470px) {
-      grid-column: 1/2;
-    }
-
     @media screen and (min-width: 767px) {
       grid-area: add;
     }
   }
 
   .schedules {
-    grid-column: 1/-1;
-
+    @media screen and (min-width: 400px) {
+      grid-column: 1/-1;
+    }
 
     @media screen and (min-width: 550px) {
       grid-column: 2/-1;
-      grid-row: 3/5;
+      grid-row: 2/4;
     }
 
     @media screen and (min-width: 767px) {
@@ -74,12 +65,6 @@
   }
 
   .contact {
-    grid-column: 1/-1;
-
-    @media screen and (min-width: 470px) {
-      grid-column: 2/-1;
-    }
-
     @media screen and (min-width: 550px) {
       grid-column: 1/2;
     }
@@ -90,9 +75,9 @@
   }
 
   .socialmedia {
-    grid-column: 1/-1;
-
-    @media screen and (min-width: 550px) {}
+    @media screen and (min-width: 400px) {
+      grid-column: 1/-1;
+    }
 
     @media screen and (min-width: 767px) {
       grid-area: soc;

@@ -7,9 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
 import { updateScroll, updateWindowSize } from "../../redux/reducers/window.reducer";
 import { APP_ROUTES } from "../../constants/route.const";
-import { clearStorage } from "../../utils/storage.utils";
-import { setUser, setisAuth } from "../../redux/reducers/user.reducer";
 import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "../../utils/user.utils";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -22,6 +21,8 @@ const Header = () => {
   useEffect(() => {
     const handleResize = () => dispatch(updateWindowSize({ width: window.innerWidth }));
     const handleScroll = () => dispatch(updateScroll({ scrollY: window.scrollY }));
+
+    handleResize();
 
     window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleScroll);
@@ -38,9 +39,7 @@ const Header = () => {
   }
 
   const handleSignOut = () => {
-    dispatch(setUser({ id: "", username: "", email: "", role: "" }));
-    clearStorage();
-    dispatch(setisAuth(false));
+    signOut(dispatch);
     if (isAuth) {
       navigate(APP_ROUTES.SIGN_IN, { replace: true });
     }

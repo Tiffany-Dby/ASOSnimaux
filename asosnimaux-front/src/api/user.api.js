@@ -1,6 +1,7 @@
-import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, setisAuth, setTokenCheck, resetSignInForm, resetDialogForm } from "../redux/reducers/user.reducer";
+import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm } from "../redux/reducers/user.reducer";
 import { getRequest, postRequest, putRequest } from "./api";
-import { clearStorage, getFromStorage, setToStorage } from "../utils/storage.utils.js";
+import { getFromStorage, setToStorage } from "../utils/storage.utils.js";
+import { signOut } from "../utils/user.utils.js";
 
 export const signInThunk = () => async (dispatch, getState) => {
   const { signInForm, signInLoading, user } = getState().userReducer;
@@ -47,7 +48,7 @@ export const signUpThunk = () => async (dispatch, getState) => {
 
 export const updateUsernameThunk = () => async (dispatch, getState) => {
   const { dialogForms, dialogLoading, user } = getState().userReducer;
-  const currentUser = getFromStorage("user");
+  const token = getFromStorage("token");
   if (dialogLoading) return;
 
   dispatch(startDialogLoading());
@@ -56,10 +57,9 @@ export const updateUsernameThunk = () => async (dispatch, getState) => {
     username: dialogForms.username
   }
 
-  const { result, error, status } = await putRequest(`users/username`, formatExpectedOnRequest, currentUser.token);
+  const { result, error, status } = await putRequest(`users/username`, formatExpectedOnRequest, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setDialogError({ error: `Something went wrong : ${error}` }));
 
-  setToStorage("user", { ...currentUser, username: dialogForms.username });
   dispatch(setUser({ ...user, username: dialogForms.username }))
   dispatch(resetDialogForm())
 }
@@ -79,9 +79,7 @@ export const updatePasswordThunk = () => async (dispatch, getState) => {
   const { result, error, status } = await putRequest(`users/password`, formatExpectedOnRequest, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setDialogError({ error: `Something went wrong : ${error}` }));
 
-  clearStorage();
-  dispatch(setUser({ id: "", username: "", email: "", role: "" }));
-  dispatch(setisAuth(false));
+  signOut(dispatch);
   dispatch(resetDialogForm());
 }
 
@@ -92,12 +90,9 @@ export const getOneUserThunk = () => async (dispatch, getState) => {
 
   const { result, error, status } = await getRequest("users/user", token);
   if (!result?.message || status >= 400 || !!error) {
-    dispatch(setUser({ id: "", username: "", email: "", role: "" }));
-    dispatch(setisAuth(false));
-    dispatch(setTokenCheck(true));
+    signOut(dispatch);
     return dispatch(setGetUserError({ error: `Something went wrong: ${error}` }));
   }
 
-  dispatch(setTokenCheck(true));
   dispatch(setUser({ id: result.user.userID, username: result.user.username, email: result.user.email, role: result.user.userRole }))
 }

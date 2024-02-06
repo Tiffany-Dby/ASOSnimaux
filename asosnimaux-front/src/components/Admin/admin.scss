@@ -1,48 +1,97 @@
 @use "../../styles/mixins" as mxn;
 
 .admin {
-  @include mxn.container;
+  @include mxn.flex("column", "nowrap");
+  padding-top: var(--padding-l);
 
-  h2 {
-    margin-bottom: 2rem;
-  }
-
-  .new-article,
-  .all-articles {
-    @include mxn.container("800px", 0);
-  }
-
-  form,
-  .articles-overview__wrapper {
-    @include mxn.container("600px", 0);
+  &__all-articles {
+    @include mxn.container($padding: var(--padding-s));
     @include mxn.flex("column", "nowrap");
-    gap: 3rem;
+    gap: 2rem;
+
+    &__wrapper {
+      @include mxn.flex;
+      justify-content: space-around;
+      gap: 3rem;
+
+      @media screen and (min-width:650px) {
+        @include mxn.grow
+      }
+    }
   }
 
-  form,
-  .article-overview {
-    background-color: var(--secondary-50);
-    border-radius: var(--radius-m);
+  &__article {
+    display: grid;
+    width: 100%;
+    background-color: var(--white);
+    border-radius: var(--radius-s);
     box-shadow: var(--box-shadow-2-2-5);
+
+    @media screen and (min-width:620px) {
+      flex: 1 0;
+      min-width: 230px;
+
+      &:last-child {
+        max-width: 50%;
+      }
+    }
+
+    @media screen and (min-width:930px) {
+      flex: 1 0;
+      min-width: 300px;
+
+      &:last-child {
+        max-width: 45%;
+      }
+    }
+
+    @media screen and (min-width:1000px) {
+
+      &:last-child {
+        max-width: calc(33% - var(--padding-s));
+      }
+    }
+
+    &__content {
+      display: grid;
+      text-align: center;
+
+      h3 {
+        padding: var(--padding-xxs);
+      }
+    }
+
+    &__date {
+      grid-area: 1/1;
+
+      p {
+        padding: var(--padding-xs);
+        background-color: var(--dark-brown);
+        color: var(--white);
+        border-radius: var(--radius-s) var(--radius-s) 0 0;
+      }
+    }
+
+    .icons-wrapper {
+      @include mxn.flex;
+      justify-content: center;
+      align-self: end;
+      gap: 5rem;
+      margin: 2rem 0;
+    }
   }
 
-  form {
-    padding: var(--padding-l) var(--padding-m);
+  .btn-wrapper {
+    @include mxn.btnStylish;
+    margin: 2rem auto;
 
-    .input__wrapper:has(textarea) label {
-      top: -20px;
+    .btn {
+      font-size: var(--font-size-n);
     }
+  }
 
-    textarea {
-      min-width: 100%;
-      max-width: 100%;
-      min-height: 200px;
-    }
-
-    .btn-wrapper {
-      @include mxn.btnSimple;
-      margin: 0 auto;
-    }
+  &__new-article {
+    background-color: var(--secondary-50);
 
     input[type="file"] {
       &::file-selector-button {
@@ -61,19 +110,11 @@
         }
       }
     }
-  }
 
-  .article-overview {
-    @include mxn.flex("row", "nowrap");
-    gap: 5rem;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--padding-s);
-
-    .icons-wrapper {
-      @include mxn.flex("column", "nowrap");
-      align-items: center;
-      gap: 2.5rem;
+    textarea {
+      min-width: 100%;
+      max-width: 100%;
+      min-height: 200px;
     }
   }
 }

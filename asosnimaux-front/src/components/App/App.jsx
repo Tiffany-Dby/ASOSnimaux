@@ -16,13 +16,17 @@ import { APP_ROUTES } from "../../constants/route.const.js"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOneUserThunk } from '../../api/user.api.js';
+import { getFromStorage } from '../../utils/storage.utils.js';
 
 const App = () => {
   const dispatch = useDispatch();
   const { user, isAuth } = useSelector(state => state.userReducer);
 
   useEffect(() => {
-    dispatch(getOneUserThunk());
+    const token = getFromStorage("token");
+    if (token) {
+      dispatch(getOneUserThunk());
+    }
   }, []);
 
   return (
@@ -68,7 +72,6 @@ const App = () => {
                 <>
                   <PrivateRoute
                     hasAccess={isAuth}
-                    redirectPath={APP_ROUTES.SIGN_IN}
                   >
                     <User />
                   </PrivateRoute>
@@ -81,7 +84,6 @@ const App = () => {
                 <>
                   <PrivateRoute
                     hasAccess={isAuth && user.role === 'admin'}
-                    redirectPath={APP_ROUTES.SIGN_IN}
                   >
                     <Admin />
                   </PrivateRoute>
