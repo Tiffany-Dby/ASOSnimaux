@@ -56,22 +56,27 @@
     @media screen and (min-width: 500px) {
       width: 60%;
     }
+  }
 
-    &:has(.article__content__date) div:nth-child(1) {
-      justify-self: center;
-    }
+  &:has(.article__date) div:nth-child(1) {
+    justify-self: center;
+  }
 
-    &__title {
-      font-size: var(--font-size-m);
-    }
+  &__title {
+    font-size: var(--font-size-m);
+  }
 
-    &__date {
+  &__date {
+    grid-row: 1/1;
+    justify-self: center;
+
+    p {
       font-size: var(--font-size-s);
-      padding: 1rem;
+      padding: var(--padding-s);
       background-color: var(--dark-brown);
       border-radius: 0 0 var(--radius-s) var(--radius-s);
       color: var(--white);
-      text-align: center;
     }
   }
+
 }

@@ -10,7 +10,6 @@ import Contact from '../Contact/Contact';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import HomeArticles from '../HomeArticles/HomeArticles';
-import Location from '../Location/Location';
 import Schedules from '../Schedules/Schedules';
 import SignIn from '../SignIn/SignIn';
 import SignUp from '../SignUp/SignUp';
@@ -21,6 +20,7 @@ import { setUser, setisAuth } from "../../redux/reducers/user.reducer.js";
 import Error from '../Error/Error.jsx';
 import { getOneUserThunk } from '../../api/user.api.js';
 import PrivateRoute from '../PrivateRoute/PrivateRoute.jsx';
+import Informations from '../Informations/Informations.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -77,21 +77,8 @@ const App = () => {
               element={
                 <>
                   <Banner />
-                  <section className="articles">
-                    <HomeArticles />
-                  </section>
-                  <section className="location">
-                    <Location />
-                  </section>
-                  <section className="schedules">
-                    <Schedules />
-                  </section>
-                  <section id="contact" className="contact">
-                    <Contact />
-                  </section>
-                  <section className="socialmedia">
-                    <SocialMedia />
-                  </section>
+                  <HomeArticles />
+                  <Informations />
                 </>
               }
             />

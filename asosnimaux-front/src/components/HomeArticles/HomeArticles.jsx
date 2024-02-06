@@ -6,6 +6,7 @@ import "./homeArticles.scss";
 import { setToLocalDate, setToLocalDateLong } from "../../utils/date.utils";
 import { useEffect } from "react";
 import { getOverviewThunk } from "../../api/article.api";
+import { Link } from "react-router-dom";
 
 const HomeArticles = () => {
   const dispatch = useDispatch();
@@ -18,19 +19,19 @@ const HomeArticles = () => {
 
   return (
     <>
-      <div className="title-wrapper">
-        <h2>Articles</h2>
-      </div>
-      <div className="content-wrapper">
-        <div className="articles-wrapper">
+      <section className="articles-overview">
+        <div className="title-wrapper">
+          <h2>Articles</h2>
+        </div>
+        <div className="articles-overview__wrapper">
           {overview.map((article, index) => (
-            <Article key={index} artclStyle="" imgUrl={article.picture_url} imgAlt={article.picture_caption} title={article.name} date={setToLocalDate(article.date)} text={article.truncated_description} />
+            <Article key={index} artclStyle="" imgUrl={article.picture_url} imgAlt={article.picture_caption} title={article.name} date={setToLocalDateLong(article.date)} text={article.truncated_description} />
           ))}
         </div>
         <div className="btn-wrapper">
-          <a className="btn" href={APP_ROUTES.ARTICLES}>Voir plus d'articles</a>
+          <Link className="btn" to={APP_ROUTES.ARTICLES}>Voir plus d'articles</Link>
         </div>
-      </div>
+      </section>
 
     </>
   )

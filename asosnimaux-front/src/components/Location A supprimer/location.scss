@@ -1,0 +1,48 @@
+@use "../../styles/mixins" as mxn;
+
+.location {
+  padding: var(--padding-s);
+
+  &__content {
+    @include mxn.flex("column", "nowrap");
+    gap: var(--padding-m);
+
+    @media screen and (min-width: 767px) {
+      flex-direction: row;
+    }
+  }
+
+  article {
+    @include mxn.flex("column", "nowrap");
+    align-items: center;
+    background-color: var(--white);
+    box-shadow: var(--box-shadow-2-2-5);
+    border-radius: var(--radius-xs);
+  }
+
+  &__map {
+    @include mxn.grow;
+  }
+
+  &__subtitle {
+    text-transform: uppercase;
+    text-align: center;
+    background-color: var(--dark-brown);
+    width: 100%;
+    color: var(--white);
+    border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+    padding: var(--padding-xs);
+  }
+
+  &__details {
+    padding: var(--padding-s);
+  }
+
+  iframe {
+    width: 100%;
+    height: 300px;
+    // box-shadow: var((--box-shadow-2-2-5));
+    padding: var(--padding-s);
+    border-radius: 2rem;
+  }
+}

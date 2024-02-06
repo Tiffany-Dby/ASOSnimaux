@@ -1,6 +1,6 @@
 @use "../../styles/mixins" as mxn;
 
-.social-media-list {
+.socialmedia-list {
   @include mxn.flex;
   gap: .5rem;
   transition: all .5s ease;

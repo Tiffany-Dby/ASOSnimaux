@@ -1,15 +1,10 @@
 @use "../../styles/mixins" as mxn;
 
 .socialmedia {
-  &__details {
-    text-align: center;
-  }
+  text-align: center;
 
-  .social-media-list {
-    padding: 0 var(--padding-m);
-    justify-content: center;
-    max-width: 380px;
-    margin: 0 auto;
+  .informations__article__title {
+    background-color: var(--dark-brown);
   }
 
   .icon {

@@ -1,17 +1,17 @@
-import SocialMediaLink from "../SocialMediaLink/SocialMediaLink";
+import SocialMediaLink from "../SocialMediaLinks/SocialMediaLinks";
 import "./socialMedia.scss";
 
 const SocialMedia = () => {
   return (
     <>
-      <div className="title-wrapper">
-        <h2>Réseaux Sociaux</h2>
-      </div>
+      <article className="informations__article socialmedia">
+        <h3 className="informations__article__title">Réseaux Sociaux</h3>
 
-      <div className="socialmedia__details">
-        <p>N'hésitez pas à nous suivre !</p>
-        <SocialMediaLink socialMediaStyle={"socialmedia__list"} />
-      </div>
+        <div className="informations__article__details">
+          <p>N'hésitez pas à nous suivre !</p>
+          <SocialMediaLink socialMediaStyle={"socialmedia__list"} />
+        </div>
+      </article>
     </>
   );
 }

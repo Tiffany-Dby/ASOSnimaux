@@ -9,12 +9,12 @@ const Article = ({ artclStyle, imgUrl, imgAlt, title, date, text }) => {
           <img loading="lazy" crossOrigin="anonymous" src={imgUrl} alt={imgAlt} />
         </div>
         <div className="article__content">
-          <div>
-            <p className="article__content__date">{date}</p>
+          <h2 className="article__title">{title}</h2>
+          <div className="article__date">
+            <p>{date}</p>
           </div>
-          <h2 className="article__content__title">{title}</h2>
-          <div>
-            <p className="article__content__text">{text}</p>
+          <div className="article__text">
+            <p>{text}</p>
           </div>
         </div>
       </article>

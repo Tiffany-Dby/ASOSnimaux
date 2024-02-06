@@ -1,0 +1,12 @@
+.map {
+  .informations__article__title {
+    background-color: var(--primary);
+  }
+
+  iframe {
+    width: 100%;
+    height: 300px;
+    padding: var(--padding-s);
+    border-radius: 2rem;
+  }
+}

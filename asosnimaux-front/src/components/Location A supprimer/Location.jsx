@@ -16,7 +16,7 @@ const Location = () => {
         <article className="location__address">
           <h3 className="location__subtitle">Adresse</h3>
           <div className="location__details">
-            <p><span>ASOS'NIMAUX</span></p>
+            <p><strong>ASOS'NIMAUX</strong></p>
             <p>8, Parvis des Chartrons</p>
             <p>33000 Bordeaux</p>
             <p>FRANCE</p>

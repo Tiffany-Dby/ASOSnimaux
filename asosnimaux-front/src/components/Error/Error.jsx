@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./error.scss";
+import { APP_ROUTES } from "../../constants/route.const";
 
 const Error = () => {
   return (
@@ -16,12 +17,12 @@ const Error = () => {
           <ul>
             <li>
               <div className="btn-wrapper">
-                <Link className="btn">Accueil</Link>
+                <Link to={APP_ROUTES.HOME} className="btn">Accueil</Link>
               </div>
             </li>
             <li>
               <div className="btn-wrapper">
-                <Link className="btn">Compte</Link>
+                <Link to={APP_ROUTES.ACCOUNT} className="btn">Compte</Link>
               </div>
             </li>
           </ul>

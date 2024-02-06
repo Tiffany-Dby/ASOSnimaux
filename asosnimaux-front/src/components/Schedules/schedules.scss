@@ -1,8 +1,13 @@
 @use "../../styles/mixins" as mxn;
 
 .schedules {
+  .informations__article__title {
+    background-color: var(--secondary125);
+    color: var(--dark-brown);
+  }
+
   table {
-    margin: 0 auto;
+    margin: 1.6rem auto 2.5rem;
     border-collapse: collapse;
 
     th {

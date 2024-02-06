@@ -1,10 +1,10 @@
 import { FaLinkedin, FaSquareFacebook, FaSquareInstagram, FaSquareXTwitter, FaSquareYoutube } from "react-icons/fa6";
-import "./socialMediaLink.scss";
+import "./socialMediaLinks.scss";
 
 const SocialMediaLink = () => {
   return (
     <>
-      <ul className="social-media-list">
+      <ul className="socialmedia-list">
         <li><a href="https://www.facebook.com/" target="_blank"><FaSquareFacebook className="icon" /></a></li>
         <li><a href="https://twitter.com/" target="_blank"><FaSquareXTwitter className="icon" /></a></li>
         <li><a href="https://www.instagram.com/" target="_blank"><FaSquareInstagram className="icon" /></a></li>

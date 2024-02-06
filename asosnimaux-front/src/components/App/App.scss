@@ -13,23 +13,16 @@
   }
 }
 
-.user,
-.articles,
-.animals,
-.location,
-.schedules,
-.contact,
-.socialmedia {
-  // @include mxn.container;
-  padding-bottom: var(--padding-m);
-}
-
 // section:nth-child(even) {
 //   background-color: var(--secondary-50);
 // }
 
-section:last-of-type {
-  padding-bottom: var(--padding-l);
+section {
+  padding: var(--padding-xl) var(--padding-s);
+
+  &:last-of-type {
+    padding-bottom: var(--padding-l);
+  }
 }
 
 .animals__wrapper:has(.animal:hover) .animal:not(:hover) img {
