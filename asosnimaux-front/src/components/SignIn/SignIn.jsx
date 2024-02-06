@@ -1,6 +1,6 @@
+import "./signIn.scss";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
-import "./signIn.scss";
 import { signInThunk } from "../../api/user.api";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSignInForm } from "../../redux/reducers/user.reducer";
@@ -23,19 +23,15 @@ const SignIn = () => {
 
   const handleRedirect = () => {
     if (isAuth) {
-      navigate(APP_ROUTES.HOME, { replace: true });
+      navigate(APP_ROUTES.ACCOUNT, { replace: true });
     }
   }
 
   useEffect(() => {
     if (isAuth) {
-      navigate(APP_ROUTES.HOME, { replace: true });
+      navigate(APP_ROUTES.ACCOUNT, { replace: true });
     }
   }, [isAuth]);
-
-  useEffect(() => {
-    console.log("Sign in", user)
-  }, []);
 
   return (
     <>
@@ -45,8 +41,10 @@ const SignIn = () => {
         </div>
         <form onSubmit={handleSubmit}>
           {signInLoading ?
-            <span className="loading"></span>
-
+            <>
+              <p>Chargement...</p>
+              <span className="loading"></span>
+            </>
             :
             <>
               <Input label="Email ou Pseudo" id="login" required={true} value={signInForm.login} onChange={value => updateForm("login", value)} />

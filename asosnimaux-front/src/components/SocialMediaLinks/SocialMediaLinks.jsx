@@ -1,5 +1,5 @@
-import { FaLinkedin, FaSquareFacebook, FaSquareInstagram, FaSquareXTwitter, FaSquareYoutube } from "react-icons/fa6";
 import "./socialMediaLinks.scss";
+import { FaLinkedin, FaSquareFacebook, FaSquareInstagram, FaSquareXTwitter, FaSquareYoutube } from "react-icons/fa6";
 
 const SocialMediaLink = () => {
   return (

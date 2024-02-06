@@ -1,7 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
+import "./signUp.scss";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
-import "./signUp.scss";
+import { useDispatch, useSelector } from "react-redux";
 import { signUpThunk } from "../../api/user.api";
 import { updateSignUpForm } from "../../redux/reducers/user.reducer";
 import { APP_ROUTES } from "../../constants/route.const.js";

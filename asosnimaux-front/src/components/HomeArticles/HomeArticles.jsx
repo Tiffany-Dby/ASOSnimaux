@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { APP_ROUTES } from "../../constants/route.const";
 import Article from "../Article/Article";
-import Button from "../Button/Button";
 import "./homeArticles.scss";
 import { setToLocalDate, setToLocalDateLong } from "../../utils/date.utils";
 import { useEffect } from "react";

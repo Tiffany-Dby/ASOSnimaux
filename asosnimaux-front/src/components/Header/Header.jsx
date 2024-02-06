@@ -1,13 +1,13 @@
+import "./header.scss";
 import Burger from "../Burger/Burger";
 import HeaderNav from "../HeaderNav/HeaderNav";
 import { FaCircleUser, FaHeart, FaPowerOff } from "react-icons/fa6";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
 import { updateScroll, updateWindowSize } from "../../redux/reducers/window.reducer";
-import "./header.scss";
 import { APP_ROUTES } from "../../constants/route.const";
-import { clearStorage, getFromStorage } from "../../utils/storage.utils";
+import { clearStorage } from "../../utils/storage.utils";
 import { setUser, setisAuth } from "../../redux/reducers/user.reducer";
 import { Link, useNavigate } from "react-router-dom";
 

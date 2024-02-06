@@ -1,48 +1,28 @@
 import './App.scss';
+import Admin from '../Admin/Admin';
+import Adoption from '../Adoption/Adoption';
+import Banner from '../Banner/Banner';
+import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
+import HomeArticles from '../HomeArticles/HomeArticles';
+import SignIn from '../SignIn/SignIn';
+import SignUp from '../SignUp/SignUp';
+import User from '../User/User';
+import Error from '../Error/Error.jsx';
+import PrivateRoute from '../PrivateRoute/PrivateRoute.jsx';
+import Informations from '../Informations/Informations.jsx';
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Admin from '../Admin/Admin';
-import Adoption from '../Adoption/Adoption';
-import Banner from '../Banner/Banner';
-import Contact from '../Contact/Contact';
-import Footer from '../Footer/Footer';
-import Header from '../Header/Header';
-import HomeArticles from '../HomeArticles/HomeArticles';
-import Schedules from '../Schedules/Schedules';
-import SignIn from '../SignIn/SignIn';
-import SignUp from '../SignUp/SignUp';
-import SocialMedia from '../SocialMedia/SocialMedia';
-import User from '../User/User';
-import { getFromStorage } from "../../utils/storage.utils.js";
-import { setUser, setisAuth } from "../../redux/reducers/user.reducer.js";
-import Error from '../Error/Error.jsx';
 import { getOneUserThunk } from '../../api/user.api.js';
-import PrivateRoute from '../PrivateRoute/PrivateRoute.jsx';
-import Informations from '../Informations/Informations.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
-  const { user, isAuth, isTokenChecked } = useSelector(state => state.userReducer);
-
-  // useEffect(() => {
-  //   const isUserAuth = getFromStorage("user");
-  //   if (isUserAuth) {
-  //     dispatch(setUser({ id: isUserAuth.userID, username: isUserAuth.username, email: isUserAuth.email, role: isUserAuth.userRole }));
-  //     dispatch(setisAuth(true));
-  //   }
-  //   else {
-  //     dispatch(setisAuth(false));
-  //   }
-  // }, [])
-
-  // useEffect(() => {
-  //   dispatch(getOneUserThunk());
-  // }, [isTokenChecked]);
+  const { user, isAuth } = useSelector(state => state.userReducer);
 
   useEffect(() => {
-    console.log("App", user)
+    dispatch(getOneUserThunk());
   }, []);
 
   return (

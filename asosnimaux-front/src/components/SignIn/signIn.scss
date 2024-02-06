@@ -5,8 +5,8 @@
 
   form {
     @include mxn.container("400px");
-    @include mxn.flex;
-    justify-content: center;
+    @include mxn.flex("column", "nowrap");
+    align-items: center;
     gap: 2.25rem;
   }
 

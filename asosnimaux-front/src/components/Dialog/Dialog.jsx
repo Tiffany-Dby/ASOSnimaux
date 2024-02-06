@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
 import "./dialog.scss";
+import { useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 
 const Dialog = ({ children }) => {

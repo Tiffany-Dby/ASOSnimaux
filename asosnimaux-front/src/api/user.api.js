@@ -65,7 +65,7 @@ export const updateUsernameThunk = () => async (dispatch, getState) => {
 }
 
 export const updatePasswordThunk = () => async (dispatch, getState) => {
-  const { dialogForms, dialogLoading, user } = getState().userReducer;
+  const { dialogForms, dialogLoading } = getState().userReducer;
   const token = getFromStorage("token");
   if (dialogLoading) return;
 
@@ -83,25 +83,21 @@ export const updatePasswordThunk = () => async (dispatch, getState) => {
   dispatch(setUser({ id: "", username: "", email: "", role: "" }));
   dispatch(setisAuth(false));
   dispatch(resetDialogForm());
-  console.log("Pw Thunk", user);
 }
 
 export const getOneUserThunk = () => async (dispatch, getState) => {
-
   const token = getFromStorage("token");
 
   dispatch(startGetUserLoading());
 
   const { result, error, status } = await getRequest("users/user", token);
   if (!result?.message || status >= 400 || !!error) {
-    console.log('jwt error')
     dispatch(setUser({ id: "", username: "", email: "", role: "" }));
     dispatch(setisAuth(false));
     dispatch(setTokenCheck(true));
     return dispatch(setGetUserError({ error: `Something went wrong: ${error}` }));
   }
 
-  console.log('jwt success')
   dispatch(setTokenCheck(true));
   dispatch(setUser({ id: result.user.userID, username: result.user.username, email: result.user.email, role: result.user.userRole }))
 }

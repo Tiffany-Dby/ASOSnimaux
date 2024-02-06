@@ -1,17 +1,119 @@
 @use "../../styles/mixins" as mxn;
 
 .informations {
-  @include mxn.flex("column", "nowrap");
-  gap: 2rem;
+
+  &__wrapper {
+    // @include mxn.flex("column", "nowrap");
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    @include mxn.container;
+
+    @media screen and (min-width: 767px) {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-areas:
+        "ttl ttl ttl ttl"
+        "map map map map"
+        "map map map map"
+        "add con sch sch"
+        "soc soc sch sch";
+      gap: 2rem;
+    }
+
+    @media screen and (min-width: 1024px) {
+      grid-template-areas:
+        "ttl ttl ttl ttl"
+        "map map map sch"
+        "map map map sch"
+        "add con img img"
+        "soc soc img img";
+    }
+  }
+
+  .title-wrapper {
+    grid-column: 1/-1;
+
+    @media screen and (min-width: 767px) {
+      grid-area: ttl;
+    }
+  }
+
+  .map {
+    grid-column: 1/-1;
+
+    @media screen and (min-width: 767px) {
+      grid-area: map;
+    }
+  }
+
+  .address {
+    grid-column: 1/-1;
+
+    @media screen and (min-width: 470px) {
+      grid-column: 1/2;
+    }
+
+    @media screen and (min-width: 767px) {
+      grid-area: add;
+    }
+  }
+
+  .schedules {
+    grid-column: 1/-1;
+
+
+    @media screen and (min-width: 550px) {
+      grid-column: 2/-1;
+      grid-row: 3/5;
+    }
+
+    @media screen and (min-width: 767px) {
+      grid-area: sch;
+    }
+  }
+
+  .contact {
+    grid-column: 1/-1;
+
+    @media screen and (min-width: 470px) {
+      grid-column: 2/-1;
+    }
+
+    @media screen and (min-width: 550px) {
+      grid-column: 1/2;
+    }
+
+    @media screen and (min-width: 767px) {
+      grid-area: con;
+    }
+  }
+
+  .socialmedia {
+    grid-column: 1/-1;
+
+    @media screen and (min-width: 550px) {}
+
+    @media screen and (min-width: 767px) {
+      grid-area: soc;
+    }
+  }
+
+  &__img {
+    @media screen and (min-width: 767px) {
+      grid-area: img;
+      box-shadow: var(--box-shadow-2-2-5);
+    }
+  }
 
   &__article {
-    @include mxn.flex("column", "nowrap");
-    align-items: center;
+    display: grid;
     background-color: var(--white);
     box-shadow: var(--box-shadow-2-2-5);
     border-radius: var(--radius-xs);
 
     &__title {
+      height: fit-content;
       text-transform: uppercase;
       text-align: center;
       background-color: var(--dark-brown);
@@ -22,7 +124,8 @@
     }
 
     &__details {
-      padding: var(--padding-s);
+      justify-self: center;
+      padding: var(--padding-xs);
     }
   }
 }

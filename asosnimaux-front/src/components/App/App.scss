@@ -18,10 +18,10 @@
 // }
 
 section {
-  padding: var(--padding-xl) var(--padding-s);
+  padding: var(--padding-m) var(--padding-s);
 
   &:last-of-type {
-    padding-bottom: var(--padding-l);
+    padding-bottom: var(--padding-xl);
   }
 }
 

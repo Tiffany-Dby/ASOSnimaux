@@ -1,21 +1,16 @@
+import "./user.scss";
 import Button from "../Button/Button";
 import Dialog from "../Dialog/Dialog";
-import { FaPencil, FaTrashCan } from "react-icons/fa6";
-import "./user.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { resetDialogForm, setisAuth, updateDialogForm } from "../../redux/reducers/user.reducer";
-import { createPortal } from "react-dom";
 import Input from "../Input/Input";
+import { FaPencil, FaTrashCan } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import { resetDialogForm, updateDialogForm } from "../../redux/reducers/user.reducer";
+import { createPortal } from "react-dom";
 import { setInputFields, toggleDialog } from "../../redux/reducers/dialog.reducer";
-import { getOneUserThunk, updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { APP_ROUTES } from "../../constants/route.const";
-import { getFromStorage } from "../../utils/storage.utils";
+import { updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
 
 const User = ({ imgUrl, imgAlt, date, testimonie }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { user, dialogForms } = useSelector(state => state.userReducer);
   const { input } = useSelector(state => state.dialogReducer);
 
@@ -44,30 +39,6 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
   }
 
   const updateForm = (input, value) => dispatch(updateDialogForm({ input, value }));
-
-  // useEffect(() => {
-  //   const token = getFromStorage("token");
-  //   if (!token) {
-  //     dispatch(setisAuth(false));
-  //     navigate(APP_ROUTES.SIGN_IN, { replace: true })
-  //     console.log(user)
-  //   }
-  //   else {
-  //     dispatch(getOneUserThunk());
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!isAuth) {
-  //     console.log(isAuth)
-  //     navigate(APP_ROUTES.SIGN_IN, { replace: true })
-  //     console.log(user)
-  //   }
-  // }, [isTokenChecked]);
-
-  useEffect(() => {
-    console.log("User", user)
-  }, []);
 
   return (
     <>

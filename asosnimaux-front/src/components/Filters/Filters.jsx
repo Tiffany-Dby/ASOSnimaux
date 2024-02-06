@@ -1,6 +1,6 @@
+import "./filters.scss";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
-import "./filters.scss";
 
 const Filters = () => {
   return (

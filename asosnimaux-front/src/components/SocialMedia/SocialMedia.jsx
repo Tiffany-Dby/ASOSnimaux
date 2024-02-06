@@ -1,5 +1,5 @@
-import SocialMediaLink from "../SocialMediaLinks/SocialMediaLinks";
 import "./socialMedia.scss";
+import SocialMediaLink from "../SocialMediaLinks/SocialMediaLinks";
 
 const SocialMedia = () => {
   return (

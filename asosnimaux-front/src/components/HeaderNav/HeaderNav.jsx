@@ -1,8 +1,7 @@
-import { APP_ROUTES } from "../../constants/route.const";
-import { NavLink, Link, useLocation } from 'react-router-dom';
 import "./headerNav.scss";
+import { NavLink } from 'react-router-dom';
+import { APP_ROUTES } from "../../constants/route.const";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
 
 const HeaderNav = ({ toggleClass }) => {

@@ -1,7 +1,6 @@
+import "./banner.scss";
 import { Link } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/route.const";
-import Button from "../Button/Button";
-import "./banner.scss";
 
 const Banner = () => {
   return (
