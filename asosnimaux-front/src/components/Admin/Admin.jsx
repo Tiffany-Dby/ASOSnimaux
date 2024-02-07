@@ -5,18 +5,18 @@ import InputFile from "../InputFile/InputFile";
 import Dialog from "../Dialog/Dialog";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk } from "../../api/article.api";
-import { resetFormNewArticle, updateFormNewArticle } from "../../redux/reducers/article.reducer";
+import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticleThunk } from "../../api/article.api";
+import { resetFormNewArticle, setSelectedArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
 import { useEffect, useRef, useState } from "react";
 import { setToLocalDate } from "../../utils/date.utils";
-import { closeDialog, setIsDeleteForm, setIsNewForm, toggleDialog } from "../../redux/reducers/dialog.reducer";
+import { closeDialog, setIsDeleteForm, setIsNewForm, setIsUpdateForm, toggleDialog } from "../../redux/reducers/dialog.reducer";
 
 const Admin = () => {
   const dispatch = useDispatch();
 
   const { isNewForm, isDeleteForm, isUpdateForm } = useSelector(state => state.dialogReducer);
   const { articles, newArticleLoading, newArticleError } = useSelector(state => state.articleReducer);
-  const { newArticle, all } = articles;
+  const { newArticle, all, selectedArticle } = articles;
 
   const inputFileRef = useRef(null);
   const [file, setFile] = useState(null);
@@ -26,7 +26,7 @@ const Admin = () => {
     dispatch(getAllArticlesThunk());
   }, []);
 
-  const handleSubmit = e => {
+  const handleSubmitNew = e => {
     e.preventDefault();
     dispatch(postArticleThunk(file));
     setFile(null);
@@ -34,11 +34,28 @@ const Admin = () => {
     dispatch(closeDialog());
   }
 
-  const updateForm = (input, value) => dispatch(updateFormNewArticle({ input, value }));
+  const handleSubmitSelected = e => {
+    e.preventDefault();
+    dispatch(updateArticleThunk())
+    dispatch(closeDialog());
+  }
+
+  const updateFormNew = (input, value) => dispatch(updateFormNewArticle({ input, value }));
+
+  const updateFormSelected = (input, value) => dispatch(updateFormSelectedArticle({ input, value }));
 
   const handleNewForm = () => {
     dispatch(setIsNewForm());
   }
+
+  const handleUpdateForm = (article) => {
+    dispatch(setIsUpdateForm());
+    dispatch(setSelectedArticle({ id: article.id, name: article.name, location: article.location, description: article.description }))
+  }
+
+  useEffect(() => {
+    console.log(all)
+  }, [all])
 
   const handleDeleteForm = (id) => {
     dispatch(setIsDeleteForm());
@@ -81,7 +98,7 @@ const Admin = () => {
                   </div>
                 </div>
                 <div className="icons-wrapper">
-                  <FaPencil className="manage-icons" />
+                  <FaPencil className="manage-icons" onClick={() => handleUpdateForm(a)} />
                   <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleDeleteForm(a.id)} />
                 </div>
               </article>
@@ -89,34 +106,23 @@ const Admin = () => {
           </div>
 
           <Dialog>
-            {isDeleteForm && <div className="dialog-wrapper">
-              <div className="title-wrapper">
-                <h2>Supprimer</h2>
-              </div>
-              <p>Voulez-vous vraiment supprimer cet article ?</p>
-              <div className="btns-wrapper">
-                <Button btnStyle={""} text="Confirmer" btnClick={handleConfirmedDeletion} />
-                <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
-              </div>
-            </div>}
-
             {isNewForm &&
               <div className="dialog-wrapper admin__new-article">
                 <div className="title-wrapper">
                   <h2>Nouvel article</h2>
                 </div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmitNew}>
                   <Input
                     label="Titre"
                     id="name"
                     required={true}
                     value={newArticle.name}
-                    onChange={value => updateForm("name", value)} />
+                    onChange={value => updateFormNew("name", value)} />
                   <Input
                     label="Localisation"
                     id="location"
                     value={newArticle.location}
-                    onChange={value => updateForm("location", value)} />
+                    onChange={value => updateFormNew("location", value)} />
                   <InputFile
                     label="Choisir une image"
                     id="picture_url"
@@ -127,7 +133,7 @@ const Admin = () => {
                     label="Description de l'image"
                     id="picture_caption"
                     value={newArticle.picture_caption}
-                    onChange={value => updateForm("picture_caption", value)} />
+                    onChange={value => updateFormNew("picture_caption", value)} />
                   <div className="input__wrapper">
                     <label className="input__label" htmlFor="description">Contenu</label>
                     <textarea
@@ -135,7 +141,49 @@ const Admin = () => {
                       name="description"
                       id="description"
                       value={newArticle.description || ""}
-                      onChange={e => updateForm("description", e.target.value)}></textarea>
+                      onChange={e => updateFormNew("description", e.target.value)}></textarea>
+                  </div>
+                  <div className="btns-wrapper">
+                    <Button btnStyle="" text="Valider" type="submit" />
+                    <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                  </div>
+                </form>
+              </div>
+            }
+            {isDeleteForm &&
+              <div className="dialog-wrapper">
+                <div className="title-wrapper">
+                  <h2>Supprimer</h2>
+                </div>
+                <p>Voulez-vous vraiment supprimer cet article ?</p>
+                <div className="btns-wrapper">
+                  <Button btnStyle={""} text="Confirmer" btnClick={handleConfirmedDeletion} />
+                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                </div>
+              </div>
+            }
+            {isUpdateForm &&
+              <div className="dialog-wrapper">
+                <form onSubmit={handleSubmitSelected}>
+                  <Input
+                    label="Titre"
+                    id="name"
+                    required={true}
+                    value={selectedArticle.name}
+                    onChange={value => updateFormSelected("name", value)} />
+                  <Input
+                    label="Localisation"
+                    id="location"
+                    value={selectedArticle.location}
+                    onChange={value => updateFormSelected("location", value)} />
+                  <div className="input__wrapper">
+                    <label className="input__label" htmlFor="description">Contenu</label>
+                    <textarea
+                      className="input"
+                      name="description"
+                      id="description"
+                      value={selectedArticle.description || ""}
+                      onChange={e => updateFormSelected("description", e.target.value)}></textarea>
                   </div>
                   <div className="btns-wrapper">
                     <Button btnStyle="" text="Valider" type="submit" />

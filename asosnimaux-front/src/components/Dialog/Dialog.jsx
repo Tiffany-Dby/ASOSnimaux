@@ -10,9 +10,8 @@ const Dialog = ({ children }) => {
   const { isOpen } = useSelector(state => state.dialogReducer);
 
   useEffect(() => {
-    const handleEscapeKey = e => {
-      if (e.key === "Escape" && isOpen) dispatch(closeDialog());
-    }
+    const handleEscapeKey = e => e.key === "Escape" && isOpen ? dispatch(closeDialog()) : () => { };
+
     if (dialogRef.current) {
       if (isOpen) {
         dialogRef.current.showModal();

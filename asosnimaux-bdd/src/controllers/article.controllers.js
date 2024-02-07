@@ -1,8 +1,7 @@
 import { ArticleDB } from "../databases/article.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
-import { mkdir, unlink } from "node:fs/promises";
 import formidable from "formidable";
-import { setDeleteImgUrl, setImgUrl } from "../utils/formidable.utils.js";
+import { deleteImg, setDeleteImgUrl, setImgUrl } from "../utils/formidable.utils.js";
 
 const create_ = async ({ body: { name, location, description, pictureURL, pictureCaption, userID } }, res) => {
   const areStrings = areStringsFilled([name, location, description, pictureURL, pictureCaption]);
@@ -21,7 +20,7 @@ const create = async (req, res) => {
     uploadDir: "./public/articles",
     keepExtensions: true,
     createDirsFromUploads: true,
-    maxFileSize: 1024 * 1024,
+    maxFileSize: 5 * 1024 * 1024, // 5MB,
     filter: opts => {
       const { mimetype } = opts;
       return mimetype === "image/png" || mimetype === "image/jpg" || mimetype === "image/jpeg";
@@ -71,6 +70,11 @@ const create = async (req, res) => {
   const result = createdArticle.result;
   console.log(result);
 
+  if (error || err) {
+    const e = deleteImg(picture_url);
+    if (e) return res.statut(403).json({ message: e });
+  }
+
   return res.status(error ? 500 : 200).json({ message: error ? error : `New article successfully created`, article: result });
 }
 
@@ -115,27 +119,24 @@ const update = async ({ body: { name, location, description, articleID } }, res)
 
   const response = await ArticleDB.update(name, location, description, articleID);
   console.log("response controller:", response);
-
   const error = response.error;
 
-  return res.status(error ? 500 : 200).json({ message: error ? error : `Update on article with id ${articleID} successful` });
+  const updatedArticle = await ArticleDB.readOne(articleID);
+  const err = updatedArticle.error;
+  const result = updatedArticle.result;
+  console.log(result)
+
+
+  return res.status(error ? 500 : 200).json({ message: error ? error : `Update on article with id ${articleID} successful`, result });
 }
 
 const deleteOne = async ({ params: { articleID } }, res) => {
   const response = await ArticleDB.deleteOne(articleID);
 
   const { imgPathResult, error } = response;
-
-  try {
-    if (!error) {
-      const PicturePath = setDeleteImgUrl(imgPathResult[0].picture_url)
-      const r = await unlink(PicturePath);
-      console.log(`${PicturePath} was successfully deleted`);
-    }
-  }
-  catch (e) {
-    console.log(e.message);
-  }
+  // transaction (SQL)
+  const err = await deleteImg(imgPathResult);
+  if (err) return res.status(403).json({ message: err });
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Article with id ${articleID} deleted successfully` });
 }

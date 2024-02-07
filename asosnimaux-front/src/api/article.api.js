@@ -1,6 +1,6 @@
 import { APP_ROUTES } from "../constants/route.const.js";
-import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll, setStartDeleteLoading, setDeleteError, setDelete, resetFormNewArticle } from "../redux/reducers/article.reducer"
-import { deleteRequest, getRequest, postRequest } from "./api";
+import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll, setStartDeleteLoading, setDeleteError, setDelete, resetFormNewArticle, startSelectedLoading, setSelectedError, setSelectedArticle, setUpdateSelected } from "../redux/reducers/article.reducer"
+import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { setFormData } from "../utils/formidable.utils.js"
 import { getFromStorage } from "../utils/storage.utils.js";
 
@@ -56,6 +56,35 @@ export const postArticleThunk = (file) => async (dispatch, getState) => {
   }));
 
   dispatch(resetFormNewArticle());
+}
+
+export const updateArticleThunk = () => async (dispatch, getState) => {
+  const { articles, selectedLoading } = getState().articleReducer;
+  const { selectedArticle, all } = articles;
+  const token = getFromStorage("token");
+  if (selectedLoading) return;
+
+  const formatExpectedOnRequest = {
+    articleID: selectedArticle.id,
+    name: selectedArticle.name,
+    location: selectedArticle.location,
+    description: selectedArticle.description
+  }
+
+  dispatch(startSelectedLoading());
+  const { result, error, status } = await putRequest("articles/", formatExpectedOnRequest, token);
+
+  if (!result?.message || status >= 400 || !!error) return dispatch(setSelectedError({ error: `Something went wrong ${error}` }));
+  console.log(result);
+
+  dispatch(setUpdateSelected({
+    article: {
+      id: result.result[0].id,
+      name: result.result[0].name,
+      location: result.result[0].location,
+      description: result.result[0].description
+    }
+  }));
 }
 
 export const deleteArticleThunk = (id) => async (dispatch, getState) => {

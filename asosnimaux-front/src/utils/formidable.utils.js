@@ -8,3 +8,11 @@ export const setFormData = form => {
 
   return fd;
 }
+
+export const formatArticle = (article) => {
+  const formattedArticle = {
+    articleID: article.id
+  }
+
+  return formattedArticle;
+}

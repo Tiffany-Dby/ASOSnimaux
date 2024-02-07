@@ -19,6 +19,12 @@ const ARTICLE_STATE = {
       picture_caption: "",
       description: ""
     },
+    selectedArticle: {
+      articleID: "",
+      name: "",
+      location: "",
+      description: ""
+    },
   },
   overviewLoading: false,
   overviewError: null,
@@ -29,7 +35,9 @@ const ARTICLE_STATE = {
   oneLoading: false,
   oneError: null,
   deleteLoading: false,
-  deleteError: null
+  deleteError: null,
+  selectedLoading: false,
+  selectedError: null
 }
 
 const articleSlice = createSlice({
@@ -176,6 +184,17 @@ const articleSlice = createSlice({
         deleteLoading: false
       }
     },
+    setUpdateSelected: (state, action) => {
+      const { article } = action.payload;
+      return {
+        ...state,
+        articles: {
+          ...state.articles,
+          all: state.articles.all.map((a) => a.id === article.id ? { ...article } : { ...a })
+        },
+        selectedLoading: false
+      }
+    },
     setStartDeleteLoading: (state, action) => {
       return {
         ...state,
@@ -194,9 +213,56 @@ const articleSlice = createSlice({
         deleteError: action.payload.error,
         deleteLoading: false
       }
+    },
+    setSelectedArticle: (state, action) => {
+      const { id, name, location, description } = action.payload;
+      return {
+        ...state,
+        articles: {
+          ...state.articles,
+          selectedArticle: {
+            id,
+            name,
+            location,
+            description
+          }
+        }
+      }
+    },
+    updateFormSelectedArticle: (state, action) => {
+      const { input, value } = action.payload;
+      return {
+        ...state,
+        articles: {
+          ...state.articles,
+          selectedArticle: {
+            ...state.articles.selectedArticle,
+            [input]: value
+          }
+        }
+      }
+    },
+    startSelectedLoading: (state, action) => {
+      return {
+        ...state,
+        selectedLoading: true
+      }
+    },
+    stopSelectedLoading: (state, action) => {
+      return {
+        ...state,
+        selectedLoading: false
+      }
+    },
+    setSelectedError: (state, action) => {
+      return {
+        ...state,
+        selectedError: action.payload.error,
+        selectedLoading: false
+      }
     }
   }
 });
 
-export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle, resetFormNewArticle, setAll, startAllLoading, stopAllLoading, setAllError, setDelete, setStartDeleteLoading, setStopDeleteLoading, setDeleteError } = articleSlice.actions;
+export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle, resetFormNewArticle, setAll, startAllLoading, stopAllLoading, setAllError, setDelete, setStartDeleteLoading, setStopDeleteLoading, setDeleteError, setSelectedArticle, updateFormSelectedArticle, startSelectedLoading, stopSelectedLoading, setSelectedError, setUpdateSelected } = articleSlice.actions;
 export default articleSlice.reducer;
