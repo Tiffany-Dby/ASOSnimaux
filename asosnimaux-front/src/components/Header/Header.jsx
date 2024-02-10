@@ -2,7 +2,7 @@ import "./header.scss";
 import Burger from "../Burger/Burger";
 import HeaderNav from "../HeaderNav/HeaderNav";
 import { FaCircleUser, FaHeart, FaPowerOff } from "react-icons/fa6";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
 import { updateScroll, updateWindowSize } from "../../redux/reducers/window.reducer";
@@ -13,14 +13,24 @@ import { signOut } from "../../utils/user.utils";
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const headerRef = useRef(null);
 
   const { isMobileMenuOpen } = useSelector(state => state.headerReducer);
   const { width, scrollY } = useSelector(state => state.windowReducer);
   const { isAuth } = useSelector(state => state.userReducer);
 
+  const handleResize = () => dispatch(updateWindowSize({ width: window.innerWidth }));
+  const handleScroll = () => dispatch(updateScroll({ scrollY: window.scrollY }));
+  const handleOutsideHeaderClick = e => {
+    if (isMobileMenuOpen) {
+      if (headerRef.current && !headerRef.current.contains(e.target)) dispatch(toggleMobileMenu(false));
+    }
+  }
+
   useEffect(() => {
-    const handleResize = () => dispatch(updateWindowSize({ width: window.innerWidth }));
-    const handleScroll = () => dispatch(updateScroll({ scrollY: window.scrollY }));
+    if (isAuth) {
+      navigate(APP_ROUTES.SIGN_IN, { replace: true });
+    }
 
     handleResize();
 
@@ -33,6 +43,13 @@ const Header = () => {
     }
   }, []);
 
+  useEffect(() => {
+    document.addEventListener('click', handleOutsideHeaderClick);
+
+    return () => {
+      document.removeEventListener('click', handleOutsideHeaderClick);
+    }
+  }, [isMobileMenuOpen])
 
   const handleBurgerClick = () => {
     dispatch(toggleMobileMenu(!isMobileMenuOpen));
@@ -40,20 +57,15 @@ const Header = () => {
 
   const handleSignOut = () => {
     signOut(dispatch);
+
     if (isAuth) {
       navigate(APP_ROUTES.SIGN_IN, { replace: true });
     }
   }
 
-  useEffect(() => {
-    if (isAuth) {
-      navigate(APP_ROUTES.SIGN_IN, { replace: true });
-    }
-  }, []);
-
   return (
     <>
-      <header id="topPage" className="header">
+      <header id="topPage" className="header" ref={headerRef}>
         <div className="header__wrapper">
           <div className="header__img">
             <Link to={APP_ROUTES.HOME}>

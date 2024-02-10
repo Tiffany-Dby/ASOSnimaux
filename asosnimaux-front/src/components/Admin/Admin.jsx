@@ -9,12 +9,12 @@ import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticl
 import { resetFormNewArticle, setSelectedArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
 import { useEffect, useRef, useState } from "react";
 import { setToLocalDate } from "../../utils/date.utils";
-import { closeDialog, setIsDeleteForm, setIsNewForm, setIsUpdateForm, toggleDialog } from "../../redux/reducers/dialog.reducer";
+import { closeDialog, setIsDeleteArticleForm, setIsNewArticleForm, setIsUpdateArticleForm } from "../../redux/reducers/dialog.reducer";
 
 const Admin = () => {
   const dispatch = useDispatch();
 
-  const { isNewForm, isDeleteForm, isUpdateForm } = useSelector(state => state.dialogReducer);
+  const { isNewArticleForm, isDeleteArticleForm, isUpdateArticleForm } = useSelector(state => state.dialogReducer);
   const { articles, newArticleLoading, newArticleError } = useSelector(state => state.articleReducer);
   const { newArticle, all, selectedArticle } = articles;
 
@@ -45,20 +45,16 @@ const Admin = () => {
   const updateFormSelected = (input, value) => dispatch(updateFormSelectedArticle({ input, value }));
 
   const handleNewForm = () => {
-    dispatch(setIsNewForm());
+    dispatch(setIsNewArticleForm());
   }
 
   const handleUpdateForm = (article) => {
-    dispatch(setIsUpdateForm());
+    dispatch(setIsUpdateArticleForm());
     dispatch(setSelectedArticle({ id: article.id, name: article.name, location: article.location, description: article.description }))
   }
 
-  useEffect(() => {
-    console.log(all)
-  }, [all])
-
   const handleDeleteForm = (id) => {
-    dispatch(setIsDeleteForm());
+    dispatch(setIsDeleteArticleForm());
     setArticleId(id);
   }
 
@@ -81,7 +77,7 @@ const Admin = () => {
           <h1>Page administrateur</h1>
         </div>
 
-        <section className="admin__all-articles">
+        <section className="admin admin__all-articles">
           <Button btnStyle={""} text={"Créer un nouvel article"} btnClick={handleNewForm} />
 
           <h2>Tous les articles ({all.length})</h2>
@@ -90,12 +86,10 @@ const Admin = () => {
             {all.map((a) => (
               <article key={a.id} className="admin__article">
                 <div className="admin__article__content">
-                  <div className="admin__article__title">
-                    <h3>{a.name}</h3>
-                  </div>
-                  <div className="admin__article__date">
+                  <h3 className="admin__article__title">{a.name}</h3>
+                  <span className="admin__article__date">
                     <p>{setToLocalDate(a.date)}</p>
-                  </div>
+                  </span>
                 </div>
                 <div className="icons-wrapper">
                   <FaPencil className="manage-icons" onClick={() => handleUpdateForm(a)} />
@@ -106,7 +100,7 @@ const Admin = () => {
           </div>
 
           <Dialog>
-            {isNewForm &&
+            {isNewArticleForm &&
               <div className="dialog-wrapper admin__new-article">
                 <div className="title-wrapper">
                   <h2>Nouvel article</h2>
@@ -150,7 +144,7 @@ const Admin = () => {
                 </form>
               </div>
             }
-            {isDeleteForm &&
+            {isDeleteArticleForm &&
               <div className="dialog-wrapper">
                 <div className="title-wrapper">
                   <h2>Supprimer</h2>
@@ -162,8 +156,11 @@ const Admin = () => {
                 </div>
               </div>
             }
-            {isUpdateForm &&
-              <div className="dialog-wrapper">
+            {isUpdateArticleForm &&
+              <div className="dialog-wrapper admin__update-article">
+                <div className="title-wrapper">
+                  <h2>Mettre à jour</h2>
+                </div>
                 <form onSubmit={handleSubmitSelected}>
                   <Input
                     label="Titre"

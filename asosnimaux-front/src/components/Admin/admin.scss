@@ -30,26 +30,16 @@
     @media screen and (min-width:620px) {
       flex: 1 0;
       min-width: 230px;
-
-      &:last-child {
-        max-width: 50%;
-      }
+      max-width: 50%;
     }
 
     @media screen and (min-width:930px) {
-      flex: 1 0;
       min-width: 300px;
-
-      &:last-child {
-        max-width: 45%;
-      }
+      max-width: calc(50% - var(--padding-s));
     }
 
-    @media screen and (min-width:1000px) {
-
-      &:last-child {
-        max-width: calc(33% - var(--padding-s));
-      }
+    @media screen and (min-width:1010px) {
+      max-width: calc(33% - var(--padding-s));
     }
 
     &__content {
@@ -90,7 +80,8 @@
     }
   }
 
-  &__new-article {
+  &__new-article,
+  &__update-article {
     background-color: var(--secondary-50);
 
     input[type="file"] {

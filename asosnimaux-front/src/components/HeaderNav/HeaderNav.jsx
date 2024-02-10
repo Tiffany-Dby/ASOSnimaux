@@ -26,7 +26,8 @@ const HeaderNav = ({ toggleClass }) => {
           <li><NavLink className={checkActiveLink} to={APP_ROUTES.ARTICLES} >Actualités</NavLink></li>
           <li><NavLink className={checkActiveLink} to="" >Contact</NavLink></li>
           {user.role === 'admin' &&
-            <li><NavLink className={checkActiveLink} to={APP_ROUTES.ADMIN} >Admin</NavLink></li>}
+            <li><NavLink className={checkActiveLink} to={APP_ROUTES.ADMIN} >Admin</NavLink></li>
+          }
         </ul>
       </nav >
     </>

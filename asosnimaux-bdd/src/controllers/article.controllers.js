@@ -124,8 +124,9 @@ const update = async ({ body: { name, location, description, articleID } }, res)
   const updatedArticle = await ArticleDB.readOne(articleID);
   const err = updatedArticle.error;
   const result = updatedArticle.result;
-  console.log(result)
 
+  if (err) return res.status(500).json({ message: err });
+  console.log(result)
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Update on article with id ${articleID} successful`, result });
 }

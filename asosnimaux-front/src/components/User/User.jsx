@@ -6,13 +6,13 @@ import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { resetDialogForm, updateDialogForm } from "../../redux/reducers/user.reducer";
 import { createPortal } from "react-dom";
-import { setInputFields, toggleDialog } from "../../redux/reducers/dialog.reducer";
-import { updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
+import { closeDialog, setInputFields, setIsDeleteAccountForm, setIsUpdateAccountForm, toggleDialog } from "../../redux/reducers/dialog.reducer";
+import { deleteUserThunk, updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
 
 const User = ({ imgUrl, imgAlt, date, testimonie }) => {
   const dispatch = useDispatch();
   const { user, dialogForms } = useSelector(state => state.userReducer);
-  const { input } = useSelector(state => state.dialogReducer);
+  const { input, isDeleteAccountForm, isUpdateAccountForm } = useSelector(state => state.dialogReducer);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -25,17 +25,28 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
     else if (input.id === "newPassword") {
       dispatch(updatePasswordThunk());
     }
+    dispatch(closeDialog());
+  }
+
+  const handleDeleteForm = () => {
+    dispatch(setIsDeleteAccountForm());
+  }
+
+  const handleConfirmedDeletion = () => {
+    console.log(user.id);
+    dispatch(deleteUserThunk(user.id));
+    dispatch(closeDialog());
   }
 
   const handleDialog = (input, value) => {
     dispatch(resetDialogForm());
     dispatch(setInputFields({ label: input.label, id: input.id, type: input.type }));
     dispatch(updateDialogForm({ input, value }));
-    dispatch(toggleDialog());
+    dispatch(setIsUpdateAccountForm());
   }
 
   const handleDialogClose = () => {
-    dispatch(toggleDialog());
+    dispatch(closeDialog());
   }
 
   const updateForm = (input, value) => dispatch(updateDialogForm({ input, value }));
@@ -106,25 +117,40 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
             </article>
           </div>
 
-          <Button btnStyle={""} text="Supprimer le compte" />
+          <Button btnStyle={""} text="Supprimer le compte" btnClick={handleDeleteForm} />
         </div>
-        {createPortal(
-          <Dialog>
-            <form onSubmit={handleSubmit}>
+        <Dialog>
+          {isUpdateAccountForm &&
+            <div className="dialog-wrapper">
               <div className="title-wrapper">
                 <h2>Mettre à jour</h2>
               </div>
-              {input.id === "newPassword" &&
-                <Input label={"Ancien mot de passe"} id={"oldPassword"} type={"password"} value={dialogForms.oldPassword} onChange={(value) => updateForm("oldPassword", value)} />
-              }
-              <Input label={input.label} id={input.id} type={input.type} value={dialogForms[input.id]} onChange={(value) => updateForm(input.id, value)} />
+              <form onSubmit={handleSubmit}>
+                {input.id === "newPassword" &&
+                  <Input label={"Ancien mot de passe"} id={"oldPassword"} type={"password"} value={dialogForms.oldPassword} onChange={(value) => updateForm("oldPassword", value)} />
+                }
+                <Input label={input.label} id={input.id} type={input.type} value={dialogForms[input.id]} onChange={(value) => updateForm(input.id, value)} />
+                <div className="btns-wrapper">
+                  <Button btnStyle="" text="Valider" type="submit" />
+                  <Button btnStyle={""} text="Annuler" btnClick={handleDialogClose} />
+                </div>
+              </form>
+            </div>
+          }
+          {isDeleteAccountForm &&
+            <div className="dialog-wrapper">
+              <div className="title-wrapper">
+                <h2>Supprimer</h2>
+              </div>
+              <p>Êtes vous certain(e) de vouloir <strong>supprimer votre compte</strong> ?</p>
+              <p className="text-error">Attention : Cette action est irréversible !</p>
               <div className="btns-wrapper">
-                <Button btnStyle="" text="Valider" type="submit" btnClick={handleDialogClose} />
+                <Button btnStyle={""} text="Confirmer" btnClick={handleConfirmedDeletion} />
                 <Button btnStyle={""} text="Annuler" btnClick={handleDialogClose} />
               </div>
-            </form>
-          </Dialog>
-          , document.body)}
+            </div>
+          }
+        </Dialog>
       </section>
     </>
   );

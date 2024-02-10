@@ -28,7 +28,6 @@
         padding-top: 0;
       }
     }
-
   }
 
   &__links {
@@ -77,5 +76,6 @@
     &:hover li:not(:hover) .active::after {
       background-color: transparent;
     }
+
   }
 }

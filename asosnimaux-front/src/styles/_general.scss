@@ -85,3 +85,12 @@ p {
   padding: .5rem;
   border-radius: 50%;
 }
+
+.text-error {
+  font-size: var(--font-size-s);
+  font-weight: var(--fw-semi-bold);
+  color: var(--light-red);
+  display: block;
+  text-align: center;
+  padding: var(--padding-s) var(--padding-xxs);
+}

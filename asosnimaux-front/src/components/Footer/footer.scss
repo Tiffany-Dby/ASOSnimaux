@@ -17,7 +17,7 @@
   }
 
   nav:has(.footer__links) {
-    @include mxn.container;
+    @include mxn.container($padding: var(--padding-m) 0);
   }
 
   &__links {
@@ -29,21 +29,8 @@
       gap: 1.9rem;
     }
 
-    a,
-    li {
-      transition: all .5s ease;
-    }
-
     li {
       padding-top: var(--padding-xs);
-    }
-
-    a {
-      color: var(--white);
-
-      &:hover {
-        color: var(--accent);
-      }
     }
 
     & ul:nth-child(2) {
@@ -61,5 +48,20 @@
         transform: scale(.80);
       }
     }
+  }
+
+  a {
+    color: var(--white);
+    transition: all .5s ease;
+
+    &:hover {
+      color: var(--accent);
+    }
+  }
+
+  .copyright {
+    display: block;
+    text-decoration: none;
+    text-align: center;
   }
 }

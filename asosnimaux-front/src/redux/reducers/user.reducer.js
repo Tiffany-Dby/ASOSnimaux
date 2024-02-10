@@ -21,6 +21,7 @@ const USER_STATE = {
   },
   signUpLoading: false,
   signUpError: null,
+  isSignUpDone: false,
   dialogForms: {
     username: "",
     email: "",
@@ -30,7 +31,9 @@ const USER_STATE = {
   dialogLoading: false,
   dialogError: null,
   getUserLoading: false,
-  getUserError: null
+  getUserError: null,
+  deleteUserLoading: false,
+  deleteUserError: null
 }
 
 const userSlice = createSlice({
@@ -104,6 +107,16 @@ const userSlice = createSlice({
         }
       }
     },
+    resetSignUpForm: (state, action) => {
+      return {
+        ...state,
+        signUpForm: {
+          username: "",
+          email: "",
+          password: ""
+        }
+      }
+    },
     startSignUpLoading: (state, action) => {
       return { ...state, signUpLoading: true }
     },
@@ -116,6 +129,9 @@ const userSlice = createSlice({
         signUpError: action.payload.error,
         signUpLoading: false
       }
+    },
+    setIsSignUpDone: (state, action) => {
+      return { ...state, isSignUpDone: true }
     },
     setisAuth: (state, action) => {
       return {
@@ -168,9 +184,22 @@ const userSlice = createSlice({
         getUserError: action.payload.error,
         getUserLoading: false
       }
+    },
+    startDeleteUserLoading: (state, action) => {
+      return { ...state, deleteUserLoading: true }
+    },
+    stopDeleteUserLoading: (state, action) => {
+      return { ...state, deleteUserLoading: false }
+    },
+    setDeleteUserError: (state, action) => {
+      return {
+        ...state,
+        deleteUserError: action.payload.error,
+        deleteUserLoading: false
+      }
     }
   }
 });
 
-export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setisAuth, updateDialogForm, resetDialogForm, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError } = userSlice.actions;
+export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError } = userSlice.actions;
 export default userSlice.reducer;

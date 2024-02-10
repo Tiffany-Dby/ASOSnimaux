@@ -21,6 +21,7 @@ const ARTICLE_STATE = {
     },
     selectedArticle: {
       articleID: "",
+      date: "",
       name: "",
       location: "",
       description: ""
@@ -184,17 +185,6 @@ const articleSlice = createSlice({
         deleteLoading: false
       }
     },
-    setUpdateSelected: (state, action) => {
-      const { article } = action.payload;
-      return {
-        ...state,
-        articles: {
-          ...state.articles,
-          all: state.articles.all.map((a) => a.id === article.id ? { ...article } : { ...a })
-        },
-        selectedLoading: false
-      }
-    },
     setStartDeleteLoading: (state, action) => {
       return {
         ...state,
@@ -240,6 +230,17 @@ const articleSlice = createSlice({
             [input]: value
           }
         }
+      }
+    },
+    setUpdateSelected: (state, action) => {
+      const { article } = action.payload;
+      return {
+        ...state,
+        articles: {
+          ...state.articles,
+          all: state.articles.all.map((a) => a.id === article.id ? { ...article } : { ...a })
+        },
+        selectedLoading: false
       }
     },
     startSelectedLoading: (state, action) => {

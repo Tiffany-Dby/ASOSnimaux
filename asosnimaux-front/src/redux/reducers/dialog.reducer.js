@@ -2,9 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const DIALOG_STATE = {
   isOpen: false,
-  isNewForm: false,
-  isDeleteForm: false,
-  isUpdateForm: false,
+  isNewArticleForm: false,
+  isDeleteArticleForm: false,
+  isUpdateArticleForm: false,
+  isDeleteAccountForm: false,
+  isUpdateAccountForm: false,
   input: {
     label: "",
     id: "",
@@ -21,9 +23,11 @@ const dialogSlice = createSlice({
     },
     closeDialog: (state, action) => {
       state.isOpen = false;
-      state.isNewForm = false;
-      state.isDeleteForm = false;
-      state.isUpdateForm = false;
+      state.isNewArticleForm = false;
+      state.isDeleteArticleForm = false;
+      state.isUpdateArticleForm = false;
+      state.isDeleteAccountForm = false;
+      state.isUpdateAccountForm = false;
     },
     setInputFields: (state, action) => {
       const { label, id, type } = action.payload;
@@ -37,20 +41,28 @@ const dialogSlice = createSlice({
         }
       }
     },
-    setIsNewForm: (state, action) => {
+    setIsNewArticleForm: (state, action) => {
       state.isOpen = true;
-      state.isNewForm = true;
+      state.isNewArticleForm = true;
     },
-    setIsDeleteForm: (state, action) => {
+    setIsDeleteArticleForm: (state, action) => {
       state.isOpen = true;
-      state.isDeleteForm = true;
+      state.isDeleteArticleForm = true;
     },
-    setIsUpdateForm: (state, action) => {
+    setIsUpdateArticleForm: (state, action) => {
       state.isOpen = true;
-      state.isUpdateForm = true;
+      state.isUpdateArticleForm = true;
+    },
+    setIsDeleteAccountForm: (state, action) => {
+      state.isOpen = true;
+      state.isDeleteAccountForm = true;
+    },
+    setIsUpdateAccountForm: (state, action) => {
+      state.isOpen = true;
+      state.isUpdateAccountForm = true;
     },
   }
 });
 
-export const { toggleDialog, setInputFields, closeDialog, setIsNewForm, setIsDeleteForm, setIsUpdateForm } = dialogSlice.actions;
+export const { toggleDialog, setInputFields, closeDialog, setIsNewArticleForm, setIsDeleteArticleForm, setIsUpdateArticleForm, setIsDeleteAccountForm, setIsUpdateAccountForm } = dialogSlice.actions;
 export default dialogSlice.reducer;

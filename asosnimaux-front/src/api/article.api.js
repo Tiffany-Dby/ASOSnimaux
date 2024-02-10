@@ -1,16 +1,16 @@
 import { APP_ROUTES } from "../constants/route.const.js";
-import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll, setStartDeleteLoading, setDeleteError, setDelete, resetFormNewArticle, startSelectedLoading, setSelectedError, setSelectedArticle, setUpdateSelected } from "../redux/reducers/article.reducer"
+import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll, setAllError, setStartDeleteLoading, setDeleteError, setDelete, resetFormNewArticle, startSelectedLoading, setSelectedError, setSelectedArticle, setUpdateSelected } from "../redux/reducers/article.reducer"
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { setFormData } from "../utils/formidable.utils.js"
 import { getFromStorage } from "../utils/storage.utils.js";
 
 export const getAllArticlesThunk = () => async (dispatch, getState) => {
-  const { allLoading, allError } = getState().articleReducer;
+  const { allLoading } = getState().articleReducer;
   if (allLoading) return;
 
   dispatch(startAllLoading());
   const { result, error, status } = await getRequest("articles/all");
-  if (!result?.message || status >= 400 || !!error) return dispatch(setAll({ error: `Something went wrong : ${error}` }));
+  if (!result?.message || status >= 400 || !!error) return dispatch(setAllError({ error: `Something went wrong : ${error}` }));
 
   dispatch(setAll({ all: result.result }));
 }
@@ -75,11 +75,11 @@ export const updateArticleThunk = () => async (dispatch, getState) => {
   const { result, error, status } = await putRequest("articles/", formatExpectedOnRequest, token);
 
   if (!result?.message || status >= 400 || !!error) return dispatch(setSelectedError({ error: `Something went wrong ${error}` }));
-  console.log(result);
 
   dispatch(setUpdateSelected({
     article: {
       id: result.result[0].id,
+      date: result.result[0].date,
       name: result.result[0].name,
       location: result.result[0].location,
       description: result.result[0].description

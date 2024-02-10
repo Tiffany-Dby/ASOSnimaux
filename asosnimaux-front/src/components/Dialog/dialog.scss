@@ -19,7 +19,7 @@ dialog {
   form,
   .dialog-wrapper {
     @include mxn.flex("column", "nowrap");
-    gap: 2rem;
+    gap: 2.5rem;
     padding-bottom: var(--padding-xs);
     text-align: center;
   }
@@ -44,7 +44,8 @@ dialog {
     }
   }
 
-  &:has(.admin__new-article) {
+  &:has(.admin__new-article),
+  &:has(.admin__update-article) {
     background-color: var(--secondary-50);
     max-width: 700px;
   }

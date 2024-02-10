@@ -12,7 +12,7 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { signInForm, signInLoading, signInError, isAuth, user } = useSelector(state => state.userReducer);
+  const { signInForm, signInLoading, signInError, isAuth } = useSelector(state => state.userReducer);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,6 +39,9 @@ const SignIn = () => {
         <div className='title-wrapper'>
           <h1>Se connecter</h1>
         </div>
+        {signInError &&
+          <span className="text-error">{signInError}</span>
+        }
         <form onSubmit={handleSubmit}>
           {signInLoading ?
             <>

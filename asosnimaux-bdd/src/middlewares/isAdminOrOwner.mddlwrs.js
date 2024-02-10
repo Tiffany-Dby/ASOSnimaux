@@ -9,13 +9,13 @@ const isAdminOrOwner = async (req, res, next) => {
       WHERE id = ?
     `;
 
-    const { paramID } = req.params;
+    const { id } = req.params;
     const { userID } = req.body;
     const response = await query(sql, [userID]);
     const user = response[0];
     const role = user.user_role;
 
-    if (role !== "admin" && role !== "super_admin" && paramID !== userID) return res.status(401).json({ message: `Unauthorized : You don't have the rights for this action.` });
+    if (role !== "admin" && role !== "super_admin" && id !== userID) return res.status(401).json({ message: `Unauthorized : You don't have the rights for this action.` });
 
     next();
   }

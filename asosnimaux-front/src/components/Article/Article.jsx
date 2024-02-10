@@ -10,12 +10,10 @@ const Article = ({ artclStyle, imgUrl, imgAlt, title, date, text }) => {
         </div>
         <div className="article__content">
           <h2 className="article__title">{title}</h2>
-          <div className="article__date">
+          <span className="article__date">
             <p>{date}</p>
-          </div>
-          <div className="article__text">
-            <p>{text}</p>
-          </div>
+          </span>
+          <p>{text}</p>
         </div>
       </article>
     </>
