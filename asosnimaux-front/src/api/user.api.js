@@ -1,4 +1,4 @@
-import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading } from "../redux/reducers/user.reducer";
+import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers } from "../redux/reducers/user.reducer";
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { getFromStorage, setToStorage } from "../utils/storage.utils.js";
 import { signOut } from "../utils/user.utils.js";
@@ -82,6 +82,25 @@ export const getOneUserThunk = () => async (dispatch, getState) => {
   }
 
   dispatch(setUser({ id: result.user.userID, username: result.user.username, email: result.user.email, role: result.user.userRole }))
+}
+
+export const getAllUsersThunk = () => async (dispatch, getState) => {
+  const { allUsers, allUsersLoading } = getState().userReducer;
+  const token = getFromStorage("token");
+  if (allUsersLoading) return;
+
+  dispatch(startAllUsersLoading());
+
+  const { result, error, status } = await getRequest("users/all", token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setAllUsersError({ error: `Something went wrong : ${error}` }));
+
+  const users = result.result;
+
+  dispatch(setAllUsers({
+    allUsers: users.map(user => {
+      return { id: user.id, username: user.username, role: user.user_role }
+    })
+  }));
 }
 
 export const deleteUserThunk = (id) => async (dispatch, getState) => {

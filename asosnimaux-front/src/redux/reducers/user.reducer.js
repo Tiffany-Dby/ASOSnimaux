@@ -8,6 +8,9 @@ const USER_STATE = {
     role: ""
   },
   isAuth: false,
+  allUsers: [],
+  allUsersLoading: false,
+  allUsersError: null,
   signInForm: {
     login: "",
     password: ""
@@ -57,6 +60,32 @@ const userSlice = createSlice({
           role
         },
         isAuth: true
+      }
+    },
+    setAllUsers: (state, action) => {
+      return {
+        ...state,
+        allUsers: action.payload.allUsers,
+        allUsersLoading: false
+      }
+    },
+    startAllUsersLoading: (state, action) => {
+      return {
+        ...state,
+        allUsersLoading: true
+      }
+    },
+    stopAllUsersLoading: (state, action) => {
+      return {
+        ...state,
+        allUsersLoading: false
+      }
+    },
+    setAllUsersError: (state, action) => {
+      return {
+        ...state,
+        allUsersError: action.payload.error,
+        allUsersLoading: false
       }
     },
     updateSignInForm: (state, action) => {
@@ -201,5 +230,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError } = userSlice.actions;
+export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError, setAllUsers, startAllUsersLoading, stopAllUsersLoading, setAllUsersError } = userSlice.actions;
 export default userSlice.reducer;

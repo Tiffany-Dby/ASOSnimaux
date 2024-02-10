@@ -22,6 +22,25 @@ const create = async (username, email, password) => {
   }
 }
 
+const readAll = async () => {
+  const sql = `
+    SELECT id, username, email, user_role
+    FROM users
+  `;
+
+  let result = [];
+  let error = null;
+  try {
+    result = await query(sql);
+  }
+  catch (err) {
+    error = err.message;
+  }
+  finally {
+    return { result, error };
+  }
+}
+
 const followAnimal = async (userID, animalID) => {
   const sql = `
     INSERT INTO users_animals (user_id, animal_id)
@@ -164,6 +183,23 @@ const updatePassword = async (newPassword, id) => {
     return { result, error };
   }
 }
+const updateRole = async (newRole, id) => {
+  const sql = `
+    UPDATE users
+    SET user_role = ?
+    WHERE id = ?
+  `;
+
+  let result = [];
+  let error = null;
+  try {
+    result = await query(sql, [newRole, id]);
+    if (result.affectedRows !== 1) throw new Error(`Something went wrong couldn't update password`);
+  }
+  finally {
+    return { result, error };
+  }
+}
 
 const updateEmail = () => {
 
@@ -211,6 +247,7 @@ const deleteOne = async (id) => {
 
 export const UserDB = {
   create,
+  readAll,
   followAnimal,
   readOne,
   readByEmailOrUsername,
@@ -218,6 +255,7 @@ export const UserDB = {
   readUsersFollow,
   updateUsername,
   updatePassword,
+  updateRole,
   unfollow,
   deleteOne
 }

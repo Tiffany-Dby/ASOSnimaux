@@ -26,6 +26,13 @@ const create = async ({ body: { username, email, password } }, res) => {
   return res.status(error ? 500 : 201).json({ message: error ? error : `New user successfully created` });
 }
 
+const readAll = async (req, res) => {
+  const response = await UserDB.readAll();
+  const { result, error } = response;
+
+  return res.status(error ? 500 : 200).json({ message: error ? error : `Request on all users successful`, result });
+}
+
 const followAnimal = async ({ body: { userID, animalID }, res }) => {
   const response = await UserDB.followAnimal(userID, animalID);
   const error = response.error;
@@ -123,6 +130,18 @@ const updatePassword = async ({ body: { oldPassword, newPassword, userID } }, re
   return res.status(error ? 500 : 200).json({ message: error ? error : `Update on password for user with id "${userID}" successful` });
 }
 
+const updateRole = async ({ params: { id }, body: { newRole } }, res) => {
+  const areStrings = areStringsFilled([newRole]);
+  if (!areStrings) return res.status(403).json({ message: `Missing data` });
+
+  if (newRole !== "admin" && newRole !== "member") return res.status(403).json({ message: `Select the appropriate role` });
+
+  const response = await UserDB.updateRole(newRole, id);
+  const { result, error } = response;
+
+  return res.status(error ? 500 : 200).json({ message: error ? error : `Update on role for user with id "${id}" successful` });
+}
+
 const unfollow = async ({ body: { userID }, params: { animalID } }, res) => {
   const response = await UserDB.unfollow(userID, animalID);
 
@@ -131,15 +150,16 @@ const unfollow = async ({ body: { userID }, params: { animalID } }, res) => {
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request from user with id ${userID} to unfollow animal with id ${animalID} successful` });
 }
 
-const deleteOne = async ({ params: { id }, body: { userID } }, res) => {
+const deleteOne = async ({ params: { id } }, res) => {
   const response = await UserDB.deleteOne(id);
   const error = response.error;
 
-  return res.status(error ? 500 : 200).json({ message: error ? error : `Request to delete user with id "${userID}" successful` });
+  return res.status(error ? 500 : 200).json({ message: error ? error : `Request to delete user with id "${id}" successful` });
 }
 
 export const UserController = {
   create,
+  readAll,
   followAnimal,
   readOne,
   signIn,
@@ -147,6 +167,7 @@ export const UserController = {
   readUsersFollow,
   updateUsername,
   updatePassword,
+  updateRole,
   unfollow,
   deleteOne
 }

@@ -10,10 +10,14 @@ import { resetFormNewArticle, setSelectedArticle, updateFormNewArticle, updateFo
 import { useEffect, useRef, useState } from "react";
 import { setToLocalDate } from "../../utils/date.utils";
 import { closeDialog, setIsDeleteArticleForm, setIsNewArticleForm, setIsUpdateArticleForm } from "../../redux/reducers/dialog.reducer";
+import { Link, Route, Routes } from "react-router-dom";
+import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import { APP_ROUTES } from "../../constants/route.const";
 
 const Admin = () => {
   const dispatch = useDispatch();
 
+  const { user } = useSelector(state => state.userReducer);
   const { isNewArticleForm, isDeleteArticleForm, isUpdateArticleForm } = useSelector(state => state.dialogReducer);
   const { articles, newArticleLoading, newArticleError } = useSelector(state => state.articleReducer);
   const { newArticle, all, selectedArticle } = articles;
@@ -76,11 +80,16 @@ const Admin = () => {
         <div className="title-wrapper">
           <h1>Page administrateur</h1>
         </div>
+        {user.role === 'super_admin' &&
+          <div className="btn-wrapper">
+            <Link className="btn" to={`${APP_ROUTES.ADMIN}/users`}>Gérer les Utilisateurs</Link>
+          </div>
+        }
 
         <section className="admin admin__all-articles">
-          <Button btnStyle={""} text={"Créer un nouvel article"} btnClick={handleNewForm} />
 
           <h2>Tous les articles ({all.length})</h2>
+          <Button btnStyle={""} text={"Créer un nouvel article"} btnClick={handleNewForm} />
 
           <div className="admin__all-articles__wrapper">
             {all.map((a) => (

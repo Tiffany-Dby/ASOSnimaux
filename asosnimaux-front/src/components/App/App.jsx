@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOneUserThunk } from '../../api/user.api.js';
 import { getFromStorage } from '../../utils/storage.utils.js';
+import SuperAdmin from '../SuperAdmin/SuperAdmin.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -79,11 +80,23 @@ const App = () => {
               }
             />
             <Route
+              path={`${APP_ROUTES.ADMIN}/users`}
+              element={
+                <>
+                  <PrivateRoute
+                    hasAccess={isAuth && user.role === 'super_admin'}
+                  >
+                    <SuperAdmin />
+                  </PrivateRoute>
+                </>
+              }
+            />
+            <Route
               path={APP_ROUTES.ADMIN}
               element={
                 <>
                   <PrivateRoute
-                    hasAccess={isAuth && user.role === 'admin'}
+                    hasAccess={isAuth && (user.role === 'admin' || user.role === 'super_admin')}
                   >
                     <Admin />
                   </PrivateRoute>

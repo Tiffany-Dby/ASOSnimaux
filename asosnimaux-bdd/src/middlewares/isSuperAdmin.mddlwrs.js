@@ -1,6 +1,6 @@
 import query from "../databases/init.db.js";
 
-const isAdmin = async ({ body: { userID } }, res, next) => {
+const isSuperAdmin = async ({ body: { userID } }, res, next) => {
   let error = null;
   try {
     const sql = `
@@ -13,7 +13,7 @@ const isAdmin = async ({ body: { userID } }, res, next) => {
     const user = response[0];
     const role = user.user_role;
 
-    if (role !== "admin" && role !== "super_admin") return res.status(401).json({ message: `Unauthorized : You don't have the rights for this action.` });
+    if (role !== "super_admin") return res.status(401).json({ message: `Unauthorized : You don't have the rights for this action.` });
 
     next();
   }
@@ -23,4 +23,4 @@ const isAdmin = async ({ body: { userID } }, res, next) => {
   }
 }
 
-export default isAdmin;
+export default isSuperAdmin;

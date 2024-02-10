@@ -4,14 +4,15 @@
   @include mxn.flex("column", "nowrap");
   padding-top: var(--padding-l);
 
-  &__all-articles {
+  &__all-articles,
+  &__all-users {
     @include mxn.container($padding: var(--padding-s));
     @include mxn.flex("column", "nowrap");
     gap: 2rem;
 
     &__wrapper {
       @include mxn.flex;
-      justify-content: space-around;
+      justify-content: space-between;
       gap: 3rem;
 
       @media screen and (min-width:650px) {
@@ -20,35 +21,27 @@
     }
   }
 
-  &__article {
+  &__article, &__user {
     display: grid;
     width: 100%;
     background-color: var(--white);
     border-radius: var(--radius-s);
     box-shadow: var(--box-shadow-2-2-5);
 
-    @media screen and (min-width:620px) {
-      flex: 1 0;
-      min-width: 230px;
-      max-width: 50%;
-    }
-
-    @media screen and (min-width:930px) {
-      min-width: 300px;
+    @media screen and (min-width:635px) {
+      flex: 1 auto;
       max-width: calc(50% - var(--padding-s));
     }
+  }
 
-    @media screen and (min-width:1010px) {
-      max-width: calc(33% - var(--padding-s));
-    }
-
+  &__article {
     &__content {
       display: grid;
       text-align: center;
+    }
 
-      h3 {
-        padding: var(--padding-xxs);
-      }
+    &__title {
+      padding: var(--padding-xxs);
     }
 
     &__date {
@@ -62,13 +55,14 @@
       }
     }
 
-    .icons-wrapper {
-      @include mxn.flex;
-      justify-content: center;
-      align-self: end;
-      gap: 5rem;
-      margin: 2rem 0;
-    }
+  }
+
+  .icons-wrapper {
+    @include mxn.flex;
+    justify-content: center;
+    align-self: end;
+    gap: 5rem;
+    padding: var(--padding-s);
   }
 
   .btn-wrapper {
