@@ -3,6 +3,6 @@ import { clearStorage } from "./storage.utils";
 
 export const signOut = (dispatch) => {
   clearStorage();
-  dispatch(setUser({ id: "", username: "", email: "", role: "" }));
+  dispatch(setUser({ id: "", username: "", email: "", avatar: "", role: "" }));
   dispatch(setisAuth(false));
 }
