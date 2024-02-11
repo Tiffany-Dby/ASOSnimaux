@@ -17,7 +17,7 @@ const Header = () => {
 
   const { isMobileMenuOpen } = useSelector(state => state.headerReducer);
   const { width, scrollY } = useSelector(state => state.windowReducer);
-  const { isAuth } = useSelector(state => state.userReducer);
+  const { isAuth, user } = useSelector(state => state.userReducer);
 
   const handleResize = () => dispatch(updateWindowSize({ width: window.innerWidth }));
   const handleScroll = () => dispatch(updateScroll({ scrollY: window.scrollY }));
@@ -82,7 +82,9 @@ const Header = () => {
               {isAuth ?
                 <>
                   <Link to={APP_ROUTES.ACCOUNT}>
-                    <FaCircleUser className="icon" color="var(--primary)" />
+                    <div className="icon avatar">
+                      <img crossOrigin="anonymous" src={user.avatar} alt={"Un sticker animal"} />
+                    </div>
                   </Link>
                   <FaPowerOff className="icon" color="var(--primary)" onClick={handleSignOut} />
                 </>

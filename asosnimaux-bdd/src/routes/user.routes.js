@@ -22,6 +22,7 @@ const initUserRoutes = (app) => {
   // PUT
   userRouter.put("/username", jwtMddlwr, UserController.updateUsername);
   userRouter.put("/password", jwtMddlwr, UserController.updatePassword);
+  userRouter.put("/avatar", jwtMddlwr, UserController.updateAvatar);
   userRouter.put("/role/:id", jwtMddlwr, isSuperAdmin, UserController.updateRole);
 
   // DELETE

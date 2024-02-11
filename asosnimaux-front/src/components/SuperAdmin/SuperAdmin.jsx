@@ -3,26 +3,42 @@ import "./superadmin.scss";
 import { APP_ROUTES } from "../../constants/route.const";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import Dialog from "../Dialog/Dialog";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsersThunk } from "../../api/user.api";
+import { deleteUserThunk, getAllUsersThunk } from "../../api/user.api";
+import Button from "../Button/Button";
+import { closeDialog, setIsDeleteUserBySuperAdminForm } from "../../redux/reducers/dialog.reducer";
 
 const SuperAdmin = () => {
   const dispatch = useDispatch();
 
   const { allUsers } = useSelector(state => state.userReducer);
+  const { isDeleteUserBySuperAdminForm, isUpdateUserRoleBySuperAdminForm } = useSelector(state => state.dialogReducer);
+
+  const [userID, setUserID] = useState(null);
 
   useEffect(() => {
     dispatch(getAllUsersThunk());
-    console.log(allUsers)
   }, []);
 
   const handleUpdateForm = () => {
 
   }
 
-  const handleDeleteForm = () => {
+  const handleDeleteForm = (id) => {
+    dispatch(setIsDeleteUserBySuperAdminForm());
+    setUserID(id)
+  }
 
+  const handleConfirmedDeletion = () => {
+    dispatch(deleteUserThunk(userID));
+    setUserID(null)
+    dispatch(closeDialog());
+  }
+
+  const handleCancel = () => {
+    setUserID(null)
+    dispatch(closeDialog());
   }
 
   return (
@@ -51,13 +67,28 @@ const SuperAdmin = () => {
                 <span className="icons-wrapper">
                   <FaPencil className="manage-icons admin__user__icon" color="var(--dark-brown)" onClick={() => handleUpdateForm()} />
 
-                  <FaTrashCan className="manage-icons admin__user__icon" color="var(--dark-red)" onClick={handleDeleteForm()} />
+                  <FaTrashCan className="manage-icons admin__user__icon" color="var(--dark-red)" onClick={() => handleDeleteForm(user.id)} />
                 </span>
               </article>
             ))}
           </div>
           <Dialog>
-
+            {isDeleteUserBySuperAdminForm &&
+              <div className="dialog-wrapper">
+                <div className="title-wrapper">
+                  <h2>Supprimer</h2>
+                </div>
+                <p>Êtes vous certain(e) de vouloir <strong>supprimer cet utilisateur</strong> ?</p>
+                <p className="text-error">Attention : Cette action est irréversible !</p>
+                <div className="btns-wrapper">
+                  <Button btnStyle={""} text="Confirmer" btnClick={handleConfirmedDeletion} />
+                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                </div>
+              </div>
+            }
+            {isUpdateUserRoleBySuperAdminForm &&
+              <></>
+            }
           </Dialog>
         </section>
       </div>

@@ -39,6 +39,10 @@
     flex-wrap: nowrap;
     gap: 1rem;
 
+    .icon.avatar {
+      background-color: var(--primary);
+    }
+
     a {
       @include mxn.flex;
       justify-content: center;

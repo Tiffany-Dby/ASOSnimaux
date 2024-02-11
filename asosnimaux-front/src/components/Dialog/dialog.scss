@@ -22,6 +22,36 @@ dialog {
     gap: 2.5rem;
     padding-bottom: var(--padding-xs);
     text-align: center;
+
+    .avatar {
+      flex: 1 auto;
+      max-width: calc(45% - var(--padding-s));
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all .5s ease;
+
+      &__wrapper {
+        @include mxn.flex;
+        @include mxn.grow;
+        justify-content: space-around;
+        gap: 2rem;
+        padding: var(--padding-s);
+      }
+
+    }
+
+    &:has(.avatar:hover) .avatar:not(:hover) {
+      opacity: .5;
+    }
+
+    &:has(.selected) .avatar:not(.selected) {
+      opacity: .7;
+      transform: scale(.80)
+    }
+
+    .selected {
+      background-color: var(--primary);
+    }
   }
 
   &::backdrop {

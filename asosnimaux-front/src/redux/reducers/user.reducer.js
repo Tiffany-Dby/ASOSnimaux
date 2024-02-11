@@ -5,6 +5,7 @@ const USER_STATE = {
     id: "",
     username: "",
     email: "",
+    avatar: "",
     role: ""
   },
   isAuth: false,
@@ -31,6 +32,9 @@ const USER_STATE = {
     oldPassword: "",
     newPassword: ""
   },
+  updatedAvatar: "",
+  updatedAvatarLoading: false,
+  updatedAvatarError: null,
   dialogLoading: false,
   dialogError: null,
   getUserLoading: false,
@@ -44,7 +48,7 @@ const userSlice = createSlice({
   initialState: USER_STATE,
   reducers: {
     setUser: (state, action) => {
-      const { id, email, username, role } = action.payload;
+      const { id, username, email, avatar, role } = action.payload;
       return {
         ...state,
         signUpLoading: false,
@@ -52,11 +56,14 @@ const userSlice = createSlice({
         signInError: null,
         dialogLoading: false,
         getUserLoading: false,
+        deleteUserLoading: false,
+        updatedAvatarLoading: false,
         user: {
           ...state.user,
           id,
           username,
           email,
+          avatar,
           role
         },
         isAuth: true
@@ -201,6 +208,25 @@ const userSlice = createSlice({
         dialogLoading: false
       }
     },
+    setUpdatedAvatar: (state, action) => {
+      return {
+        ...state,
+        updatedAvatar: action.payload
+      }
+    },
+    startUpdatedAvatarLoading: (state, action) => {
+      return { ...state, updatedAvatarLoading: true }
+    },
+    stopUpdatedAvatarLoading: (state, action) => {
+      return { ...state, updatedAvatarLoading: false }
+    },
+    setUpdatedAvatarError: (state, action) => {
+      return {
+        ...state,
+        updatedAvatarError: action.payload.error,
+        updatedAvatarLoading: false
+      }
+    },
     startGetUserLoading: (state, action) => {
       return { ...state, getUserLoading: true }
     },
@@ -226,9 +252,17 @@ const userSlice = createSlice({
         deleteUserError: action.payload.error,
         deleteUserLoading: false
       }
-    }
+    },
+    setDeleteBySuperAdmin: (state, action) => {
+      const { id } = action.payload;
+      return {
+        ...state,
+        allUsers: state.allUsers.filter(user => user.id !== id),
+        deleteLoading: false
+      }
+    },
   }
 });
 
-export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError, setAllUsers, startAllUsersLoading, stopAllUsersLoading, setAllUsersError } = userSlice.actions;
+export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, setUpdatedAvatar, startUpdatedAvatarLoading, stopUpdatedAvatarLoading, setUpdatedAvatarError, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError, setAllUsers, startAllUsersLoading, stopAllUsersLoading, setAllUsersError, setDeleteBySuperAdmin } = userSlice.actions;
 export default userSlice.reducer;

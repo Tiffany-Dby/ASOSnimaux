@@ -1,7 +1,8 @@
-import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers } from "../redux/reducers/user.reducer";
+import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading } from "../redux/reducers/user.reducer";
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { getFromStorage, setToStorage } from "../utils/storage.utils.js";
 import { signOut } from "../utils/user.utils.js";
+import { APP_ROUTES } from "../constants/route.const.js";
 
 export const signInThunk = () => async (dispatch, getState) => {
   const { signInForm, signInLoading } = getState().userReducer;
@@ -15,7 +16,7 @@ export const signInThunk = () => async (dispatch, getState) => {
   const { token } = result.user;
   setToStorage("token", token);
 
-  dispatch(setUser({ id: result.user.userID, username: result.user.username, email: result.user.email, role: result.user.userRole }));
+  dispatch(setUser({ id: result.user.userID, username: result.user.username, email: result.user.email, avatar: `${APP_ROUTES.API_URL}${result.user.avatar}`, role: result.user.userRole }));
   dispatch(resetSignInForm());
 }
 
@@ -70,6 +71,23 @@ export const updatePasswordThunk = () => async (dispatch, getState) => {
   dispatch(resetDialogForm());
 }
 
+export const updateAvatarThunk = () => async (dispatch, getState) => {
+  const { user, updatedAvatar, updatedAvatarLoading } = getState().userReducer;
+  const token = getFromStorage("token");
+  if (updatedAvatarLoading) return;
+
+  dispatch(startUpdatedAvatarLoading());
+
+  const formatExpectedOnRequest = {
+    avatarUrl: updatedAvatar,
+  }
+
+  const { result, error, status } = await putRequest(`users/avatar`, formatExpectedOnRequest, token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setUpdatedAvatarError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setUser({ ...user, avatar: `${APP_ROUTES.API_URL}${updatedAvatar}` }));
+}
+
 export const getOneUserThunk = () => async (dispatch, getState) => {
   const token = getFromStorage("token");
 
@@ -81,7 +99,7 @@ export const getOneUserThunk = () => async (dispatch, getState) => {
     return dispatch(setGetUserError({ error: `Something went wrong: ${error}` }));
   }
 
-  dispatch(setUser({ id: result.user.userID, username: result.user.username, email: result.user.email, role: result.user.userRole }))
+  dispatch(setUser({ id: result.user.userID, username: result.user.username, email: result.user.email, avatar: `${APP_ROUTES.API_URL}${result.user.avatar}`, role: result.user.userRole }))
 }
 
 export const getAllUsersThunk = () => async (dispatch, getState) => {
@@ -104,15 +122,20 @@ export const getAllUsersThunk = () => async (dispatch, getState) => {
 }
 
 export const deleteUserThunk = (id) => async (dispatch, getState) => {
+  const { user } = getState().userReducer;
   const token = getFromStorage("token");
 
   dispatch(startDeleteUserLoading());
 
-  console.log(id);
-
   const { result, error, status } = await deleteRequest(`users/${id}`, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setDeleteUserError({ error: `Something went wrong : ${error}` }));
 
-  signOut(dispatch);
+  if (id === user.id) {
+    signOut(dispatch);
+  }
+  else {
+    dispatch(setDeleteBySuperAdmin({ id }));
+  }
+
   dispatch(stopDeleteUserLoading());
 }

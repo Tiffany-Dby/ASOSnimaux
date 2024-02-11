@@ -6,6 +6,11 @@
     margin-bottom: 1rem;
   }
 
+  section {
+    @include mxn.flex("column", "nowrap");
+    gap: 2rem;
+  }
+
   &__content-wrapper {
     @include mxn.flex;
     justify-content: center;
@@ -30,29 +35,51 @@
 
   .content {
     width: 100%;
-    padding-bottom: var(--padding-xs);
+    padding: var(--padding-xs);
 
     &__header {
       @include mxn.flex;
       justify-content: space-between;
       align-items: center;
+      padding: var(--padding-xs);
+      background-color: var(--dark-brown);
+      border-radius: var(--radius-s) var(--radius-s) 0 0;
+      color: var(--white);
+      text-transform: uppercase;
 
       &>div {
         display: flex;
         gap: .5rem;
       }
     }
+
+
+    &__password {
+      display: flex;
+      align-items: center;
+
+      &::after {
+        content: '••••••••••';
+        color: var(--dark-brown);
+        font-size: var(--font-size-m);
+      }
+    }
   }
 
+  .img {
+    max-width: 150px;
+    margin: 0 auto;
+  }
+
+  &__avatar,
   &__username,
   &__email,
   &__password,
   &__testimonies {
-    @include mxn.container("400px", var(--padding-xs) var(--padding-s));
-    border-radius: var(--radius-l);
-    background-color: var(--secondary-50);
+    @include mxn.container("400px", 0);
+    border-radius: var(--radius-s);
+    background-color: var(--white);
     box-shadow: var(--box-shadow-2-2-5);
-    margin-bottom: 2rem;
   }
 
   & div:has(.manage-icons) {
@@ -61,12 +88,12 @@
 
   .btn-wrapper {
     @include mxn.btnSimple;
-    margin-top: 5rem;
+    margin-top: 2rem;
+    text-align: center;
 
     .btn {
       background-color: var(--dark-red);
       box-shadow: var(--shadow-border-m) var(--dark-red);
     }
-
   }
 }

@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 
 const create = async (username, email, password) => {
   const sql = `
-    INSERT INTO users (id, username, email, password, user_role)
-    VALUES (?, ?, ?, ?, "membre")
+    INSERT INTO users (id, username, email, password)
+    VALUES (?, ?, ?, ?)
   `;
 
   let result = [];
@@ -62,7 +62,7 @@ const followAnimal = async (userID, animalID) => {
 
 const readOne = async (id) => {
   const sql = `
-    SELECT id, username, email, password, user_role
+    SELECT id, username, email, password, avatar_url, user_role
     FROM users
     WHERE id = ?
   `;
@@ -82,7 +82,7 @@ const readOne = async (id) => {
 
 const readByEmailOrUsername = async (emailOrUsername) => {
   const sql = `
-    SELECT id, username, email, password, user_role
+    SELECT id, username, email, password, avatar_url, user_role
     FROM users
     WHERE (
       email = ? OR username = ?
@@ -183,6 +183,25 @@ const updatePassword = async (newPassword, id) => {
     return { result, error };
   }
 }
+
+const updateAvatar = async (avatarUrl, id) => {
+  const sql = `
+    UPDATE users
+    SET avatar_url = ?
+    WHERE id = ?
+  `;
+
+  let result = [];
+  let error = null;
+  try {
+    result = await query(sql, [avatarUrl, id]);
+    if (result.affectedRows !== 1) throw new Error(`Something went wrong couldn't update avatar`);
+  }
+  finally {
+    return { result, error };
+  }
+}
+
 const updateRole = async (newRole, id) => {
   const sql = `
     UPDATE users
@@ -226,6 +245,16 @@ const unfollow = async (userID, animalID) => {
 }
 
 const deleteOne = async (id) => {
+  const testimoniesSql = `
+    DELETE FROM testimonies
+    WHERE user_id = ?
+  `;
+
+  const usersAnimalsSql = `
+    DELETE FROM users_animals
+    WHERE user_id = ?
+  `;
+
   const sql = `
     DELETE FROM users
     WHERE id = ?
@@ -234,6 +263,9 @@ const deleteOne = async (id) => {
   let result = [];
   let error = null;
   try {
+    await query(testimoniesSql, [id]);
+    await query(usersAnimalsSql, [id]);
+
     result = await query(sql, [id]);
     if (result.affectedRows !== 1) throw new Error(`Something went wrong couldn't delete user`);
   }
@@ -255,6 +287,7 @@ export const UserDB = {
   readUsersFollow,
   updateUsername,
   updatePassword,
+  updateAvatar,
   updateRole,
   unfollow,
   deleteOne

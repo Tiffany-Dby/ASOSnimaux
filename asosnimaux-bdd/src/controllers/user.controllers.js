@@ -48,6 +48,7 @@ const readOne = async ({ body: { userID } }, res) => {
     userID: result[0].id,
     username: result[0].username,
     email: result[0].email,
+    avatar: result[0].avatar_url,
     userRole: result[0].user_role
   }
 
@@ -66,6 +67,7 @@ const signIn = async ({ body: { login, password } }, res) => {
   const pwDB = user.password;
   const username = user.username;
   const email = user.email;
+  const avatar = user.avatar_url;
   const userRole = user.user_role;
 
   const arePwSame = await compareHash(password, pwDB);
@@ -74,7 +76,7 @@ const signIn = async ({ body: { login, password } }, res) => {
 
   const token = jwtSign(userID);
 
-  return res.status(200).json({ message: `Authentication succeeded`, user: { userID, username, email, userRole, token } })
+  return res.status(200).json({ message: `Authentication succeeded`, user: { userID, username, email, avatar, userRole, token } })
 }
 
 const readUsersTestimonies = async ({ body: { userID } }, res) => {
@@ -130,6 +132,16 @@ const updatePassword = async ({ body: { oldPassword, newPassword, userID } }, re
   return res.status(error ? 500 : 200).json({ message: error ? error : `Update on password for user with id "${userID}" successful` });
 }
 
+const updateAvatar = async ({ body: { userID, avatarUrl } }, res) => {
+  const areStrings = areStringsFilled([avatarUrl]);
+  if (!areStrings) return res.status(403).json({ message: `Missing data` });
+
+  const response = await UserDB.updateAvatar(avatarUrl, userID);
+  const { result, error } = response;
+
+  return res.status(error ? 500 : 200).json({ message: error ? error : `Update on avatar for user with id "${userID}" successful` });
+}
+
 const updateRole = async ({ params: { id }, body: { newRole } }, res) => {
   const areStrings = areStringsFilled([newRole]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
@@ -137,14 +149,13 @@ const updateRole = async ({ params: { id }, body: { newRole } }, res) => {
   if (newRole !== "admin" && newRole !== "member") return res.status(403).json({ message: `Select the appropriate role` });
 
   const response = await UserDB.updateRole(newRole, id);
-  const { result, error } = response;
+  const error = response.error;
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Update on role for user with id "${id}" successful` });
 }
 
 const unfollow = async ({ body: { userID }, params: { animalID } }, res) => {
   const response = await UserDB.unfollow(userID, animalID);
-
   const error = response.error;
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request from user with id ${userID} to unfollow animal with id ${animalID} successful` });
@@ -167,6 +178,7 @@ export const UserController = {
   readUsersFollow,
   updateUsername,
   updatePassword,
+  updateAvatar,
   updateRole,
   unfollow,
   deleteOne

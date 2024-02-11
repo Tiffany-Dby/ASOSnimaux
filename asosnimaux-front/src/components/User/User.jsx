@@ -4,15 +4,21 @@ import Dialog from "../Dialog/Dialog";
 import Input from "../Input/Input";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { resetDialogForm, updateDialogForm } from "../../redux/reducers/user.reducer";
+import { resetDialogForm, setUpdatedAvatar, updateDialogForm } from "../../redux/reducers/user.reducer";
 import { createPortal } from "react-dom";
-import { closeDialog, setInputFields, setIsDeleteAccountForm, setIsUpdateAccountForm, toggleDialog } from "../../redux/reducers/dialog.reducer";
-import { deleteUserThunk, updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
+import { closeDialog, setInputFields, setIsDeleteAccountForm, setIsUpdateAccountAvatar, setIsUpdateAccountForm, toggleDialog } from "../../redux/reducers/dialog.reducer";
+import { deleteUserThunk, updateAvatarThunk, updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
+import { useEffect, useState } from "react";
+import { AVATAR } from "../../constants/avatar.const";
+import { APP_ROUTES } from "../../constants/route.const";
 
-const User = ({ imgUrl, imgAlt, date, testimonie }) => {
+const User = ({ date, testimonie }) => {
   const dispatch = useDispatch();
-  const { user, dialogForms } = useSelector(state => state.userReducer);
-  const { input, isDeleteAccountForm, isUpdateAccountForm } = useSelector(state => state.dialogReducer);
+
+  const { user, dialogForms, updatedAvatar } = useSelector(state => state.userReducer);
+  const { input, isDeleteAccountForm, isUpdateAccountForm, isUpdateAccountAvatar } = useSelector(state => state.dialogReducer);
+
+  const [avatarIndex, setAvatarIndex] = useState(null);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -28,12 +34,20 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
     dispatch(closeDialog());
   }
 
+  const handleUpdateAvatarDialog = () => {
+    dispatch(setIsUpdateAccountAvatar());
+  }
+
+  const handleUpdateAvatar = () => {
+    dispatch(updateAvatarThunk(updatedAvatar));
+    dispatch(closeDialog());
+  }
+
   const handleDeleteForm = () => {
     dispatch(setIsDeleteAccountForm());
   }
 
   const handleConfirmedDeletion = () => {
-    console.log(user.id);
     dispatch(deleteUserThunk(user.id));
     dispatch(closeDialog());
   }
@@ -46,6 +60,8 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
   }
 
   const handleDialogClose = () => {
+    setAvatarIndex(null);
+    dispatch(setUpdatedAvatar(""))
     dispatch(closeDialog());
   }
 
@@ -53,7 +69,7 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
 
   return (
     <>
-      <section className="user">
+      <div className="user">
         <div className="title-wrapper">
           <h1>Dashboard</h1>
         </div>
@@ -63,63 +79,89 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
             <h2>{user.username}</h2>
           </div>
         </div>
-        <div className="user__avatar">
-          <img src={imgUrl} alt={imgAlt} />
-        </div>
         <div className="user__content-wrapper">
           <div className="articles-wrapper">
-            <article>
+            <section>
               <h2>Informations de compte</h2>
-              <div className="user__username">
+              <article className="user__avatar">
                 <div className="content__header">
-                  <p>Pseudo</p>
+                  <h3>Avatar</h3>
+                  <FaPencil className="manage-icons" onClick={handleUpdateAvatarDialog} />
+                </div>
+                <div className="content img">
+                  <img crossOrigin="anonymous" src={user.avatar} alt={"Un sticker animal"} />
+                </div>
+              </article>
+              <article className="user__username">
+                <div className="content__header">
+                  <h3>Pseudo</h3>
                   <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Pseudo", id: "username", type: "text" })} />
                 </div>
                 <div className="content">
                   <p>{user.username}</p>
                 </div>
-              </div>
-              <div className="user__email">
+              </article>
+              <article className="user__email">
                 <div className="content__header">
-                  <p>Email</p>
+                  <h3>Email</h3>
                   <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Email", id: "email", type: "email" })} />
                 </div>
                 <div className="content">
                   <p>{user.email}</p>
                 </div>
-              </div>
-            </article>
+              </article>
+            </section>
 
-            <article>
+            <section>
               <h2>Sécurité</h2>
-              <div className="user__password">
+              <article className="user__password">
                 <div className="content__header">
-                  <p>Mot de passe</p>
+                  <h3>Mot de passe</h3>
                   <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Nouveau mot de passe", id: "newPassword", type: "password" })} />
                 </div>
-              </div>
-            </article>
+                <div className="content">
+                  <p className="content__password"></p>
+                </div>
+              </article>
+              <Button btnStyle={""} text="Supprimer le compte" btnClick={handleDeleteForm} />
+            </section>
 
-            <article>
-              <h2>Témoignages</h2>
-              <div className="user__testimonies">
+            <section>
+              <h2>Témoignages (nmbr)</h2>
+              <article className="user__testimonies">
                 <div className="content__header">
-                  <p>Témoignage du {date}</p>
+                  <h3>Témoignage du {date}</h3>
                   <div>
                     <FaPencil className="manage-icons" onClick={handleDialog} />
                     <FaTrashCan className="manage-icons" color="var(--dark-red)" />
                   </div>
                 </div>
                 <div className="content">
-                  <p>{testimonie} Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ex, eligendi accusamus minus officia voluptatem, explicabo voluptate repellendus aspernatur accusantium amet expedita repellat, aliquid ratione corrupti vel rerum itaque nesciunt.</p>
+                  <p>{testimonie}</p>
                 </div>
-              </div>
-            </article>
+              </article>
+            </section>
           </div>
 
-          <Button btnStyle={""} text="Supprimer le compte" btnClick={handleDeleteForm} />
         </div>
         <Dialog>
+          {isUpdateAccountAvatar &&
+            <div className="dialog-wrapper">
+              <section className="avatar__wrapper">
+                <div className="title-wrapper">
+                  <h2>Choisir un Avatar</h2>
+                </div>
+                {AVATAR.URL.map((u, index) => (
+                  <article key={index} className={`avatar${avatarIndex === index ? ' selected' : ''}`}>
+                    <img crossOrigin="anonymous" src={`${APP_ROUTES.API_URL}${u}`} alt={"Un sticker animal"} onClick={() => { dispatch(setUpdatedAvatar(u)); setAvatarIndex(avatarIndex === index ? null : index) }} />
+                  </article>
+                ))
+                }
+                <Button btnStyle="" text="Valider" btnClick={handleUpdateAvatar} />
+                <Button btnStyle={""} text="Annuler" btnClick={handleDialogClose} />
+              </section>
+            </div>
+          }
           {isUpdateAccountForm &&
             <div className="dialog-wrapper">
               <div className="title-wrapper">
@@ -151,7 +193,7 @@ const User = ({ imgUrl, imgAlt, date, testimonie }) => {
             </div>
           }
         </Dialog>
-      </section>
+      </div>
     </>
   );
 }
