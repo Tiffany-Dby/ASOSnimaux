@@ -4,6 +4,7 @@ import headerReducer from "./reducers/header.reducer";
 import windowReducer from "./reducers/window.reducer";
 import articleReducer from "./reducers/article.reducer";
 import dialogReducer from "./reducers/dialog.reducer";
+import toastReducer from "./reducers/toast.reducer";
 
 const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ const store = configureStore({
     headerReducer,
     windowReducer,
     articleReducer,
-    dialogReducer
+    dialogReducer,
+    toastReducer
   },
 });
 

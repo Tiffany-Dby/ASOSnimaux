@@ -32,8 +32,11 @@ const USER_STATE = {
     oldPassword: "",
     newPassword: ""
   },
+  updatePasswordSuccess: null,
+  updateUsernameSuccess: null,
   updatedAvatar: "",
   updatedAvatarLoading: false,
+  updateAvatarSuccess: null,
   updatedAvatarError: null,
   dialogLoading: false,
   dialogError: null,
@@ -48,7 +51,7 @@ const userSlice = createSlice({
   initialState: USER_STATE,
   reducers: {
     setUser: (state, action) => {
-      const { id, username, email, avatar, role } = action.payload;
+      const { id, username, email, avatar, role, updateUsernameSuccess, updateAvatarSuccess } = action.payload;
       return {
         ...state,
         signUpLoading: false,
@@ -66,7 +69,9 @@ const userSlice = createSlice({
           avatar,
           role
         },
-        isAuth: true
+        isAuth: true,
+        updateUsernameSuccess,
+        updateAvatarSuccess,
       }
     },
     setAllUsers: (state, action) => {
@@ -211,7 +216,7 @@ const userSlice = createSlice({
     setUpdatedAvatar: (state, action) => {
       return {
         ...state,
-        updatedAvatar: action.payload
+        updatedAvatar: action.payload,
       }
     },
     startUpdatedAvatarLoading: (state, action) => {
@@ -261,8 +266,22 @@ const userSlice = createSlice({
         deleteLoading: false
       }
     },
+    setUpdatePasswordSuccess: (state, action) => {
+      return {
+        ...state,
+        updatePasswordSuccess: "Mot de passe mis à jour !"
+      }
+    },
+    resetUserSuccess: (state, action) => {
+      return {
+        ...state,
+        updateAvatarSuccess: null,
+        updatePasswordSuccess: null,
+        updateUsernameSuccess: null,
+      }
+    }
   }
 });
 
-export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, setUpdatedAvatar, startUpdatedAvatarLoading, stopUpdatedAvatarLoading, setUpdatedAvatarError, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError, setAllUsers, startAllUsersLoading, stopAllUsersLoading, setAllUsersError, setDeleteBySuperAdmin } = userSlice.actions;
+export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, setUpdatedAvatar, startUpdatedAvatarLoading, stopUpdatedAvatarLoading, setUpdatedAvatarError, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError, setAllUsers, startAllUsersLoading, stopAllUsersLoading, setAllUsersError, setDeleteBySuperAdmin, setUpdatePasswordSuccess, resetUserSuccess } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,8 +1,9 @@
-import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading } from "../redux/reducers/user.reducer";
+import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading, setUpdatePasswordSuccess } from "../redux/reducers/user.reducer";
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { getFromStorage, setToStorage } from "../utils/storage.utils.js";
 import { signOut } from "../utils/user.utils.js";
 import { APP_ROUTES } from "../constants/route.const.js";
+import { showToast } from "../utils/toast.utils.js";
 
 export const signInThunk = () => async (dispatch, getState) => {
   const { signInForm, signInLoading } = getState().userReducer;
@@ -48,8 +49,9 @@ export const updateUsernameThunk = () => async (dispatch, getState) => {
   const { result, error, status } = await putRequest(`users/username`, formatExpectedOnRequest, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setDialogError({ error: `Something went wrong : ${error}` }));
 
-  dispatch(setUser({ ...user, username: dialogForms.username }))
-  dispatch(resetDialogForm())
+  dispatch(setUser({ ...user, username: dialogForms.username, updateUsernameSuccess: "Pseudo mis à jour !" }));
+  dispatch(resetDialogForm());
+  showToast(dispatch);
 }
 
 export const updatePasswordThunk = () => async (dispatch, getState) => {
@@ -67,8 +69,10 @@ export const updatePasswordThunk = () => async (dispatch, getState) => {
   const { result, error, status } = await putRequest(`users/password`, formatExpectedOnRequest, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setDialogError({ error: `Something went wrong : ${error}` }));
 
-  signOut(dispatch);
   dispatch(resetDialogForm());
+  signOut(dispatch);
+  dispatch(setUpdatePasswordSuccess());
+  showToast(dispatch);
 }
 
 export const updateAvatarThunk = () => async (dispatch, getState) => {
@@ -85,7 +89,8 @@ export const updateAvatarThunk = () => async (dispatch, getState) => {
   const { result, error, status } = await putRequest(`users/avatar`, formatExpectedOnRequest, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setUpdatedAvatarError({ error: `Something went wrong : ${error}` }));
 
-  dispatch(setUser({ ...user, avatar: `${APP_ROUTES.API_URL}${updatedAvatar}` }));
+  dispatch(setUser({ ...user, avatar: `${APP_ROUTES.API_URL}${updatedAvatar}`, updateAvatarSuccess: "Avatar mis à jour !" }));
+  showToast(dispatch);
 }
 
 export const getOneUserThunk = () => async (dispatch, getState) => {
@@ -103,7 +108,7 @@ export const getOneUserThunk = () => async (dispatch, getState) => {
 }
 
 export const getAllUsersThunk = () => async (dispatch, getState) => {
-  const { allUsers, allUsersLoading } = getState().userReducer;
+  const { allUsersLoading } = getState().userReducer;
   const token = getFromStorage("token");
   if (allUsersLoading) return;
 

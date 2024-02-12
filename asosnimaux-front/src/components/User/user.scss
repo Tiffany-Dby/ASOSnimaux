@@ -17,7 +17,7 @@
   }
 
   &__greetings {
-    @include mxn.container("400px", 0);
+    @include mxn.container("400px", var(--padding-s));
 
     h2 {
       text-align: left;

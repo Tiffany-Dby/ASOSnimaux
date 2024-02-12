@@ -30,14 +30,17 @@ const ARTICLE_STATE = {
   overviewLoading: false,
   overviewError: null,
   newArticleLoading: false,
+  newArticleSuccess: null,
   newArticleError: null,
   allLoading: false,
   allError: null,
   oneLoading: false,
   oneError: null,
   deleteLoading: false,
+  deleteSuccess: null,
   deleteError: null,
   selectedLoading: false,
+  selectedSuccess: null,
   selectedError: null
 }
 
@@ -95,7 +98,8 @@ const articleSlice = createSlice({
           ]
         },
         newArticleError: null,
-        newArticleLoading: false
+        newArticleLoading: false,
+        newArticleSuccess: "Article créé !"
       }
     },
     startNewArticleLoading: (state, action) => {
@@ -182,7 +186,8 @@ const articleSlice = createSlice({
           ...state.articles,
           all: state.articles.all.filter(article => article.id !== id)
         },
-        deleteLoading: false
+        deleteLoading: false,
+        deleteSuccess: "Article supprimé !",
       }
     },
     setStartDeleteLoading: (state, action) => {
@@ -240,7 +245,8 @@ const articleSlice = createSlice({
           ...state.articles,
           all: state.articles.all.map((a) => a.id === article.id ? { ...article } : { ...a })
         },
-        selectedLoading: false
+        selectedLoading: false,
+        selectedSuccess: "Article mis à jour !"
       }
     },
     startSelectedLoading: (state, action) => {
@@ -261,9 +267,17 @@ const articleSlice = createSlice({
         selectedError: action.payload.error,
         selectedLoading: false
       }
+    },
+    resetArticleSuccess: (state, action) => {
+      return {
+        ...state,
+        newArticleSuccess: null,
+        deleteSuccess: null,
+        selectedSuccess: null,
+      }
     }
   }
 });
 
-export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle, resetFormNewArticle, setAll, startAllLoading, stopAllLoading, setAllError, setDelete, setStartDeleteLoading, setStopDeleteLoading, setDeleteError, setSelectedArticle, updateFormSelectedArticle, startSelectedLoading, stopSelectedLoading, setSelectedError, setUpdateSelected } = articleSlice.actions;
+export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle, resetFormNewArticle, setAll, startAllLoading, stopAllLoading, setAllError, setDelete, setStartDeleteLoading, setStopDeleteLoading, setDeleteError, setSelectedArticle, updateFormSelectedArticle, startSelectedLoading, stopSelectedLoading, setSelectedError, setUpdateSelected, resetArticleSuccess } = articleSlice.actions;
 export default articleSlice.reducer;

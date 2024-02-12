@@ -12,7 +12,7 @@ import { closeDialog, setIsDeleteUserBySuperAdminForm } from "../../redux/reduce
 const SuperAdmin = () => {
   const dispatch = useDispatch();
 
-  const { allUsers } = useSelector(state => state.userReducer);
+  const { allUsers, allUsersLoading, allUsersError, deleteUserLoading, deleteUserError } = useSelector(state => state.userReducer);
   const { isDeleteUserBySuperAdminForm, isUpdateUserRoleBySuperAdminForm } = useSelector(state => state.dialogReducer);
 
   const [userID, setUserID] = useState(null);
@@ -47,11 +47,25 @@ const SuperAdmin = () => {
         <div className="title-wrapper">
           <h1>Page administrateur</h1>
         </div>
+
         <div className="btn-wrapper">
           <Link className="btn" to={APP_ROUTES.ADMIN}>Gérer les Articles</Link>
         </div>
+
         <section className="admin admin__all-users">
           <h2>Tous les utilisateurs ({allUsers.length})</h2>
+          {deleteUserError &&
+            <p className="text-error">{deleteUserError}</p>
+          }
+          {allUsersError &&
+            <p className="text-error">{allUsersError}</p>
+          }
+          {allUsersLoading &&
+            <div className="loading">
+              <span className="loading__spin"></span>
+              <p className="loading__text">Chargement des utilisateurs en cours...</p>
+            </div>
+          }
 
           <div className="admin__all-users__wrapper">
             {allUsers.map((user) => (
@@ -64,11 +78,17 @@ const SuperAdmin = () => {
                   <span className="admin__user__role-label">Rôle</span>
                   <p className="admin__user__role">{user.role}</p>
                 </div>
-                <span className="icons-wrapper">
-                  <FaPencil className="manage-icons admin__user__icon" color="var(--dark-brown)" onClick={() => handleUpdateForm()} />
-
-                  <FaTrashCan className="manage-icons admin__user__icon" color="var(--dark-red)" onClick={() => handleDeleteForm(user.id)} />
-                </span>
+                {deleteUserLoading ?
+                  <div className="loading">
+                    <span className="loading__spin"></span>
+                    <p className="loading__text">Suppression de l'utilisateur en cours...</p>
+                  </div>
+                  :
+                  <span className="icons-wrapper">
+                    <FaPencil className="manage-icons admin__user__icon" color="var(--dark-brown)" onClick={() => handleUpdateForm()} />
+                    <FaTrashCan className="manage-icons admin__user__icon" color="var(--dark-red)" onClick={() => handleDeleteForm(user.id)} />
+                  </span>
+                }
               </article>
             ))}
           </div>

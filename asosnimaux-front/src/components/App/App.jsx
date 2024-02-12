@@ -11,13 +11,14 @@ import User from '../User/User';
 import Error from '../Error/Error.jsx';
 import PrivateRoute from '../PrivateRoute/PrivateRoute.jsx';
 import Informations from '../Informations/Informations.jsx';
+import SuperAdmin from '../SuperAdmin/SuperAdmin.jsx';
+import Filters from '../Filters/Filters.jsx';
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOneUserThunk } from '../../api/user.api.js';
 import { getFromStorage } from '../../utils/storage.utils.js';
-import SuperAdmin from '../SuperAdmin/SuperAdmin.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -35,8 +36,8 @@ const App = () => {
       <BrowserRouter>
         <Header />
         <main>
+          {/* <Filters /> */}
           <Routes>
-            {/*<Filters /> */}
             <Route
               path={APP_ROUTES.SIGN_UP}
               element={

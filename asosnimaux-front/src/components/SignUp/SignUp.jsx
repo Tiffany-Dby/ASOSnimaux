@@ -39,10 +39,10 @@ const SignUp = () => {
         }
         <form onSubmit={handleSubmit}>
           {signUpLoading ?
-            <>
-              <p>Chargement...</p>
-              <span className="loading"></span>
-            </>
+            <div className="loading">
+              <p className="loading__text">Chargement...</p>
+              <span className="loading__paws"></span>
+            </div>
             :
             <>
               <Input label="Pseudo" id="username" required={true} value={signUpForm.username} onChange={value => updateForm("username", value)} />

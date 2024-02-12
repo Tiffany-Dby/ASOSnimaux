@@ -11,11 +11,13 @@ import { deleteUserThunk, updateAvatarThunk, updatePasswordThunk, updateUsername
 import { useEffect, useState } from "react";
 import { AVATAR } from "../../constants/avatar.const";
 import { APP_ROUTES } from "../../constants/route.const";
+import Toast from "../Toast/Toast";
 
 const User = ({ date, testimonie }) => {
   const dispatch = useDispatch();
 
-  const { user, dialogForms, updatedAvatar } = useSelector(state => state.userReducer);
+  const { isToastOpen } = useSelector(state => state.toastReducer);
+  const { user, dialogForms, updatedAvatar, updateAvatarSuccess, updateUsernameSuccess } = useSelector(state => state.userReducer);
   const { input, isDeleteAccountForm, isUpdateAccountForm, isUpdateAccountAvatar } = useSelector(state => state.dialogReducer);
 
   const [avatarIndex, setAvatarIndex] = useState(null);
@@ -70,6 +72,9 @@ const User = ({ date, testimonie }) => {
   return (
     <>
       <div className="user">
+        {isToastOpen &&
+          <Toast message={updateAvatarSuccess || updateUsernameSuccess} />
+        }
         <div className="title-wrapper">
           <h1>Dashboard</h1>
         </div>
@@ -157,8 +162,10 @@ const User = ({ date, testimonie }) => {
                   </article>
                 ))
                 }
-                <Button btnStyle="" text="Valider" btnClick={handleUpdateAvatar} />
-                <Button btnStyle={""} text="Annuler" btnClick={handleDialogClose} />
+                <div className="btns-wrapper">
+                  <Button btnStyle="" text="Valider" btnClick={handleUpdateAvatar} />
+                  <Button btnStyle={""} text="Annuler" btnClick={handleDialogClose} />
+                </div>
               </section>
             </div>
           }
@@ -169,7 +176,10 @@ const User = ({ date, testimonie }) => {
               </div>
               <form onSubmit={handleSubmit}>
                 {input.id === "newPassword" &&
-                  <Input label={"Ancien mot de passe"} id={"oldPassword"} type={"password"} value={dialogForms.oldPassword} onChange={(value) => updateForm("oldPassword", value)} />
+                  <>
+                    <p className="text-error">Après modification, vous devrez vous reconnecter</p>
+                    <Input label={"Ancien mot de passe"} id={"oldPassword"} type={"password"} value={dialogForms.oldPassword} onChange={(value) => updateForm("oldPassword", value)} />
+                  </>
                 }
                 <Input label={input.label} id={input.id} type={input.type} value={dialogForms[input.id]} onChange={(value) => updateForm(input.id, value)} />
                 <div className="btns-wrapper">

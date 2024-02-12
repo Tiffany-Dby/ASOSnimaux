@@ -79,6 +79,10 @@ dialog {
     background-color: var(--secondary-50);
     max-width: 700px;
   }
+
+  .text-error {
+    padding: 0;
+  }
 }
 
 @keyframes open {

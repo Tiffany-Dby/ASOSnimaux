@@ -3,6 +3,8 @@ import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewErro
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { setFormData } from "../utils/formidable.utils.js"
 import { getFromStorage } from "../utils/storage.utils.js";
+import { triggerToast } from "../redux/reducers/toast.reducer.js";
+import { showToast } from "../utils/toast.utils.js";
 
 export const getAllArticlesThunk = () => async (dispatch, getState) => {
   const { allLoading } = getState().articleReducer;
@@ -55,6 +57,7 @@ export const postArticleThunk = (file) => async (dispatch, getState) => {
     picture_caption: result.article[0].picture_caption
   }));
 
+  showToast(dispatch);
   dispatch(resetFormNewArticle());
 }
 
@@ -85,6 +88,7 @@ export const updateArticleThunk = () => async (dispatch, getState) => {
       description: result.result[0].description
     }
   }));
+  showToast(dispatch);
 }
 
 export const deleteArticleThunk = (id) => async (dispatch, getState) => {
@@ -97,4 +101,5 @@ export const deleteArticleThunk = (id) => async (dispatch, getState) => {
   if (!result?.message || status >= 400 || !!error) return dispatch(setDeleteError({ error: `Something went wrong: ${error}` }));
 
   dispatch(setDelete({ id }));
+  showToast(dispatch);
 }

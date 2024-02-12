@@ -24,7 +24,7 @@ const HeaderNav = ({ toggleClass }) => {
           <li><NavLink className={checkActiveLink} to={APP_ROUTES.ASSOCIATION} >L'Association</NavLink></li>
           <li><NavLink className={checkActiveLink} to={APP_ROUTES.ADOPTION} >Adoption</NavLink></li>
           <li><NavLink className={checkActiveLink} to={APP_ROUTES.ARTICLES} >Actualités</NavLink></li>
-          <li><NavLink className={checkActiveLink} to="" >Contact</NavLink></li>
+          <li><NavLink className={checkActiveLink} to={APP_ROUTES.DONATION} >Don</NavLink></li>
           {(user.role === 'admin' || user.role === 'super_admin') &&
             <li><NavLink className={checkActiveLink} to={APP_ROUTES.ADMIN} >Admin</NavLink></li>
           }

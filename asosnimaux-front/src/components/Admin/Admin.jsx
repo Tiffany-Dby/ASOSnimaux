@@ -3,6 +3,7 @@ import Button from "../Button/Button";
 import Input from "../Input/Input";
 import InputFile from "../InputFile/InputFile";
 import Dialog from "../Dialog/Dialog";
+import Toast from '../Toast/Toast.jsx';
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticleThunk } from "../../api/article.api";
@@ -10,16 +11,16 @@ import { resetFormNewArticle, setSelectedArticle, updateFormNewArticle, updateFo
 import { useEffect, useRef, useState } from "react";
 import { setToLocalDate } from "../../utils/date.utils";
 import { closeDialog, setIsDeleteArticleForm, setIsNewArticleForm, setIsUpdateArticleForm } from "../../redux/reducers/dialog.reducer";
-import { Link, Route, Routes } from "react-router-dom";
-import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import { Link } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/route.const";
 
 const Admin = () => {
   const dispatch = useDispatch();
 
+  const { isToastOpen } = useSelector(state => state.toastReducer);
   const { user } = useSelector(state => state.userReducer);
   const { isNewArticleForm, isDeleteArticleForm, isUpdateArticleForm } = useSelector(state => state.dialogReducer);
-  const { articles, newArticleLoading, newArticleError } = useSelector(state => state.articleReducer);
+  const { articles, allLoading, newArticleLoading, newArticleError, newArticleSuccess, selectedLoading, selectedError, selectedSuccess, deleteLoading, deleteError, deleteSuccess } = useSelector(state => state.articleReducer);
   const { newArticle, all, selectedArticle } = articles;
 
   const inputFileRef = useRef(null);
@@ -77,6 +78,9 @@ const Admin = () => {
   return (
     <>
       <div className="admin">
+        {isToastOpen &&
+          <Toast message={newArticleSuccess || selectedSuccess || deleteSuccess} />
+        }
         <div className="title-wrapper">
           <h1>Page administrateur</h1>
         </div>
@@ -85,11 +89,23 @@ const Admin = () => {
             <Link className="btn" to={`${APP_ROUTES.ADMIN}/users`}>Gérer les Utilisateurs</Link>
           </div>
         }
-
         <section className="admin admin__all-articles">
 
           <h2>Tous les articles ({all.length})</h2>
-          <Button btnStyle={""} text={"Créer un nouvel article"} btnClick={handleNewForm} />
+          {newArticleError &&
+            <p className="text-error">{newArticleError}</p>
+          }
+          {deleteError &&
+            <p className="text-error">{deleteError}</p>
+          }
+          {newArticleLoading || allLoading ?
+            <div className="loading">
+              <span className="loading__spin"></span>
+              <p className="loading__text">{newArticleLoading && "Création de l'article"}{allLoading && "Chargement des articles"} en cours...</p>
+            </div>
+            :
+            <Button btnStyle={""} text={"Créer un nouvel article"} btnClick={handleNewForm} />
+          }
 
           <div className="admin__all-articles__wrapper">
             {all.map((a) => (
@@ -100,10 +116,17 @@ const Admin = () => {
                     <p>{setToLocalDate(a.date)}</p>
                   </span>
                 </div>
-                <div className="icons-wrapper">
-                  <FaPencil className="manage-icons" onClick={() => handleUpdateForm(a)} />
-                  <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleDeleteForm(a.id)} />
-                </div>
+                {selectedLoading || deleteLoading ?
+                  <div className="loading">
+                    <span className="loading__spin"></span>
+                    <p className="loading__text">{selectedLoading && "Mise à jour"}{deleteLoading && "Suppression"} en cours...</p>
+                  </div>
+                  :
+                  <div className="icons-wrapper">
+                    <FaPencil className="manage-icons" onClick={() => handleUpdateForm(a)} />
+                    <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleDeleteForm(a.id)} />
+                  </div>
+                }
               </article>
             ))}
           </div>
@@ -124,17 +147,20 @@ const Admin = () => {
                   <Input
                     label="Localisation"
                     id="location"
+                    required={true}
                     value={newArticle.location}
                     onChange={value => updateFormNew("location", value)} />
                   <InputFile
                     label="Choisir une image"
                     id="picture_url"
+                    required={true}
                     value={newArticle.picture_url}
                     onChange={file => setFile(file)}
                     inputFileRef={inputFileRef} />
                   <Input
                     label="Description de l'image"
                     id="picture_caption"
+                    required={true}
                     value={newArticle.picture_caption}
                     onChange={value => updateFormNew("picture_caption", value)} />
                   <div className="input__wrapper">
@@ -143,6 +169,7 @@ const Admin = () => {
                       className="input"
                       name="description"
                       id="description"
+                      required={true}
                       value={newArticle.description || ""}
                       onChange={e => updateFormNew("description", e.target.value)}></textarea>
                   </div>

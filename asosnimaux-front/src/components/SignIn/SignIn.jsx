@@ -7,12 +7,14 @@ import { updateSignInForm } from "../../redux/reducers/user.reducer";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Toast from "../Toast/Toast.jsx";
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { signInForm, signInLoading, signInError, isAuth } = useSelector(state => state.userReducer);
+  const { isToastOpen } = useSelector(state => state.toastReducer);
+  const { signInForm, signInLoading, signInError, isAuth, updatePasswordSuccess } = useSelector(state => state.userReducer);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,6 +38,9 @@ const SignIn = () => {
   return (
     <>
       <div className="signIn-wrapper">
+        {isToastOpen &&
+          <Toast message={updatePasswordSuccess} />
+        }
         <div className='title-wrapper'>
           <h1>Se connecter</h1>
         </div>
@@ -44,10 +49,10 @@ const SignIn = () => {
         }
         <form onSubmit={handleSubmit}>
           {signInLoading ?
-            <>
-              <p>Chargement...</p>
-              <span className="loading"></span>
-            </>
+            <div className="loading">
+              <p className="loading__text">Chargement...</p>
+              <span className="loading__paws"></span>
+            </div>
             :
             <>
               <Input label="Email ou Pseudo" id="login" required={true} value={signInForm.login} onChange={value => updateForm("login", value)} />
