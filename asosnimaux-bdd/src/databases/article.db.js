@@ -27,8 +27,14 @@ const create = async (article, userID) => {
 
 const readAll = async () => {
   const sql = `
-    SELECT id, date, name, location, description, picture_url, picture_caption
+    SELECT id, date, name, location, description, picture_url, picture_caption,
+    CASE 
+        WHEN LENGTH(description) > 100 
+        THEN CONCAT(SUBSTRING(description, 1, 100), '...') 
+        ELSE description 
+    END AS truncated_description
     FROM events
+    ORDER BY date DESC
   `;
 
   let result = [];

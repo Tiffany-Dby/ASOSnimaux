@@ -1,4 +1,4 @@
-import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading, setUpdatePasswordSuccess } from "../redux/reducers/user.reducer";
+import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading, setUpdatePasswordSuccess, startSelectedUserLoading, setSelectedUserError, setUpdateSelectedUser } from "../redux/reducers/user.reducer";
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { getFromStorage, setToStorage } from "../utils/storage.utils.js";
 import { signOut } from "../utils/user.utils.js";
@@ -126,6 +126,24 @@ export const getAllUsersThunk = () => async (dispatch, getState) => {
   }));
 }
 
+export const updateUserRoleThunk = () => async (dispatch, getState) => {
+  const { allUsers, selectedUser, selectedUserLoading } = getState().userReducer;
+  const token = getFromStorage("token");
+  if (selectedUserLoading) return;
+
+  dispatch(startSelectedUserLoading());
+
+  const formatExpectedOnRequest = {
+    newRole: selectedUser.role,
+  }
+
+  const { result, error, status } = await putRequest(`users/role/${selectedUser.id}`, formatExpectedOnRequest, token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setSelectedUserError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setUpdateSelectedUser({ user: { id: selectedUser.id, username: selectedUser.username, role: selectedUser.role } }));
+  showToast(dispatch);
+}
+
 export const deleteUserThunk = (id) => async (dispatch, getState) => {
   const { user } = getState().userReducer;
   const token = getFromStorage("token");
@@ -143,4 +161,5 @@ export const deleteUserThunk = (id) => async (dispatch, getState) => {
   }
 
   dispatch(stopDeleteUserLoading());
+  showToast(dispatch);
 }

@@ -105,8 +105,8 @@ const readOne = async ({ params: { articleID } }, res) => {
     name: result[0].name,
     location: result[0].location,
     description: result[0].description,
-    pictureURL: result[0].pictureURL,
-    pictureCaption: result[0].pictureCaption
+    pictureURL: result[0].picture_url,
+    pictureCaption: result[0].picture_caption
   }
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request on article with id ${articleID} successful`, article });

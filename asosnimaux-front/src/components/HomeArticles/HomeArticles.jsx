@@ -22,9 +22,11 @@ const HomeArticles = () => {
         <div className="title-wrapper">
           <h2>Articles</h2>
         </div>
-        <div className="articles-overview__wrapper">
-          {overview.map((article, index) => (
-            <Article key={index} artclStyle="" imgUrl={article.picture_url} imgAlt={article.picture_caption} title={article.name} date={setToLocalDateLong(article.date)} text={article.truncated_description} />
+        <div className="articles__wrapper">
+          {overview.map((article) => (
+            <Link key={article.id} to={`${APP_ROUTES.ARTICLES}/${article.id}`}>
+              <Article artclStyle="" imgUrl={article.picture_url} imgAlt={article.picture_caption} title={article.name} date={setToLocalDateLong(article.date)} text={article.truncated_description} />
+            </Link>
           ))}
         </div>
         <div className="btn-wrapper">

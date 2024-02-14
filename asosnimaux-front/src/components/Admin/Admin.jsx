@@ -20,7 +20,7 @@ const Admin = () => {
   const { isToastOpen } = useSelector(state => state.toastReducer);
   const { user } = useSelector(state => state.userReducer);
   const { isNewArticleForm, isDeleteArticleForm, isUpdateArticleForm } = useSelector(state => state.dialogReducer);
-  const { articles, allLoading, newArticleLoading, newArticleError, newArticleSuccess, selectedLoading, selectedError, selectedSuccess, deleteLoading, deleteError, deleteSuccess } = useSelector(state => state.articleReducer);
+  const { articles, allLoading, allError, newArticleLoading, newArticleError, newArticleSuccess, selectedLoading, selectedError, selectedSuccess, deleteLoading, deleteError, deleteSuccess } = useSelector(state => state.articleReducer);
   const { newArticle, all, selectedArticle } = articles;
 
   const inputFileRef = useRef(null);
@@ -92,11 +92,17 @@ const Admin = () => {
         <section className="admin admin__all-articles">
 
           <h2>Tous les articles ({all.length})</h2>
+          {selectedError &&
+            <p className="text-error">{selectedError}</p>
+          }
           {newArticleError &&
             <p className="text-error">{newArticleError}</p>
           }
           {deleteError &&
             <p className="text-error">{deleteError}</p>
+          }
+          {allError &&
+            <p className="text-error">{allError}</p>
           }
           {newArticleLoading || allLoading ?
             <div className="loading">

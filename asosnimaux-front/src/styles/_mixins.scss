@@ -57,9 +57,12 @@
 
   border: none;
   outline: none;
-  appearance: none;
   font-style: normal;
   background: transparent;
+
+  &:not(select) {
+    appearance: none;
+  }
 }
 
 @mixin title {

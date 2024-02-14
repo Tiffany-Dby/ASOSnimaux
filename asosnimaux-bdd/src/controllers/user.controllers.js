@@ -146,7 +146,7 @@ const updateRole = async ({ params: { id }, body: { newRole } }, res) => {
   const areStrings = areStringsFilled([newRole]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
-  if (newRole !== "admin" && newRole !== "member") return res.status(403).json({ message: `Select the appropriate role` });
+  if (newRole !== "super_admin" && newRole !== "admin" && newRole !== "membre") return res.status(403).json({ message: `Select the appropriate role` });
 
   const response = await UserDB.updateRole(newRole, id);
   const error = response.error;

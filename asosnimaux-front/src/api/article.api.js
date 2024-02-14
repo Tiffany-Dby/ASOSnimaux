@@ -1,5 +1,5 @@
 import { APP_ROUTES } from "../constants/route.const.js";
-import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll, setAllError, setStartDeleteLoading, setDeleteError, setDelete, resetFormNewArticle, startSelectedLoading, setSelectedError, setSelectedArticle, setUpdateSelected } from "../redux/reducers/article.reducer"
+import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll, setAllError, setStartDeleteLoading, setDeleteError, setDelete, resetFormNewArticle, startSelectedLoading, setSelectedError, setSelectedArticle, setUpdateSelected, startOneLoading, setOneError, setOne } from "../redux/reducers/article.reducer"
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { setFormData } from "../utils/formidable.utils.js"
 import { getFromStorage } from "../utils/storage.utils.js";
@@ -15,6 +15,19 @@ export const getAllArticlesThunk = () => async (dispatch, getState) => {
   if (!result?.message || status >= 400 || !!error) return dispatch(setAllError({ error: `Something went wrong : ${error}` }));
 
   dispatch(setAll({ all: result.result }));
+}
+
+export const getOneArticleThunk = (id) => async (dispatch, getState) => {
+  const { articles, oneLoading, oneError } = getState().articleReducer;
+  const { one } = articles;
+  if (oneLoading) return;
+
+  dispatch(startOneLoading());
+
+  const { result, error, status } = await getRequest(`articles/${id}`);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setOneError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setOne({ id: result.article.articleID, date: result.article.date, name: result.article.name, location: result.article.location, description: result.article.description, picture_url: `${APP_ROUTES.API_URL}${result.article.pictureURL}`, picture_caption: result.article.pictureCaption }));
 }
 
 export const getOverviewThunk = () => async (dispatch, getState) => {

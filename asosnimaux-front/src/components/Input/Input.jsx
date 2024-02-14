@@ -1,7 +1,6 @@
 import "./input.scss";
 
 const Input = ({ id, label, type, value, required, onChange }) => {
-
   const handleChange = (value) => {
     onChange(value);
   }

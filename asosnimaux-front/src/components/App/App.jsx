@@ -19,6 +19,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOneUserThunk } from '../../api/user.api.js';
 import { getFromStorage } from '../../utils/storage.utils.js';
+import Articles from '../Articles/Articles.jsx';
+import ArticleDetails from '../ArticleDetails/ArticleDetails.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -109,6 +111,22 @@ const App = () => {
               element={
                 <>
                   <Adoption />
+                </>
+              }
+            />
+            <Route
+              path={APP_ROUTES.ARTICLES}
+              element={
+                <>
+                  <Articles />
+                </>
+              }
+            />
+            <Route
+              path={APP_ROUTES.ARTICLE}
+              element={
+                <>
+                  <ArticleDetails />
                 </>
               }
             />

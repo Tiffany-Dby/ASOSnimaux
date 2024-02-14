@@ -1,0 +1,39 @@
+@use "../../styles/mixins" as mxn;
+
+.articles {
+
+  &-page,
+  &-overview {
+    &:has(.article:hover) .article:not(:hover) img {
+      filter: grayscale(100%) brightness(80%);
+    }
+  }
+
+  &__wrapper {
+    &>a {
+      text-decoration: none;
+      color: var(--dark-brown);
+
+      @media screen and (min-width: 500px) {
+        &:nth-child(odd) {
+          grid-column: 1/4;
+        }
+
+        &:nth-child(even) {
+          grid-column: 2/-1;
+          flex-direction: row-reverse;
+        }
+      }
+    }
+
+    @include mxn.flex;
+    @include mxn.container($padding: 0);
+    gap: 3rem;
+
+    @media screen and (min-width: 767px) {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+  }
+}

@@ -32,6 +32,14 @@ const USER_STATE = {
     oldPassword: "",
     newPassword: ""
   },
+  selectedUser: {
+    id: "",
+    username: "",
+    role: ""
+  },
+  selectedUserLoading: false,
+  selectedUserSuccess: null,
+  selectedUserError: null,
   updatePasswordSuccess: null,
   updateUsernameSuccess: null,
   updatedAvatar: "",
@@ -43,6 +51,7 @@ const USER_STATE = {
   getUserLoading: false,
   getUserError: null,
   deleteUserLoading: false,
+  deleteUserSuccess: null,
   deleteUserError: null
 }
 
@@ -263,7 +272,8 @@ const userSlice = createSlice({
       return {
         ...state,
         allUsers: state.allUsers.filter(user => user.id !== id),
-        deleteLoading: false
+        deleteLoading: false,
+        deleteUserSuccess: "Utilisateur supprimé !"
       }
     },
     setUpdatePasswordSuccess: (state, action) => {
@@ -278,10 +288,61 @@ const userSlice = createSlice({
         updateAvatarSuccess: null,
         updatePasswordSuccess: null,
         updateUsernameSuccess: null,
+        selectedUserSuccess: null
       }
-    }
+    },
+    setSelectedUser: (state, action) => {
+      const { id, username, role } = action.payload;
+      return {
+        ...state,
+        selectedUser: {
+          id,
+          username,
+          role
+        }
+      }
+    },
+    updateFormSelectedUser: (state, action) => {
+      const { input, value } = action.payload;
+      return {
+        ...state,
+        selectedUser: {
+          ...state.selectedUser,
+          [input]: value
+        }
+      }
+    },
+    setUpdateSelectedUser: (state, action) => {
+      const { user } = action.payload;
+      return {
+        ...state,
+        allUsers: state.allUsers.map((u) => u.id === user.id ? { ...user } : { ...u }),
+        selectedUser: { ...user },
+        selectedUserLoading: false,
+        selectedUserSuccess: "Rôle mis à jour !"
+      }
+    },
+    startSelectedUserLoading: (state, action) => {
+      return {
+        ...state,
+        selectedUserLoading: true
+      }
+    },
+    stopSelectedUserLoading: (state, action) => {
+      return {
+        ...state,
+        selectedUserLoading: false
+      }
+    },
+    setSelectedUserError: (state, action) => {
+      return {
+        ...state,
+        selectedUserError: action.payload.error,
+        selectedUserLoading: false
+      }
+    },
   }
 });
 
-export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, setUpdatedAvatar, startUpdatedAvatarLoading, stopUpdatedAvatarLoading, setUpdatedAvatarError, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError, setAllUsers, startAllUsersLoading, stopAllUsersLoading, setAllUsersError, setDeleteBySuperAdmin, setUpdatePasswordSuccess, resetUserSuccess } = userSlice.actions;
+export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, setUpdatedAvatar, startUpdatedAvatarLoading, stopUpdatedAvatarLoading, setUpdatedAvatarError, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError, setAllUsers, startAllUsersLoading, stopAllUsersLoading, setAllUsersError, setDeleteBySuperAdmin, setUpdatePasswordSuccess, resetUserSuccess, setSelectedUser, updateFormSelectedUser, setUpdateSelectedUser, startSelectedUserLoading, stopSelectedUserLoading, setSelectedUserError } = userSlice.actions;
 export default userSlice.reducer;

@@ -275,9 +275,49 @@ const articleSlice = createSlice({
         deleteSuccess: null,
         selectedSuccess: null,
       }
+    },
+    setOne: (state, action) => {
+      const { id, name, date, location, description, picture_url, picture_caption } = action.payload;
+      return {
+        ...state,
+        articles: {
+          ...state.articles,
+          one: {
+            id,
+            name,
+            date,
+            location,
+            description,
+            picture_url,
+            picture_caption
+          }
+        },
+        oneLoading: false
+      }
     }
+    ,
+    startOneLoading: (state, action) => {
+      return {
+        ...state,
+        oneLoading: true
+      }
+    },
+    stopOneLoading: (state, action) => {
+      return {
+        ...state,
+        oneLoading: false
+      }
+    },
+    setOneError: (state, action) => {
+      return {
+        ...state,
+        oneError: action.payload.error,
+        oneLoading: false
+      }
+    },
+
   }
 });
 
-export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle, resetFormNewArticle, setAll, startAllLoading, stopAllLoading, setAllError, setDelete, setStartDeleteLoading, setStopDeleteLoading, setDeleteError, setSelectedArticle, updateFormSelectedArticle, startSelectedLoading, stopSelectedLoading, setSelectedError, setUpdateSelected, resetArticleSuccess } = articleSlice.actions;
+export const { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, updateFormNewArticle, resetFormNewArticle, setAll, startAllLoading, stopAllLoading, setAllError, setDelete, setStartDeleteLoading, setStopDeleteLoading, setDeleteError, setSelectedArticle, updateFormSelectedArticle, startSelectedLoading, stopSelectedLoading, setSelectedError, setUpdateSelected, resetArticleSuccess, setOne, startOneLoading, stopOneLoading, setOneError } = articleSlice.actions;
 export default articleSlice.reducer;

@@ -5,45 +5,64 @@ import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import Dialog from "../Dialog/Dialog";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteUserThunk, getAllUsersThunk } from "../../api/user.api";
+import { deleteUserThunk, getAllUsersThunk, updateUserRoleThunk } from "../../api/user.api";
 import Button from "../Button/Button";
-import { closeDialog, setIsDeleteUserBySuperAdminForm } from "../../redux/reducers/dialog.reducer";
+import { closeDialog, setIsDeleteUserBySuperAdminForm, setIsUpdateUserRoleBySuperAdminForm } from "../../redux/reducers/dialog.reducer";
+import InputSelect from "../InputSelect/InputSelect";
+import { setSelectedUser, updateFormSelectedUser } from "../../redux/reducers/user.reducer";
+import Toast from "../Toast/Toast";
 
 const SuperAdmin = () => {
   const dispatch = useDispatch();
 
-  const { allUsers, allUsersLoading, allUsersError, deleteUserLoading, deleteUserError } = useSelector(state => state.userReducer);
+  const { isToastOpen } = useSelector(state => state.toastReducer);
+  const { allUsers, allUsersLoading, allUsersError, deleteUserLoading, deleteUserError, selectedUser, selectedUserLoading, selectedUserError, selectedUserSuccess, deleteUserSuccess } = useSelector(state => state.userReducer);
   const { isDeleteUserBySuperAdminForm, isUpdateUserRoleBySuperAdminForm } = useSelector(state => state.dialogReducer);
 
-  const [userID, setUserID] = useState(null);
+  const options = [
+    { label: "membre", value: "membre" },
+    { label: "admin", value: "admin" },
+    { label: "super_admin", value: "super_admin" }
+  ]
+
+  const updateFormSelected = (input, value) => dispatch(updateFormSelectedUser({ input, value }));
 
   useEffect(() => {
     dispatch(getAllUsersThunk());
   }, []);
 
-  const handleUpdateForm = () => {
-
+  const handleUpdateSubmit = e => {
+    e.preventDefault();
+    dispatch(updateUserRoleThunk());
+    dispatch(closeDialog());
   }
 
-  const handleDeleteForm = (id) => {
+  const handleUpdateForm = (user) => {
+    dispatch(setIsUpdateUserRoleBySuperAdminForm());
+    dispatch(setSelectedUser({ id: user.id, username: user.username, role: user.role }));
+  }
+
+  const handleDeleteForm = (user) => {
     dispatch(setIsDeleteUserBySuperAdminForm());
-    setUserID(id)
+    dispatch(setSelectedUser({ id: user.id, username: user.username, role: user.role }));
   }
 
   const handleConfirmedDeletion = () => {
-    dispatch(deleteUserThunk(userID));
-    setUserID(null)
+    dispatch(deleteUserThunk(selectedUser.id));
     dispatch(closeDialog());
   }
 
   const handleCancel = () => {
-    setUserID(null)
+    dispatch(setSelectedUser({ id: "", username: "", role: "" }));
     dispatch(closeDialog());
   }
 
   return (
     <>
       <div className="admin">
+        {isToastOpen &&
+          <Toast message={selectedUserSuccess || deleteUserSuccess} />
+        }
         <div className="title-wrapper">
           <h1>Page administrateur</h1>
         </div>
@@ -54,6 +73,9 @@ const SuperAdmin = () => {
 
         <section className="admin admin__all-users">
           <h2>Tous les utilisateurs ({allUsers.length})</h2>
+          {selectedUserError &&
+            <p className="text-error">{selectedUserError}</p>
+          }
           {deleteUserError &&
             <p className="text-error">{deleteUserError}</p>
           }
@@ -78,15 +100,15 @@ const SuperAdmin = () => {
                   <span className="admin__user__role-label">Rôle</span>
                   <p className="admin__user__role">{user.role}</p>
                 </div>
-                {deleteUserLoading ?
+                {deleteUserLoading || selectedUserLoading ?
                   <div className="loading">
                     <span className="loading__spin"></span>
-                    <p className="loading__text">Suppression de l'utilisateur en cours...</p>
+                    <p className="loading__text">{deleteUserLoading && "Suppression"}{selectedUserLoading && "Mise à jour"} de l'utilisateur en cours...</p>
                   </div>
                   :
                   <span className="icons-wrapper">
-                    <FaPencil className="manage-icons admin__user__icon" color="var(--dark-brown)" onClick={() => handleUpdateForm()} />
-                    <FaTrashCan className="manage-icons admin__user__icon" color="var(--dark-red)" onClick={() => handleDeleteForm(user.id)} />
+                    <FaPencil className="manage-icons admin__user__icon" color="var(--dark-brown)" onClick={() => handleUpdateForm(user)} />
+                    <FaTrashCan className="manage-icons admin__user__icon" color="var(--dark-red)" onClick={() => handleDeleteForm(user)} />
                   </span>
                 }
               </article>
@@ -107,7 +129,20 @@ const SuperAdmin = () => {
               </div>
             }
             {isUpdateUserRoleBySuperAdminForm &&
-              <></>
+              <>
+                <div className="dialog-wrapper">
+                  <div className="title-wrapper">
+                    <h2>Mettre à jour le rôle</h2>
+                  </div>
+                  <form onSubmit={handleUpdateSubmit}>
+                    <InputSelect id="role" label="Choisissez un nouveau rôle" options={options} selected={selectedUser.role} onChange={(value) => updateFormSelected("role", value)} />
+                    <div className="btns-wrapper">
+                      <Button btnStyle={""} text="Confirmer" type="submit" />
+                      <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                    </div>
+                  </form>
+                </div>
+              </>
             }
           </Dialog>
         </section>
