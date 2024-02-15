@@ -75,7 +75,8 @@ dialog {
   }
 
   &:has(.admin__new-article),
-  &:has(.admin__update-article) {
+  &:has(.admin__update-article),
+  &:has(.admin__new-animal) {
     background-color: var(--secondary-50);
     max-width: 700px;
   }

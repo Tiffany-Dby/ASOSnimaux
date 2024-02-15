@@ -45,4 +45,19 @@
       border-radius: 0 0 var(--radius-s) var(--radius-s);
     }
   }
+
+  span:has(a) {
+    text-align: center;
+    display: block;
+    margin-bottom: 2rem;
+  }
+
+  a {
+    color: var(--dark-brown);
+    transition: color .5s ease;
+
+    &:hover {
+      color: var(--accent);
+    }
+  }
 }

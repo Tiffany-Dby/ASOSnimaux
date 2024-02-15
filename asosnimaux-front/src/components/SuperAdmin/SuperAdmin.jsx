@@ -1,16 +1,16 @@
-import { Link } from "react-router-dom";
 import "./superadmin.scss";
-import { APP_ROUTES } from "../../constants/route.const";
-import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import Dialog from "../Dialog/Dialog";
-import { useEffect, useState } from "react";
+import Button from "../Button/Button";
+import InputSelect from "../InputSelect/InputSelect";
+import Toast from "../Toast/Toast";
+import { FaPencil, FaTrashCan } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import { APP_ROUTES } from "../../constants/route.const";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUserThunk, getAllUsersThunk, updateUserRoleThunk } from "../../api/user.api";
-import Button from "../Button/Button";
 import { closeDialog, setIsDeleteUserBySuperAdminForm, setIsUpdateUserRoleBySuperAdminForm } from "../../redux/reducers/dialog.reducer";
-import InputSelect from "../InputSelect/InputSelect";
 import { setSelectedUser, updateFormSelectedUser } from "../../redux/reducers/user.reducer";
-import Toast from "../Toast/Toast";
 
 const SuperAdmin = () => {
   const dispatch = useDispatch();
@@ -66,10 +66,9 @@ const SuperAdmin = () => {
         <div className="title-wrapper">
           <h1>Page administrateur</h1>
         </div>
-
-        <div className="btn-wrapper">
-          <Link className="btn" to={APP_ROUTES.ADMIN}>Gérer les Articles</Link>
-        </div>
+        <span>
+          <Link to={APP_ROUTES.ADMIN}>Page de gestion des articles et des utilisateurs</Link>
+        </span>
 
         <section className="admin admin__all-users">
           <h2>Tous les utilisateurs ({allUsers.length})</h2>

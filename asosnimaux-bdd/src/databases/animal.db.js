@@ -1,34 +1,32 @@
 import query from "./init.db.js";
 import { v4 as uuidv4 } from "uuid";
 
-const create = async (name, age, sex, description, race = "inconnue", status, species) => {
+const create = async (name, age, sex, description, race = "inconnue", status, species, picture_url, picture_caption) => {
   const sql = `
-    INSERT INTO animals (id, entry_date, name, age, sex, description, race, status, exit_date, species)
-    VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, NULL, ?)
+    INSERT INTO animals (id, name, age, sex, description, race, status, species, picture_url, picture_caption)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   let result = [];
+  let insertedId = [];
   let error = null;
   try {
     const id = uuidv4();
 
-    await query(sql, [id, name, age, sex, description, race, status, species])
-
-    const animalResponse = await readAll();
-
-    result = animalResponse.result;
+    result = await query(sql, [id, name, age, sex, description, race, status, species, picture_url, picture_caption])
+    insertedId = id;
   }
   catch (err) {
     error = err.message;
   }
   finally {
-    return { result, error };
+    return { result, error, insertedId };
   }
 }
 
 const readAllForAdoption = async () => {
   const sql = `
-    SELECT entry_date, name, age, sex, description, race, status, exit_date, species
+    SELECT entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption
     FROM animals
     WHERE exit_date is NULL
   `;
@@ -48,7 +46,7 @@ const readAllForAdoption = async () => {
 
 const readAllBySpeciesForAdoption = async (species) => {
   const sql = `
-    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species
+    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption
     FROM animals
     WHERE species = ? AND exit_date is NULL
   `;
@@ -68,7 +66,7 @@ const readAllBySpeciesForAdoption = async (species) => {
 
 const readAll = async () => {
   const sql = `
-    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species
+    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption
     FROM animals
   `;
 
@@ -87,7 +85,7 @@ const readAll = async () => {
 
 const readAllBySpecies = async (species) => {
   const sql = `
-    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species
+    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption
     FROM animals
     WHERE species = ?
   `;
@@ -107,7 +105,7 @@ const readAllBySpecies = async (species) => {
 
 const readOne = async (id) => {
   const sql = `
-    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species
+    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption
     FROM animals
     WHERE id = ?
   `;

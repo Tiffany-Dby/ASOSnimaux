@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
+import { resetFormNewArticle } from "../../redux/reducers/article.reducer";
+import { resetFormNewAnimal } from "../../redux/reducers/animal.reducer";
 
 const Dialog = ({ children }) => {
   const dispatch = useDispatch();
@@ -12,6 +14,8 @@ const Dialog = ({ children }) => {
   const handleEscapeKey = e => {
     if (e.key === "Escape") {
       dispatch(closeDialog());
+      dispatch(resetFormNewArticle());
+      dispatch(resetFormNewAnimal());
     }
   }
 
@@ -20,6 +24,8 @@ const Dialog = ({ children }) => {
 
     if (e.clientX < dialogDimensions.left || e.clientX > dialogDimensions.right || e.clientY < dialogDimensions.top || e.clientY > dialogDimensions.bottom) {
       dispatch(closeDialog());
+      dispatch(resetFormNewArticle());
+      dispatch(resetFormNewAnimal());
     }
   }
 

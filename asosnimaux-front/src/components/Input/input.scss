@@ -8,6 +8,10 @@
   transition: all .3s ease;
   background-color: var(--secondary-25);
 
+  &:where(select) {
+    padding: var(--padding-xs);
+  }
+
   &:focus-within {
     box-shadow: var(--shadow-border-xxs) var(--accent);
   }

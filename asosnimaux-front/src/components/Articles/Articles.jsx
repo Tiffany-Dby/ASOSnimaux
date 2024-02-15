@@ -1,11 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
 import "./articles.scss";
 import Article from "../Article/Article";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAllArticlesThunk, getOneArticleThunk } from "../../api/article.api";
 import { setToLocalDateLong } from "../../utils/date.utils";
 import { APP_ROUTES } from "../../constants/route.const";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Articles = () => {
   const dispatch = useDispatch();

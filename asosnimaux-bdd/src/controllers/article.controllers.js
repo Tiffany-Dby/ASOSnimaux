@@ -72,7 +72,7 @@ const create = async (req, res) => {
 
   if (error || err) {
     const e = deleteImg(picture_url);
-    if (e) return res.statut(403).json({ message: e });
+    if (e) return res.status(403).json({ message: e });
   }
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `New article successfully created`, article: result });

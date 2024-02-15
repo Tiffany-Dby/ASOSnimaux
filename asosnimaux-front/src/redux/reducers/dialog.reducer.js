@@ -10,6 +10,7 @@ const DIALOG_STATE = {
   isUpdateAccountAvatar: false,
   isDeleteUserBySuperAdminForm: false,
   isUpdateUserRoleBySuperAdminForm: false,
+  isNewAnimalForm: false,
   input: {
     label: "",
     id: "",
@@ -34,6 +35,7 @@ const dialogSlice = createSlice({
       state.isUpdateAccountAvatar = false;
       state.isDeleteUserBySuperAdminForm = false;
       state.isUpdateUserRoleBySuperAdminForm = false;
+      state.isNewAnimalForm = false;
     },
     setInputFields: (state, action) => {
       const { label, id, type } = action.payload;
@@ -79,8 +81,12 @@ const dialogSlice = createSlice({
       state.isOpen = true;
       state.isUpdateUserRoleBySuperAdminForm = true;
     },
+    setIsNewAnimalForm: (state, action) => {
+      state.isOpen = true;
+      state.isNewAnimalForm = true;
+    },
   }
 });
 
-export const { toggleDialog, setInputFields, closeDialog, setIsNewArticleForm, setIsDeleteArticleForm, setIsUpdateArticleForm, setIsDeleteAccountForm, setIsUpdateAccountForm, setIsUpdateAccountAvatar, setIsDeleteUserBySuperAdminForm, setIsUpdateUserRoleBySuperAdminForm } = dialogSlice.actions;
+export const { toggleDialog, setInputFields, closeDialog, setIsNewArticleForm, setIsDeleteArticleForm, setIsUpdateArticleForm, setIsDeleteAccountForm, setIsUpdateAccountForm, setIsUpdateAccountAvatar, setIsDeleteUserBySuperAdminForm, setIsUpdateUserRoleBySuperAdminForm, setIsNewAnimalForm } = dialogSlice.actions;
 export default dialogSlice.reducer;

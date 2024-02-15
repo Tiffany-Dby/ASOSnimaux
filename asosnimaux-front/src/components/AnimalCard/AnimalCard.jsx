@@ -1,6 +1,5 @@
-import Icon from "../Icon/Icon";
-import { FaHeart, FaMars, FaVenus } from "react-icons/fa6";
 import "./animalCard.scss";
+import { FaHeart, FaMars, FaVenus } from "react-icons/fa6";
 
 const AnimalCard = ({ imgUrl, imgAlt, animalName }) => {
   return (

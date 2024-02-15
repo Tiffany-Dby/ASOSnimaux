@@ -18,7 +18,7 @@ export const getAllArticlesThunk = () => async (dispatch, getState) => {
 }
 
 export const getOneArticleThunk = (id) => async (dispatch, getState) => {
-  const { articles, oneLoading, oneError } = getState().articleReducer;
+  const { articles, oneLoading } = getState().articleReducer;
   const { one } = articles;
   if (oneLoading) return;
 

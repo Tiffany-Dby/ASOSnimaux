@@ -1,14 +1,23 @@
-import { useDispatch, useSelector } from "react-redux";
-import { setToLocalDate, setToLocalDateLong } from "../../utils/date.utils";
 import "./articleDetails.scss";
-import Article from "../Article/Article";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from 'react-router-dom';
+import { setToLocalDateLong } from "../../utils/date.utils";
 import { splitDescription } from "../../utils/articleDescription.utils";
+import { useEffect } from "react";
+import { getOneArticleThunk } from "../../api/article.api";
 
 const ArticleDetails = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
 
   const { articles, oneLoading, oneError } = useSelector(state => state.articleReducer);
   const { one } = articles;
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getOneArticleThunk(id));
+    }
+  }, []);
 
   const paragraphs = splitDescription(one.description);
 
@@ -17,11 +26,13 @@ const ArticleDetails = () => {
       <section className="article-page">
         <div className="article-page__wrapper">
           <article>
+            <div className="article-page__title__wrapper">
+              <h1 className="article-page__title">{one.name}</h1>
+            </div>
             <div className="article-page__img">
               <img crossOrigin="anonymous" loading="lazy" src={one.picture_url} alt={one.picture_caption} />
             </div>
             <div className="article-page__content">
-              <h1 className="article-page__title">{one.name}</h1>
               <p className="article-page__date">{setToLocalDateLong(one.date)}, {one.location}</p>
               <div className="article-page__text">
                 {paragraphs.map((paragraph, index) => (

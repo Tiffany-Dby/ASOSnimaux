@@ -1,5 +1,77 @@
 import { AnimalDB } from "../databases/animal.db.js";
+import { deleteImg, setImgUrl } from "../utils/formidable.utils.js";
 import { areStringsFilled } from "../utils/string.utils.js";
+import formidable from "formidable";
+
+const create_ = async (req, res) => {
+  const { name, age, sex, description, race, status, species, picture_url, picture_caption } = req.body;
+  const areStrings = areStringsFilled([name, sex, description, status, species, picture_url, picture_caption])
+
+  if (!areStrings) return res.status(403).json({ message: `Missing data` });
+
+  const response = await AnimalDB.create(name, age, sex, description, race, status, species, picture_url, picture_caption);
+
+  const { error, insertedId } = response;
+
+  const createdAnimal = await AnimalDB.readOne(insertedId);
+  const err = createdAnimal.error;
+  const result = createdAnimal.result;
+
+  return res.status(error ? 500 : 200).json({ message: error ? error : `New animal successfully added to the table`, result });
+}
+
+const create = async (req, res) => {
+  const form = formidable({
+    uploadDir: "./public/animals",
+    keepExtensions: true,
+    createDirsFromUploads: true,
+    maxFileSize: 5 * 1024 * 1024, // 5MB,
+    filter: opts => {
+      const { mimetype } = opts;
+      return mimetype === "image/png" || mimetype === "image/jpg" || mimetype === "image/jpeg";
+    }
+  });
+
+  let fields = null;
+  let files = null;
+
+  try {
+    [fields, files] = await form.parse(req);
+  }
+  catch (err) {
+    console.log("err =>", err.message);
+    return res.status(500).json({ message: "Error parsing form" });
+  }
+
+  console.log("fields", fields);
+  console.log("files", files);
+
+  if (!files.newAnimalImg) return res.status(400).json({ message: "Something went wrong, check files mimetype" });
+
+  const filePath = files.newAnimalImg[0].filepath;
+  const picture_url = setImgUrl(filePath, "animals");
+  console.log("picture_url : ", picture_url)
+  const { name, age, sex, description, race, status, species, picture_caption } = fields;
+
+  const areStrings = areStringsFilled([name[0], sex[0], description[0], status[0], species[0], picture_url, picture_caption[0]]);
+  if (!areStrings) return res.status(403).json({ message: `Missing data` });
+
+  const response = await AnimalDB.create(name, age, sex, description, race, status, species, picture_url, picture_caption);
+
+  const { error, insertedId } = response;
+
+  const createdAnimal = await AnimalDB.readOne(insertedId);
+  const err = createdAnimal.error;
+  const result = createdAnimal.result;
+
+  if (error || err) {
+    const e = deleteImg(picture_url);
+    if (e) return res.status(403).json({ message: e });
+  }
+
+
+  return res.status(error ? 500 : 200).json({ message: error ? error : `New animal successfully added`, result });
+}
 
 const readAllForAdoption = async (req, res) => {
   const response = await AnimalDB.readAllForAdoption();
@@ -45,24 +117,14 @@ const readOne = async ({ params: { id } }, res) => {
     race: result[0].race,
     status: result[0].status,
     exitDate: result[0].exit_date,
-    species: result[0].species
+    species: result[0].species,
+    pictureURL: result[0].picture_url,
+    pictureCaption: result[0].picture_caption
   }
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request for animal with id: ${id} successful`, animal });
 }
 
-const create = async (req, res) => {
-  const { name, age, sex, description, race, status, species } = req.body;
-  const areStrings = areStringsFilled([name, sex, description, status, species])
-
-  if (!areStrings) return res.status(403).json({ message: `Missing data` });
-
-  const response = await AnimalDB.create(name, age, sex, description, race, status, species);
-
-  const { result, error } = response;
-
-  return res.status(error ? 500 : 200).json({ message: error ? error : `New animal successfully added to the table`, result });
-}
 
 const updateDetails = async (req, res) => {
   const { name, age, sex, description, race, status, species, id } = req.body;
