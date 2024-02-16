@@ -115,7 +115,8 @@
 
   &__new-article,
   &__update-article,
-  &__new-animal {
+  &__new-animal,
+  &__update-animal {
     background-color: var(--secondary-50);
 
     input[type="file"] {
@@ -137,8 +138,8 @@
     }
 
     textarea {
-      min-width: 100%;
-      max-width: 100%;
+      font-family: "Noto Sans", sans-serif;
+      width: 100%;
       min-height: 200px;
     }
   }

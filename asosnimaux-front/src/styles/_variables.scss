@@ -1,3 +1,18 @@
+// FONTS
+@font-face {
+  font-family: "Montserrat";
+  src: url(../assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format('truetype-variations');
+  font-display: swap;
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  src: url(../assets/fonts/Noto_Sans/NotoSans-VariableFont_wdth-wght.ttf) format('truetype-variations');
+  font-display: swap;
+  font-weight: 100 900;
+}
+
 :root {
   // COLORS
   --primary: #6C4E4E;

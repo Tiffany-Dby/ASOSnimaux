@@ -24,8 +24,8 @@
 
     &:focus-within {
       color: var(--accent);
-      transform: scale(1.02);
     }
+
   }
 
   &__label {
@@ -33,5 +33,10 @@
     top: -2rem;
     left: 2%;
     font-size: var(--font-label);
+  }
+
+  &--error {
+    box-shadow: var(--shadow-border-xxs) var(--light-red);
+    color: var(--light-red);
   }
 }

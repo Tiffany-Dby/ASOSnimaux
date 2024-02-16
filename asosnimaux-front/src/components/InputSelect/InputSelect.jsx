@@ -1,6 +1,9 @@
+import { useSelector } from "react-redux";
 import "./inputSelect.scss";
 
-const InputSelect = ({ id, label, options, selected, onChange }) => {
+const InputSelect = ({ id, label, inputStyle, options, value, onChange }) => {
+  const { isUpdateUserRoleBySuperAdminForm } = useSelector(state => state.dialogReducer);
+
   const handleChange = (value) => {
     onChange(value);
   }
@@ -9,8 +12,10 @@ const InputSelect = ({ id, label, options, selected, onChange }) => {
     <>
       <div className="input__wrapper">
         <label className="input__label" htmlFor={id} >{label}</label>
-        <select className="input" name={id} id={id} value={selected || ""} onChange={e => handleChange(e.target.value)}>
-          <option value="">Choisir une option</option>
+        <select className={`input ${inputStyle}`} name={id} id={id} value={value || ""} onChange={e => handleChange(e.target.value)}>
+          {!isUpdateUserRoleBySuperAdminForm &&
+            <option value="">Choisir une option</option>
+          }
           {options.map((option, index) => (
             <option key={index} value={option.value} >{option.label}</option>
           ))}

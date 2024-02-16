@@ -1,7 +1,8 @@
-import { setAllAnimals, setAllAnimalsError, setNewAnimal, setNewAnimalError, startAllAnimalsLoading, startNewAnimalLoading } from "../redux/reducers/animal.reducer";
+import { resetFormNewAnimal, setAllAnimals, setAllAnimalsError, setDeleteAnimal, setDeleteAnimalError, setNewAnimal, setNewAnimalError, setSelectedwAnimalError, setUpdateSelectedAnimal, startAllAnimalsLoading, startDeleteAnimalLoading, startNewAnimalLoading, startSelectedAnimalLoading } from "../redux/reducers/animal.reducer";
 import { setFormData } from "../utils/formidable.utils";
 import { getFromStorage } from "../utils/storage.utils";
-import { getRequest, postRequest } from "./api";
+import { showToast } from "../utils/toast.utils";
+import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 
 
 export const getAllAnimalsThunk = () => async (dispatch, getState) => {
@@ -26,16 +27,12 @@ export const postNewAnimalThunk = (file) => async (dispatch, getState) => {
   const fd = setFormData({
     ...newAnimal,
     newAnimalImg: file
-  })
-  console.log(newAnimal)
-  console.log(fd)
+  });
 
   dispatch(startNewAnimalLoading());
 
   const { result, error, status } = await postRequest("animals", fd, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setNewAnimalError({ error: `Something went wrong : ${error}` }));
-
-  console.log(result)
 
   dispatch(setNewAnimal({
     id: result.result[0].id,
@@ -51,4 +48,52 @@ export const postNewAnimalThunk = (file) => async (dispatch, getState) => {
     picture_url: result.result[0].picture_url,
     picture_caption: result.result[0].picture_caption,
   }));
+
+  showToast(dispatch);
+  dispatch(resetFormNewAnimal());
+}
+
+export const updateAnimalThunk = () => async (dispatch, getState) => {
+  const { animals, selectedAnimalLoading } = getState().animalReducer;
+  const { selectedAnimal } = animals;
+  const token = getFromStorage("token");
+  if (selectedAnimalLoading) return;
+
+  dispatch(startSelectedAnimalLoading());
+
+  const { result, error, status } = await putRequest("animals", selectedAnimal, token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setSelectedwAnimalError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setUpdateSelectedAnimal({
+    animal: {
+      id: result.updatedAnimal[0].id,
+      entry_date: result.updatedAnimal[0].entry_date,
+      name: result.updatedAnimal[0].name,
+      age: result.updatedAnimal[0].age,
+      sex: result.updatedAnimal[0].sex,
+      description: result.updatedAnimal[0].description,
+      race: result.updatedAnimal[0].race,
+      status: result.updatedAnimal[0].status,
+      exit_date: result.updatedAnimal[0].exit_date,
+      species: result.updatedAnimal[0].species,
+      picture_url: result.updatedAnimal[0].picture_url,
+      picture_caption: result.updatedAnimal[0].picture_caption
+    }
+  }));
+
+  showToast(dispatch);
+}
+
+export const deleteAnimalThunk = (id) => async (dispatch, getState) => {
+  const { deleteAnimalLoading } = getState().animalReducer;
+  const token = getFromStorage("token");
+  if (deleteAnimalLoading) return;
+
+  dispatch(startDeleteAnimalLoading());
+
+  const { result, error, status } = await deleteRequest(`animals/${id}`, token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setDeleteAnimalError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setDeleteAnimal({ id }));
+  showToast(dispatch);
 }

@@ -67,7 +67,7 @@ const SuperAdmin = () => {
           <h1>Page administrateur</h1>
         </div>
         <span>
-          <Link to={APP_ROUTES.ADMIN}>Page de gestion des articles et des utilisateurs</Link>
+          <Link to={APP_ROUTES.ADMIN}>Page de gestion des articles et des animaux</Link>
         </span>
 
         <section className="admin admin__all-users">
@@ -134,7 +134,7 @@ const SuperAdmin = () => {
                     <h2>Mettre à jour le rôle</h2>
                   </div>
                   <form onSubmit={handleUpdateSubmit}>
-                    <InputSelect id="role" label="Choisissez un nouveau rôle" options={options} selected={selectedUser.role} onChange={(value) => updateFormSelected("role", value)} />
+                    <InputSelect id="role" label="Choisissez un nouveau rôle" options={options} value={selectedUser.role} onChange={(value) => updateFormSelected("role", value)} />
                     <div className="btns-wrapper">
                       <Button btnStyle={""} text="Confirmer" type="submit" />
                       <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />

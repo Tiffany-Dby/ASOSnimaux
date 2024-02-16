@@ -1,7 +1,7 @@
 import query from "./init.db.js";
 import { v4 as uuidv4 } from "uuid";
 
-const create = async (name, age, sex, description, race = "inconnue", status, species, picture_url, picture_caption) => {
+const create = async (name, age, sex, description, race, status, species, picture_url, picture_caption) => {
   const sql = `
     INSERT INTO animals (id, name, age, sex, description, race, status, species, picture_url, picture_caption)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -68,6 +68,7 @@ const readAll = async () => {
   const sql = `
     SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption
     FROM animals
+    ORDER BY entry_date DESC
   `;
 
   let result = [];
@@ -123,7 +124,7 @@ const readOne = async (id) => {
   }
 }
 
-const updateDetails = async (name, age, sex, description, race = "inconnue", status, species, id) => {
+const updateDetails = async (name, age, sex, description, race, status, species, id) => {
   const sql = `
     UPDATE animals
     SET name = ?, age = ?, sex = ?, description = ?, race = ?, status = ?, species = ?
@@ -173,11 +174,16 @@ const deleteOne = async (id) => {
     WHERE id = ?
   `;
 
-  const usersFollowSql = ``;
+  const usersFollowSql = `
+    DELETE FROM users_animals
+    WHERE animal_id = ?
+  `;
 
   let result = [];
   let error = null;
   try {
+    await query(usersFollowSql, [id]);
+
     result = await query(sql, [id]);
     if (result.affectedRows !== 1) throw new Error(`Something went wrong couldn't delete animal`);
   }

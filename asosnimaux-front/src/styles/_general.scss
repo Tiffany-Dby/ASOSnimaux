@@ -11,6 +11,7 @@ body {
   font-size: var(--font-size-l);
   line-height: 1.618;
   font-size: var(--font-size-n);
+  font-family: "Noto Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   color: var(--dark-brown);
   display: flex;
@@ -60,6 +61,13 @@ h2,
 h3,
 p {
   margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
 }
 
 .manage-icons {

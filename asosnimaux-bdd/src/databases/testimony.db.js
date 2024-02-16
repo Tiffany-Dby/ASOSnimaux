@@ -19,7 +19,7 @@ const create = async (content, userID) => {
     const isUserMember = await query(userRoleSql, [userID]);
     console.log(isUserMember);
 
-    if (isUserMember[0].user_role !== "super_admin" && isUserMember[0].user_role !== "admin" && isUserMember[0].user_role !== "membre") throw new Error(`Something went wrong : You have to be atleast member to post new testimony.`);
+    if (isUserMember[0].user_role !== "super_admin" && isUserMember[0].user_role !== "admin" && isUserMember[0].user_role !== "membre") throw new Error(`Something went wrong : You have to atleast be a member to post a testimony.`);
 
     const id = uuidv4();
     result = await query(sql, [id, content, userID])

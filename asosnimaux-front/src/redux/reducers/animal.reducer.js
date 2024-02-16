@@ -28,7 +28,15 @@ const ANIMAL_STATE = {
       picture_caption: ""
     },
     selectedAnimal: {
-
+      id: "",
+      age: "",
+      name: "",
+      sex: "",
+      description: "",
+      race: "",
+      status: "",
+      species: "",
+      exit_date: ""
     }
   },
   allAnimalsLoading: false,
@@ -39,7 +47,11 @@ const ANIMAL_STATE = {
   newAnimalSuccess: null,
   newAnimalError: null,
   selectedAnimalLoading: false,
+  selectedAnimalSuccess: false,
   selectedAnimalError: null,
+  deleteAnimalLoading: false,
+  deleteAnimalSuccess: null,
+  deleteAnimalError: null
 }
 
 const animalSlice = createSlice({
@@ -196,9 +208,111 @@ const animalSlice = createSlice({
         newAnimalError: action.payload.error,
         newAnimalLoading: false
       }
+    },
+    resetAnimalsSuccess: (state, action) => {
+      return {
+        ...state,
+        newAnimalSuccess: null,
+        selectedAnimalSuccess: null
+      }
+    },
+    setSelectedAnimal: (state, action) => {
+      const { id, age, name, sex, description, race, status, species, exit_date } = action.payload;
+      return {
+        ...state,
+        animals: {
+          ...state.animals,
+          selectedAnimal: {
+            id,
+            age,
+            name,
+            sex,
+            description,
+            race,
+            status,
+            species,
+            exit_date
+          }
+        }
+      }
+    },
+    updateFormSelectedAnimal: (state, action) => {
+      const { input, value } = action.payload;
+      return {
+        ...state,
+        animals: {
+          ...state.animals,
+          selectedAnimal: {
+            ...state.animals.selectedAnimal,
+            [input]: value
+          }
+        }
+      }
+    },
+    setUpdateSelectedAnimal: (state, action) => {
+      const { animal } = action.payload;
+      return {
+        ...state,
+        animals: {
+          ...state.animals,
+          all: state.animals.all.map((a) => a.id === animal.id ? { ...animal } : { ...a })
+        },
+        selectedAnimalLoading: false,
+        selectedAnimalSuccess: `${animal.name} mis à jour !`
+      }
+    },
+    startSelectedAnimalLoading: (state, action) => {
+      return {
+        ...state,
+        selectedAnimalLoading: true
+      }
+    },
+    stopSelectedAnimalLoading: (state, action) => {
+      return {
+        ...state,
+        selectedAnimalLoading: false
+      }
+    },
+    setSelectedwAnimalError: (state, action) => {
+      return {
+        ...state,
+        selectedAnimalError: action.payload.error,
+        selectedAnimalLoading: false
+      }
+    },
+    setDeleteAnimal: (state, action) => {
+      const { id } = action.payload;
+      return {
+        ...state,
+        animals: {
+          ...state.animals,
+          all: state.animals.all.filter(animal => animal.id !== id)
+        },
+        deleteAnimalLoading: false,
+        deleteAnimalSuccess: "Animal supprimé !"
+      }
+    },
+    startDeleteAnimalLoading: (state, action) => {
+      return {
+        ...state,
+        deleteAnimalLoading: true
+      }
+    },
+    stopDeleteAnimalLoading: (state, action) => {
+      return {
+        ...state,
+        deleteAnimalLoading: false
+      }
+    },
+    setDeleteAnimalError: (state, action) => {
+      return {
+        ...state,
+        deleteAnimalError: action.payload.error,
+        deleteAnimalLoading: false
+      }
     }
   }
 });
 
-export const { setOneAnimal, startOneAnimalLoading, stopOneAnimalLoading, setOneAnimalError, setAllAnimals, startAllAnimalsLoading, stopAllAnimalsLoading, setAllAnimalsError, updateFormNewAnimal, resetFormNewAnimal, setNewAnimal, startNewAnimalLoading, stopNewAnimalLoading, setNewAnimalError } = animalSlice.actions;
+export const { setOneAnimal, startOneAnimalLoading, stopOneAnimalLoading, setOneAnimalError, setAllAnimals, startAllAnimalsLoading, stopAllAnimalsLoading, setAllAnimalsError, updateFormNewAnimal, resetFormNewAnimal, setNewAnimal, startNewAnimalLoading, stopNewAnimalLoading, setNewAnimalError, resetAnimalsSuccess, setSelectedAnimal, updateFormSelectedAnimal, setUpdateSelectedAnimal, startSelectedAnimalLoading, stopSelectedAnimalLoading, setSelectedwAnimalError, setDeleteAnimal, startDeleteAnimalLoading, stopDeleteAnimalLoading, setDeleteAnimalError } = animalSlice.actions;
 export default animalSlice.reducer;

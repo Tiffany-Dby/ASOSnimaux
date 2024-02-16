@@ -5,7 +5,7 @@ import formidable from "formidable";
 
 const create_ = async (req, res) => {
   const { name, age, sex, description, race, status, species, picture_url, picture_caption } = req.body;
-  const areStrings = areStringsFilled([name, sex, description, status, species, picture_url, picture_caption])
+  const areStrings = areStringsFilled([name, sex, description, race, status, species, picture_url, picture_caption])
 
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
@@ -53,7 +53,7 @@ const create = async (req, res) => {
   console.log("picture_url : ", picture_url)
   const { name, age, sex, description, race, status, species, picture_caption } = fields;
 
-  const areStrings = areStringsFilled([name[0], sex[0], description[0], status[0], species[0], picture_url, picture_caption[0]]);
+  const areStrings = areStringsFilled([name[0], sex[0], description[0], race[0], status[0], species[0], picture_url, picture_caption[0]]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
   const response = await AnimalDB.create(name, age, sex, description, race, status, species, picture_url, picture_caption);
@@ -129,8 +129,7 @@ const readOne = async ({ params: { id } }, res) => {
 const updateDetails = async (req, res) => {
   const { name, age, sex, description, race, status, species, id } = req.body;
 
-  const areStrings = areStringsFilled([name, sex, description, status, species])
-
+  const areStrings = areStringsFilled([name, sex, description, race, status, species])
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
   const response = await AnimalDB.updateDetails(name, age, sex, description, race, status, species, id);
@@ -141,9 +140,7 @@ const updateDetails = async (req, res) => {
   return res.status(error ? 500 : 200).json({ message: error ? error : `Animal's details with id: ${id} has been updated`, updatedAnimal });
 }
 
-const updateExitDate = async (req, res) => {
-  const { exitDate, id } = req.body;
-
+const updateExitDate = async ({ body: { exitDate, id } }, res) => {
   // Verif de date à faire
 
   const response = await AnimalDB.updateExitDate(exitDate, id);
