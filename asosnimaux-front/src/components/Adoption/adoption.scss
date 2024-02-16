@@ -4,11 +4,16 @@
   &__wrapper {
     @include mxn.flex;
     @include mxn.container($padding: 0);
-    justify-content: space-between;
+    justify-content: center;
     gap: 2rem;
+
+    &:has(.animal:hover) .animal:not(:hover) img {
+      filter: grayscale(100%) brightness(70%);
+    }
   }
 
   p {
-    margin-bottom: 2rem;
+    text-align: center;
+    width: 100%;
   }
 }

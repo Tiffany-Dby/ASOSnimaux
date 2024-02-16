@@ -5,7 +5,7 @@ import { APP_ROUTES } from "../../constants/route.const";
 const Banner = () => {
   return (
     <>
-      <section className="banner">
+      <section className="banner" role="banner">
         <div className="banner__header">
           <div className="banner__logo">
             <img src="/logo-lm.svg" alt="Logo ASOS'nimaux" />

@@ -74,22 +74,22 @@ const Header = () => {
           </div>
           <div className="header__icons">
             <div className="icon__wrapper">
-              <Link to={APP_ROUTES.FAVORITES}>
+              <Link to={APP_ROUTES.FAVORITES} aria-label="Lien vers la page des favoris">
                 <FaHeart className="icon heart" color="var(--secondary)" />
               </Link>
             </div>
             <div className="icon__wrapper">
               {isAuth ?
                 <>
-                  <Link to={APP_ROUTES.ACCOUNT}>
+                  <Link to={APP_ROUTES.ACCOUNT} aria-label="Lien vers la page du compte">
                     <div className="icon avatar">
                       <img crossOrigin="anonymous" src={user.avatar} alt={"Un sticker animal"} />
                     </div>
                   </Link>
-                  <FaPowerOff className="icon" color="var(--primary)" onClick={handleSignOut} />
+                  <FaPowerOff className="icon" color="var(--primary)" onClick={handleSignOut} role="button" aria-label="Bouton de déconnexion" />
                 </>
                 :
-                <Link to={APP_ROUTES.SIGN_IN}>
+                <Link to={APP_ROUTES.SIGN_IN} aria-label="Lien vers la page de connexion">
                   <FaCircleUser className="icon" color="var(--primary)" />
                 </Link>
               }

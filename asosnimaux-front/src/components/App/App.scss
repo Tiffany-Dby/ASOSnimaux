@@ -13,21 +13,12 @@
   }
 }
 
-// section:nth-child(even) {
-//   background-color: var(--secondary-50);
-// }
-
 section {
   padding: var(--padding-m) var(--padding-s);
 
   &:last-of-type {
     padding-bottom: var(--padding-xl);
   }
-}
-
-.animals__wrapper:has(.animal:hover) .animal:not(:hover) img {
-  filter: blur(.2rem);
-  // opacity: 0.50;
 }
 
 .loading {

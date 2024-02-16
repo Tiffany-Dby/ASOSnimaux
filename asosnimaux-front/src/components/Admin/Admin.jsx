@@ -200,8 +200,8 @@ const Admin = () => {
                     </div>
                   </div>
                   <div className="icons-wrapper">
-                    <FaPencil className="manage-icons" onClick={() => handleUpdateAnimalForm(animal)} />
-                    <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleDeleteAnimalForm(animal.id)} />
+                    <FaPencil className="manage-icons" onClick={() => handleUpdateAnimalForm(animal)} role="button" aria-label="Bouton de modification de l'animal" />
+                    <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleDeleteAnimalForm(animal.id)} role="button" aria-label="Bouton de suppression de l'animal" />
                   </div>
                 </article>
               ))}
@@ -209,7 +209,7 @@ const Admin = () => {
           </section>
         }
         {articlesView &&
-          <section className="admin admin__all-articles">
+          <section className="admin__all-articles">
 
             <h2>Tous les articles ({all.length})</h2>
             {selectedError &&
@@ -249,8 +249,8 @@ const Admin = () => {
                     </div>
                     :
                     <div className="icons-wrapper">
-                      <FaPencil className="manage-icons" onClick={() => handleUpdateForm(a)} />
-                      <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleDeleteForm(a.id)} />
+                      <FaPencil className="manage-icons" onClick={() => handleUpdateForm(a)} role="button" aria-label="Bouton de modification de l'article" />
+                      <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleDeleteForm(a.id)} role="button" aria-label="Bouton de suppression de l'article" />
                     </div>
                   }
                 </article>

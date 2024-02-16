@@ -106,8 +106,8 @@ const SuperAdmin = () => {
                   </div>
                   :
                   <span className="icons-wrapper">
-                    <FaPencil className="manage-icons admin__user__icon" color="var(--dark-brown)" onClick={() => handleUpdateForm(user)} />
-                    <FaTrashCan className="manage-icons admin__user__icon" color="var(--dark-red)" onClick={() => handleDeleteForm(user)} />
+                    <FaPencil className="manage-icons admin__user__icon" color="var(--dark-brown)" onClick={() => handleUpdateForm(user)} role="button" aria-label="Bouton de modification de l'utilisateur" />
+                    <FaTrashCan className="manage-icons admin__user__icon" color="var(--dark-red)" onClick={() => handleDeleteForm(user)} role="button" aria-label="Bouton de suppression de l'utilisateur" />
                   </span>
                 }
               </article>

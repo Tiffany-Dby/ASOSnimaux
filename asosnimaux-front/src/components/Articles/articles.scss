@@ -23,8 +23,14 @@
           grid-column: 2/-1;
           flex-direction: row-reverse;
         }
+
+        &:nth-child(even) article {
+          flex-direction: row-reverse
+        }
       }
+
     }
+
 
     @include mxn.flex;
     @include mxn.container($padding: 0);

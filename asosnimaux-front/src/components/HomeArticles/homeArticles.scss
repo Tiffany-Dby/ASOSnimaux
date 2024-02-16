@@ -4,6 +4,7 @@
   &-overview {
     @include mxn.flex("column", "nowrap");
     gap: 2rem;
+    background-color: var(--secondary-50);
 
     .btn-wrapper {
       @include mxn.btnStylish;

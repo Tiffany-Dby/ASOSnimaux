@@ -1,4 +1,4 @@
-import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading, setUpdatePasswordSuccess, startSelectedUserLoading, setSelectedUserError, setUpdateSelectedUser } from "../redux/reducers/user.reducer";
+import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading, setUpdatePasswordSuccess, startSelectedUserLoading, setSelectedUserError, setUpdateSelectedUser, startGetFollowLoading, setGetFollowError, setFollow, startPostFollowLoading, setPostFollowError, setPostFollow, startUnfollowLoading, setUnfollowError, setUnfollow, setSignInSuccess } from "../redux/reducers/user.reducer";
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { getFromStorage, setToStorage } from "../utils/storage.utils.js";
 import { signOut } from "../utils/user.utils.js";
@@ -18,6 +18,8 @@ export const signInThunk = () => async (dispatch, getState) => {
   setToStorage("token", token);
 
   dispatch(setUser({ id: result.user.userID, username: result.user.username, email: result.user.email, avatar: `${APP_ROUTES.API_URL}${result.user.avatar}`, role: result.user.userRole }));
+  dispatch(setSignInSuccess({ username: result.user.username }));
+  showToast(dispatch);
   dispatch(resetSignInForm());
 }
 
@@ -142,6 +144,50 @@ export const updateUserRoleThunk = () => async (dispatch, getState) => {
 
   dispatch(setUpdateSelectedUser({ user: { id: selectedUser.id, username: selectedUser.username, role: selectedUser.role } }));
   showToast(dispatch);
+}
+
+export const getUsersFollowThunk = () => async (dispatch, getState) => {
+  const { getfollowLoading, follow } = getState().userReducer;
+  const token = getFromStorage("token");
+  if (getfollowLoading) return;
+
+  dispatch(startGetFollowLoading());
+
+  const { result, error, status } = await getRequest("users/follow", token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setGetFollowError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setFollow({ animals: result.result }));
+}
+
+export const postUserFollowThunk = () => async (dispatch, getState) => {
+  const { postFollowLoading, selectedAnimalFollow, follow } = getState().userReducer;
+  const token = getFromStorage("token");
+  if (postFollowLoading) return;
+
+  dispatch(startPostFollowLoading());
+
+  const formatExpectedOnRequest = {
+    animalID: selectedAnimalFollow
+  }
+
+  const { result, error, status } = await postRequest('users/follow', formatExpectedOnRequest, token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setPostFollowError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setPostFollow({ animalID: selectedAnimalFollow }));
+}
+
+
+export const unfollowThunk = () => async (dispatch, getState) => {
+  const { unfollowLoading, selectedAnimalFollow, follow } = getState().userReducer;
+  const token = getFromStorage("token");
+  if (unfollowLoading) return;
+
+  dispatch(startUnfollowLoading());
+
+  const { result, error, status } = await deleteRequest(`users/unfollow/${selectedAnimalFollow}`, token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setUnfollowError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setUnfollow({ animalID: selectedAnimalFollow }));
 }
 
 export const deleteUserThunk = (id) => async (dispatch, getState) => {

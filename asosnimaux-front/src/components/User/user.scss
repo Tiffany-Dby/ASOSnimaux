@@ -1,6 +1,8 @@
 @use "../../styles/mixins" as mxn;
 
 .user {
+  padding-top: var(--padding-l);
+
   h2 {
     text-align: center;
     margin-bottom: 1rem;
@@ -12,25 +14,7 @@
   }
 
   &__content-wrapper {
-    @include mxn.flex;
-    justify-content: center;
-  }
-
-  &__greetings {
-    @include mxn.container("400px", var(--padding-s));
-
-    h2 {
-      text-align: left;
-      margin-bottom: 0;
-    }
-
-    .title-wrapper {
-      justify-content: start;
-    }
-  }
-
-  .articles-wrapper {
-    width: 100%;
+    @include mxn.container($padding: 0);
   }
 
   .content {

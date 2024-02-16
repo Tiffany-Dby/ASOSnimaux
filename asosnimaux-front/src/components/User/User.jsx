@@ -17,7 +17,7 @@ const User = ({ date, testimonie }) => {
   const dispatch = useDispatch();
 
   const { isToastOpen } = useSelector(state => state.toastReducer);
-  const { user, dialogForms, updatedAvatar, updateAvatarSuccess, updateUsernameSuccess } = useSelector(state => state.userReducer);
+  const { user, dialogForms, updatedAvatar, updateAvatarSuccess, updateUsernameSuccess, signInSuccess } = useSelector(state => state.userReducer);
   const { input, isDeleteAccountForm, isUpdateAccountForm, isUpdateAccountAvatar } = useSelector(state => state.dialogReducer);
 
   const [avatarIndex, setAvatarIndex] = useState(null);
@@ -73,80 +73,73 @@ const User = ({ date, testimonie }) => {
     <>
       <div className="user">
         {isToastOpen &&
-          <Toast message={updateAvatarSuccess || updateUsernameSuccess} />
+          <Toast message={updateAvatarSuccess || updateUsernameSuccess || signInSuccess} />
         }
         <div className="title-wrapper">
           <h1>Dashboard</h1>
         </div>
-        <div className="user__greetings">
-          <h2>Bonjour</h2>
-          <div className="title-wrapper">
-            <h2>{user.username}</h2>
-          </div>
-        </div>
+
         <div className="user__content-wrapper">
-          <div className="articles-wrapper">
-            <section>
-              <h2>Informations de compte</h2>
-              <article className="user__avatar">
-                <div className="content__header">
-                  <h3>Avatar</h3>
-                  <FaPencil className="manage-icons" onClick={handleUpdateAvatarDialog} />
-                </div>
-                <div className="content img">
-                  <img crossOrigin="anonymous" src={user.avatar} alt={"Un sticker animal"} />
-                </div>
-              </article>
-              <article className="user__username">
-                <div className="content__header">
-                  <h3>Pseudo</h3>
-                  <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Pseudo", id: "username", type: "text" })} />
-                </div>
-                <div className="content">
-                  <p>{user.username}</p>
-                </div>
-              </article>
-              <article className="user__email">
-                <div className="content__header">
-                  <h3>Email</h3>
-                  <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Email", id: "email", type: "email" })} />
-                </div>
-                <div className="content">
-                  <p>{user.email}</p>
-                </div>
-              </article>
-            </section>
+          <section>
+            <h2>Informations de compte</h2>
+            <article className="user__avatar">
+              <div className="content__header">
+                <h3>Avatar</h3>
+                <FaPencil className="manage-icons" onClick={handleUpdateAvatarDialog} role="button" aria-label="Bouton de modification d'avatar" />
+              </div>
+              <div className="content img">
+                <img crossOrigin="anonymous" src={user.avatar} alt={"Un sticker animal"} />
+              </div>
+            </article>
+            <article className="user__username">
+              <div className="content__header">
+                <h3>Pseudo</h3>
+                <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Pseudo", id: "username", type: "text" })} role="button" aria-label="Bouton de modification du Pseudo" />
+              </div>
+              <div className="content">
+                <p>{user.username}</p>
+              </div>
+            </article>
+            <article className="user__email">
+              <div className="content__header">
+                <h3>Email</h3>
+                <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Email", id: "email", type: "email" })} role="button" aria-label="Bouton de modification de l'email" />
+              </div>
+              <div className="content">
+                <p>{user.email}</p>
+              </div>
+            </article>
+          </section>
 
-            <section>
-              <h2>Sécurité</h2>
-              <article className="user__password">
-                <div className="content__header">
-                  <h3>Mot de passe</h3>
-                  <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Nouveau mot de passe", id: "newPassword", type: "password" })} />
-                </div>
-                <div className="content">
-                  <p className="content__password"></p>
-                </div>
-              </article>
-              <Button btnStyle={""} text="Supprimer le compte" btnClick={handleDeleteForm} />
-            </section>
+          <section>
+            <h2>Sécurité</h2>
+            <article className="user__password">
+              <div className="content__header">
+                <h3>Mot de passe</h3>
+                <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Nouveau mot de passe", id: "newPassword", type: "password" })} role="button" aria-label="Bouton de modification du mot de passe" />
+              </div>
+              <div className="content">
+                <p className="content__password"></p>
+              </div>
+            </article>
+            <Button btnStyle={""} text="Supprimer le compte" btnClick={handleDeleteForm} />
+          </section>
 
-            <section>
-              <h2>Témoignages (nmbr)</h2>
-              <article className="user__testimonies">
-                <div className="content__header">
-                  <h3>Témoignage du {date}</h3>
-                  <div>
-                    <FaPencil className="manage-icons" onClick={handleDialog} />
-                    <FaTrashCan className="manage-icons" color="var(--dark-red)" />
-                  </div>
+          <section>
+            <h2>Témoignages (nmbr)</h2>
+            <article className="user__testimonies">
+              <div className="content__header">
+                <h3>Témoignage du {date}</h3>
+                <div>
+                  <FaPencil className="manage-icons" onClick={handleDialog} role="button" aria-label="Bouton de modification du témoignage" />
+                  <FaTrashCan className="manage-icons" color="var(--dark-red)" role="button" aria-label="Bouton de suppression du témoignage" />
                 </div>
-                <div className="content">
-                  <p>{testimonie}</p>
-                </div>
-              </article>
-            </section>
-          </div>
+              </div>
+              <div className="content">
+                <p>{testimonie}</p>
+              </div>
+            </article>
+          </section>
 
         </div>
         <Dialog>
