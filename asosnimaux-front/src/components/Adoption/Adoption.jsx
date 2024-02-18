@@ -1,6 +1,6 @@
 import "./adoption.scss";
 import AnimalCard from "../AnimalCard/AnimalCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAnimalsThunk } from "../../api/animal.api";
 import { APP_ROUTES } from "../../constants/route.const";
@@ -19,8 +19,16 @@ const Adoption = () => {
 
   const { scrollY } = useSelector(state => state.windowReducer);
   const { animals } = useSelector(state => state.animalReducer);
-  const { isAuth, followIDs, selectedAnimalFollow } = useSelector(state => state.userReducer);
+  const { isAuth, followIDs, selectedAnimalFollow, allAnimalsLoading } = useSelector(state => state.userReducer);
   const { all } = animals;
+
+  const initialFiltersState = {
+    species: ["chat", "chien", "autres"],
+    sex: ["femelle", "mâle"],
+    age: ["senior", "adulte", "junior"]
+  }
+  const [filters, setFilters] = useState({ ...initialFiltersState });
+  const [filteredAnimals, setFilteredAnimals] = useState([]);
 
   const handleScroll = () => dispatch(updateScroll({ scrollY: window.scrollY }));
 
@@ -41,6 +49,10 @@ const Adoption = () => {
   }, []);
 
   useEffect(() => {
+    setFilteredAnimals([...all]);
+  }, [all]);
+
+  useEffect(() => {
     if (isAuth && followIDs.includes(selectedAnimalFollow) && selectedAnimalFollow) {
       dispatch(unfollowThunk());
       dispatch(setSelectedAnimalFollow(""));
@@ -49,7 +61,7 @@ const Adoption = () => {
       dispatch(postUserFollowThunk());
       dispatch(setSelectedAnimalFollow(""));
     }
-  }, [selectedAnimalFollow])
+  }, [selectedAnimalFollow]);
 
   const handleFollowClick = (animal) => {
     dispatch(setSelectedAnimalFollow(animal.id));
@@ -61,6 +73,25 @@ const Adoption = () => {
 
   const handleCloseFilters = () => {
     dispatch(closeDialog());
+  }
+
+  const handleApplyFilters = (newFilters) => {
+    const filtered = all.filter(animal => {
+      const speciesFilters = newFilters.species.includes(animal.species);
+      const sexFilters = newFilters.sex.includes(animal.sex);
+
+      const ageFilters = (newFilters.age.includes("junior") && animal.age >= 0 && animal.age <= 3) || (newFilters.age.includes("adulte") && animal.age >= 4 && animal.age <= 7) || (newFilters.age.includes("senior") && animal.age >= 8);
+
+      return speciesFilters && sexFilters && ageFilters;
+    });
+
+    setFilters(newFilters);
+    setFilteredAnimals(filtered);
+  }
+
+  const handleResetFilters = () => {
+    setFilters(initialFiltersState);
+    setFilteredAnimals([...all]);
   }
 
   return (
@@ -83,21 +114,35 @@ const Adoption = () => {
               </>}
             btnClick={handleOpenFilters} />
           <div className="animals__wrapper">
-            {all.map(animal => (
-              <AnimalCard
-                key={animal.id}
-                animalName={animal.name}
-                imgUrl={`${APP_ROUTES.API_URL}${animal.picture_url}`}
-                imgAlt={animal.picture_caption}
-                animalSex={animal.sex}
-                status={animal.status}
-                color={followIDs.includes(animal.id) && "var(--light-red)"}
-                followClick={() => handleFollowClick(animal)} />
-            ))}
+            {allAnimalsLoading ?
+              <div className="loading">
+                <span className="loading__paws"></span>
+                <p className="loading__text">Chargement en cours...</p>
+              </div>
+              :
+              (
+                filteredAnimals.map(animal => (
+                  <AnimalCard
+                    key={animal.id}
+                    animalName={animal.name}
+                    imgUrl={`${APP_ROUTES.API_URL}${animal.picture_url}`}
+                    imgAlt={animal.picture_caption}
+                    animalSex={animal.sex}
+                    status={animal.status}
+                    color={followIDs.includes(animal.id) && "var(--light-red)"}
+                    followClick={() => handleFollowClick(animal)} />
+                ))
+              )
+            }
           </div>
         </section>
         <Dialog>
-          <Filters onClick={handleCloseFilters} />
+          <Filters
+            onClick={handleCloseFilters}
+            initialFilters={filters}
+            resetFilters={initialFiltersState}
+            onFiltersChange={handleApplyFilters}
+            resetClick={() => handleResetFilters()} />
         </Dialog>
       </div>
     </>

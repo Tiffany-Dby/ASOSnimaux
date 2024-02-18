@@ -35,7 +35,7 @@
     @include mxn.btnSimple;
     position: sticky;
     top: 100px;
-    z-index: 10;
+    z-index: 2;
 
     .btn {
       display: flex;
@@ -73,8 +73,10 @@
       grid-template-columns: repeat(3, 1fr);
     }
 
-    &:has(.animal:hover) .animal:not(:hover) img {
-      filter: grayscale(100%) brightness(70%);
+    @media screen and (min-width: 1250px) {
+      &:has(.animal:hover) .animal:not(:hover) img {
+        filter: grayscale(100%) brightness(70%);
+      }
     }
   }
 }

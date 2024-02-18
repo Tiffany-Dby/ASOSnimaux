@@ -32,7 +32,7 @@ const Favorites = () => {
             {!isAuth &&
               <div className="notAuth">
                 <FaCircleInfo className="icon" color={"var(--dark-red)"} />
-                <p>La liste actuelle est <strong>temporaire</strong>, pour garantir la récupération de celle-ci à votre prochaine visite <Link to={APP_ROUTES.SIGN_IN}>connectez-vous</Link>.</p>
+                <p>La liste actuelle est <strong>temporaire</strong>, pour garantir la récupération de celle-ci à votre prochaine visite, <Link to={APP_ROUTES.SIGN_IN}>connectez-vous</Link>.</p>
               </div>
             }
             <h2>Vos animaux coups coeur</h2>

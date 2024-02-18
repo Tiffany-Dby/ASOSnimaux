@@ -92,7 +92,7 @@ const readUsersFollow = async ({ body: { userID } }, res) => {
   const response = await UserDB.readUsersFollow(userID);
   const { result, error } = response;
 
-  if (result.length === 0) return res.status(error ? 500 : 200).json({ message: error ? error : `User with id "${userID}" didn't follow any animal.` });
+  if (result.length === 0) return res.status(error ? 500 : 200).json({ message: error ? error : `User with id "${userID}" didn't follow any animal.`, result });
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request for all animals followed by user with id "${userID}" successful`, result });
 }
@@ -101,7 +101,7 @@ const readUsersFollowIDs = async ({ body: { userID } }, res) => {
   const response = await UserDB.readUsersFollowIDs(userID);
   const { result, error } = response;
 
-  if (result.length === 0) return res.status(error ? 500 : 200).json({ message: error ? error : `User with id "${userID}" didn't follow any animal.` });
+  if (result.length === 0) return res.status(error ? 500 : 200).json({ message: error ? error : `User with id "${userID}" didn't follow any animal.`, result });
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request for all animal IDs followed by user with id "${userID}" successful`, result });
 }

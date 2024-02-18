@@ -365,7 +365,7 @@ const userSlice = createSlice({
       const { animals } = action.payload;
       return {
         ...state,
-        followIDs: animals?.map((animal) => animal.id),
+        followIDs: animals.map((animal) => animal.id),
         getfollowLoading: false,
       }
     },
