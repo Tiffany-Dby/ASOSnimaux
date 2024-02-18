@@ -1,3 +1,5 @@
-export const splitDescription = (text) => {
-  return text.split(/\r\n|\n/);
+export const formatDescription = (text) => {
+  const splitted = text.split(/\r\n|\n/);
+
+  return splitted.filter(p => p !== "");
 }

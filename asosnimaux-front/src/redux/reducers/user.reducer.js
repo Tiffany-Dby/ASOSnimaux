@@ -8,7 +8,8 @@ const USER_STATE = {
     avatar: "",
     role: "",
   },
-  follow: [],
+  followIDs: [],
+  followedAnimals: [],
   selectedAnimalFollow: "",
   isAuth: false,
   allUsers: [],
@@ -46,6 +47,8 @@ const USER_STATE = {
   postFollowError: null,
   unfollowLoading: false,
   unfollowError: null,
+  followedAnimalsLoading: false,
+  followedAnimalsError: null,
   selectedUserLoading: false,
   selectedUserSuccess: null,
   selectedUserError: null,
@@ -358,13 +361,49 @@ const userSlice = createSlice({
         selectedUserLoading: false
       }
     },
-    setFollow: (state, action) => {
+    setFollowIDs: (state, action) => {
       const { animals } = action.payload;
       return {
         ...state,
-        follow: animals.map((animal) => animal.id),
+        followIDs: animals?.map((animal) => animal.id),
         getfollowLoading: false,
       }
+    },
+    resetFollowIDs: (state, action) => {
+      return {
+        ...state,
+        followIDs: [],
+      }
+    },
+    setFollowedAnimals: (state, action) => {
+      const { animals } = action.payload;
+      return {
+        ...state,
+        followedAnimals: animals?.map((animal) => ({ id: animal.animal_id, entry_date: animal.entry_date, name: animal.name, age: animal.age, sex: animal.sex, description: animal.description, race: animal.race, status: animal.status, exit_date: animal.exit_date, species: animal.species, picture_url: animal.picture_url, picture_caption: animal.picture_caption })),
+        followedAnimalsLoading: false,
+      }
+    },
+    startFollowedAnimalsLoading: (state, action) => {
+      return {
+        ...state,
+        followedAnimalsLoading: true
+      }
+    },
+    stopFollowedAnimalsLoading: (state, action) => {
+      return {
+        ...state,
+        followedAnimalsLoading: false
+      }
+    },
+    setFollowedAnimalsError: (state, action) => {
+      return {
+        ...state,
+        followedAnimalsError: action.payload.error,
+        followedAnimalsLoading: false
+      }
+    },
+    resetFollowedAnimals: (state, action) => {
+      state.followedAnimals = [];
     },
     setSelectedAnimalFollow: (state, action) => {
       return {
@@ -395,7 +434,7 @@ const userSlice = createSlice({
       const { animalID } = action.payload;
       return {
         ...state,
-        follow: [...state.follow, animalID],
+        followIDs: [...state.followIDs, animalID],
         postFollowLoading: false
       }
     },
@@ -422,7 +461,7 @@ const userSlice = createSlice({
       const { animalID } = action.payload;
       return {
         ...state,
-        follow: state.follow.filter(id => id !== animalID),
+        followIDs: state.followIDs.filter(id => id !== animalID),
         unfollowLoading: false
       }
     },
@@ -448,5 +487,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInSuccess, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, setUpdatedAvatar, startUpdatedAvatarLoading, stopUpdatedAvatarLoading, setUpdatedAvatarError, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError, setAllUsers, startAllUsersLoading, stopAllUsersLoading, setAllUsersError, setDeleteBySuperAdmin, setUpdatePasswordSuccess, resetUserSuccess, setSelectedUser, updateFormSelectedUser, setUpdateSelectedUser, startSelectedUserLoading, stopSelectedUserLoading, setSelectedUserError, setFollow, setSelectedAnimalFollow, startGetFollowLoading, stopGetFollowLoading, setGetFollowError, setPostFollow, startPostFollowLoading, stopPostFollowLoading, setPostFollowError, setUnfollow, startUnfollowLoading, stopUnfollowLoading, setUnfollowError } = userSlice.actions;
+export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInSuccess, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, setUpdatedAvatar, startUpdatedAvatarLoading, stopUpdatedAvatarLoading, setUpdatedAvatarError, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError, setAllUsers, startAllUsersLoading, stopAllUsersLoading, setAllUsersError, setDeleteBySuperAdmin, setUpdatePasswordSuccess, resetUserSuccess, setSelectedUser, updateFormSelectedUser, setUpdateSelectedUser, startSelectedUserLoading, stopSelectedUserLoading, setSelectedUserError, setFollowIDs, resetFollowIDs, setFollowedAnimals, startFollowedAnimalsLoading, stopFollowedAnimalsLoading, setFollowedAnimalsError, resetFollowedAnimals, setSelectedAnimalFollow, startGetFollowLoading, stopGetFollowLoading, setGetFollowError, setPostFollow, startPostFollowLoading, stopPostFollowLoading, setPostFollowError, setUnfollow, startUnfollowLoading, stopUnfollowLoading, setUnfollowError } = userSlice.actions;
 export default userSlice.reducer;

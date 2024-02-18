@@ -20,21 +20,6 @@
     filter: grayscale(0%);
   }
 
-  @media screen and (min-width: 600px) {
-    @include mxn.grow;
-    min-width: calc(280px - var(--padding-s));
-    max-width: calc(50% - var(--padding-s));
-  }
-
-  @media screen and (min-width: 767px) {
-    min-width: calc(300px - var(--padding-s));
-  }
-
-  @media screen and (min-width: 1095px) {
-    min-width: calc(350px - var(--padding-s));
-    max-width: calc(33% - var(--padding-s));
-  }
-
   &__status {
     grid-column: 1/3;
     grid-row: 1/2;
@@ -79,11 +64,6 @@
     text-decoration: none;
     color: var(--dark-brown);
     transition: color .3s ease;
-
-    // &:hover,
-    // &:hover .animal__sex {
-    //   color: var(--accent);
-    // }
   }
 
   &__sex {

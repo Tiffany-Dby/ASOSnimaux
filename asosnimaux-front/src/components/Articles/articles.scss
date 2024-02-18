@@ -1,15 +1,36 @@
 @use "../../styles/mixins" as mxn;
 
 .articles {
+  @include mxn.container;
 
-  &-page,
+  h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  &__page {
+    padding-top: var(--padding-l);
+  }
+
+  &__page,
   &-overview {
     &:has(.article:hover) .article:not(:hover) img {
       filter: grayscale(100%) brightness(80%);
     }
   }
 
+  &__header {
+    @include mxn.container($padding: 0 0 var(--padding-l));
+  }
+
   &__wrapper {
+    @include mxn.flex;
+    gap: 3rem;
+
+    @media screen and (min-width: 767px) {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
     &>a {
       text-decoration: none;
       color: var(--dark-brown);
@@ -28,18 +49,6 @@
           flex-direction: row-reverse
         }
       }
-
     }
-
-
-    @include mxn.flex;
-    @include mxn.container($padding: 0);
-    gap: 3rem;
-
-    @media screen and (min-width: 767px) {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-    }
-
   }
 }

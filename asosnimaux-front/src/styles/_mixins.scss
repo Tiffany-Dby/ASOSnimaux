@@ -147,7 +147,6 @@
   clip-path: inset(0 100% 0 0);
   animation: laodingPaws 2s infinite steps(7);
 
-
   &::before {
     grid-area: 1/1;
     content: "";
@@ -167,8 +166,6 @@
       clip-path: inset(0 -30px 0 0)
     }
   }
-
-
 }
 
 @mixin loadingSpin {

@@ -3,13 +3,16 @@
 dialog {
   position: fixed;
   width: 95%;
-  max-width: 400px;
   border-radius: var(--radius-l);
   border: 0;
   box-shadow: var(--shadow-border-s) var(--secondary125);
 
-  &[open] {
-    animation: open .5s ease;
+  &:has(.dialog-wrapper)[open] {
+    animation: openDialog .5s ease;
+  }
+
+  &:has(.filters__wrapper)[open] {
+    animation: openFilters .5s ease;
   }
 
   form,
@@ -19,34 +22,25 @@ dialog {
     padding-bottom: var(--padding-xs);
     text-align: center;
 
-    .avatar {
-      flex: 1 auto;
-      max-width: calc(45% - var(--padding-s));
-      border-radius: 50%;
-      cursor: pointer;
-      transition: all .5s ease;
-
-      &__wrapper {
-        @include mxn.flex;
-        @include mxn.grow;
-        justify-content: space-around;
-        gap: 2rem;
-        padding: var(--padding-s);
-      }
-
-    }
-
     &:has(.avatar:hover) .avatar:not(:hover) {
-      opacity: .5;
+      filter: grayscale(100%);
     }
 
     &:has(.selected) .avatar:not(.selected) {
-      opacity: .7;
-      transform: scale(.80)
+      filter: grayscale(100%);
+      transform: scale(.80);
+
+      &:hover {
+        filter: grayscale(0);
+      }
     }
 
     .selected {
       background-color: var(--primary);
+
+      &:hover {
+        filter: grayscale(0%);
+      }
     }
   }
 
@@ -64,17 +58,62 @@ dialog {
   .btn-wrapper {
     @include mxn.btnSimple;
 
-    &:nth-child(2) .btn {
+    &:nth-child(2):not(.filters__wrapper .btn-wrapper) .btn {
       background-color: var(--dark-red);
       box-shadow: var(--shadow-border-m) var(--dark-red);
     }
+  }
+
+  .avatars {
+    padding: 0;
+  }
+
+  .avatar {
+    max-width: 100px;
+    margin: 0 auto;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all .5s ease;
+
+    &__wrapper {
+      display: grid;
+      justify-content: center;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      padding-bottom: 3rem;
+
+      @media screen and (min-width: 630px) {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+  }
+
+  &:has(.filters__wrapper) {
+    margin: 0;
+    top: 100%;
+    transform: translateY(-100%);
+    border-radius: 0;
+    min-width: 100%;
+    background-color: var(--secondary-50);
+  }
+
+  &:has(.avatar__wrapper) {
+    max-width: 400px;
+
+    @media screen and (min-width: 630px) {
+      max-width: 750px;
+    }
+  }
+
+  &:has(.user__update),
+  &:has(.confirm-deletion) {
+    max-width: 425px;
   }
 
   &:has(.admin__new-article),
   &:has(.admin__update-article),
   &:has(.admin__new-animal),
   &:has(.admin__update-animal) {
-    background-color: var(--secondary-50);
     max-width: 700px;
   }
 
@@ -84,7 +123,7 @@ dialog {
 }
 
 
-@keyframes open {
+@keyframes openDialog {
   from {
     top: -25%;
     opacity: 0;
@@ -92,5 +131,17 @@ dialog {
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes openFilters {
+  from {
+    top: 100%;
+    transform: translateY(0);
+    // opacity: 0;
+  }
+
+  to {
+    // opacity: 1;
   }
 }

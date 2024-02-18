@@ -145,16 +145,18 @@ const User = ({ date, testimonie }) => {
         <Dialog>
           {isUpdateAccountAvatar &&
             <div className="dialog-wrapper">
-              <section className="avatar__wrapper">
+              <section className="avatars">
                 <div className="title-wrapper">
                   <h2>Choisir un Avatar</h2>
                 </div>
-                {AVATAR.URL.map((u, index) => (
-                  <article key={index} className={`avatar${avatarIndex === index ? ' selected' : ''}`}>
-                    <img crossOrigin="anonymous" src={`${APP_ROUTES.API_URL}${u}`} alt={"Un sticker animal"} onClick={() => { dispatch(setUpdatedAvatar(u)); setAvatarIndex(avatarIndex === index ? null : index) }} />
-                  </article>
-                ))
-                }
+                <div className="avatar__wrapper">
+                  {AVATAR.URL.map((u, index) => (
+                    <article key={index} className={`avatar${avatarIndex === index ? ' selected' : ''}`}>
+                      <img crossOrigin="anonymous" src={`${APP_ROUTES.API_URL}${u}`} alt={"Un sticker animal"} onClick={() => { dispatch(setUpdatedAvatar(u)); setAvatarIndex(avatarIndex === index ? null : index) }} />
+                    </article>
+                  ))
+                  }
+                </div>
                 <div className="btns-wrapper">
                   <Button btnStyle="" text="Valider" btnClick={handleUpdateAvatar} />
                   <Button btnStyle={""} text="Annuler" btnClick={handleDialogClose} />
@@ -167,7 +169,7 @@ const User = ({ date, testimonie }) => {
               <div className="title-wrapper">
                 <h2>Mettre à jour</h2>
               </div>
-              <form onSubmit={handleSubmit}>
+              <form className="user__update" onSubmit={handleSubmit}>
                 {input.id === "newPassword" &&
                   <>
                     <p className="text-error">Après modification, vous devrez vous reconnecter</p>

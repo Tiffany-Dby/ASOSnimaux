@@ -1,6 +1,8 @@
+import { formatDescription } from "../../utils/articleDescription.utils";
 import "./article.scss";
 
 const Article = ({ artclStyle, imgUrl, imgAlt, title, date, text }) => {
+  const paragraphs = formatDescription(text);
 
   return (
     <>
@@ -13,7 +15,11 @@ const Article = ({ artclStyle, imgUrl, imgAlt, title, date, text }) => {
           <span className="article__date">
             <p>{date}</p>
           </span>
-          <p>{text}</p>
+          <div className="article__text">
+            {paragraphs.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
         </div>
       </article>
     </>

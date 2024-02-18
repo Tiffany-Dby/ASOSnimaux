@@ -115,7 +115,7 @@ const SuperAdmin = () => {
           </div>
           <Dialog>
             {isDeleteUserBySuperAdminForm &&
-              <div className="dialog-wrapper">
+              <div className="dialog-wrapper confirm-deletion">
                 <div className="title-wrapper">
                   <h2>Supprimer</h2>
                 </div>
@@ -129,7 +129,7 @@ const SuperAdmin = () => {
             }
             {isUpdateUserRoleBySuperAdminForm &&
               <>
-                <div className="dialog-wrapper">
+                <div className="dialog-wrapper user__update">
                   <div className="title-wrapper">
                     <h2>Mettre à jour le rôle</h2>
                   </div>

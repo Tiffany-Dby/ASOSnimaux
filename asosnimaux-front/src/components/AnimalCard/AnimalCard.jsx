@@ -17,7 +17,7 @@ const AnimalCard = ({ imgUrl, imgAlt, animalName, status, animalSex, color, foll
             <img loading="lazy" crossOrigin="anonymous" src={imgUrl} alt={imgAlt} />
           </div>
           <div className="animal__infos">
-            <h2 className="animal__name">{animalName}</h2>
+            <h3 className="animal__name">{animalName}</h3>
             {animalSex === "mâle" &&
               <FaMars size={22} className="animal__sex male" />
             }

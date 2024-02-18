@@ -125,11 +125,37 @@ const readUsersTestimonies = async (userID) => {
 
 const readUsersFollow = async (userID) => {
   const sql = `
-    SELECT users.id, users.username, animals.id, animals.entry_date, animals.name, animals.age, animals.sex, animals.description, animals.race, animals.status, animals.exit_date, animals.species
+    SELECT users.id AS user_id, animals.id AS animal_id, animals.entry_date, animals.name, animals.age, animals.sex, animals.race, animals.status, animals.exit_date, animals.species, animals.picture_url, animals.picture_caption,
+    CASE 
+        WHEN LENGTH(animals.description) > 100 
+        THEN CONCAT(SUBSTRING(animals.description, 1, 100), '...') 
+        ELSE animals.description 
+    END AS truncated_description
     FROM users
-    LEFT JOIN users_animals ON users.id = users_animals.user_id
-    LEFT JOIN animals ON animals.id = users_animals.animal_id
+    JOIN users_animals ON users.id = users_animals.user_id
+    JOIN animals ON animals.id = users_animals.animal_id
     WHERE users.id = ?
+  `;
+
+  let result = [];
+  let error = null;
+  try {
+    result = await query(sql, [userID]);
+  }
+  catch (err) {
+    error = err.message;
+  }
+  finally {
+    return { result, error };
+  }
+}
+
+const readUsersFollowIDs = async (userID) => {
+  const sql = `
+    SELECT animals.id
+    FROM users_animals
+    JOIN animals ON animals.id = users_animals.animal_id
+    WHERE users_animals.user_id = ?
   `;
 
   let result = [];
@@ -285,6 +311,7 @@ export const UserDB = {
   readByEmailOrUsername,
   readUsersTestimonies,
   readUsersFollow,
+  readUsersFollowIDs,
   updateUsername,
   updatePassword,
   updateAvatar,

@@ -17,10 +17,11 @@ import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getOneUserThunk, getUsersFollowThunk } from '../../api/user.api.js';
+import { getOneUserThunk } from '../../api/user.api.js';
 import { getFromStorage } from '../../utils/storage.utils.js';
 import Articles from '../Articles/Articles.jsx';
 import ArticleDetails from '../ArticleDetails/ArticleDetails.jsx';
+import Favorites from '../Favorites/Favorites.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -111,6 +112,14 @@ const App = () => {
               element={
                 <>
                   <Adoption />
+                </>
+              }
+            />
+            <Route
+              path={APP_ROUTES.FAVORITES}
+              element={
+                <>
+                  <Favorites />
                 </>
               }
             />

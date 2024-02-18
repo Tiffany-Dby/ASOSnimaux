@@ -12,28 +12,27 @@
     gap: 2rem;
 
     &__wrapper {
-      @include mxn.flex;
-      justify-content: space-between;
+      display: grid;
       gap: 3rem;
 
-      @media screen and (min-width:650px) {
-        @include mxn.grow
+      @media screen and (min-width:500px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media screen and (min-width:900px) {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
   }
 
   &__article,
-  &__user, &__animal {
+  &__user,
+  &__animal {
     display: grid;
     width: 100%;
     background-color: var(--white);
     border-radius: var(--radius-s);
     box-shadow: var(--box-shadow-2-2-5);
-
-    @media screen and (min-width:635px) {
-      flex: 1 auto;
-      max-width: calc(50% - var(--padding-s));
-    }
   }
 
   &__article {
@@ -117,7 +116,7 @@
   &__update-article,
   &__new-animal,
   &__update-animal {
-    background-color: var(--secondary-50);
+    // background-color: var(--secondary-50);
 
     input[type="file"] {
       &::file-selector-button {

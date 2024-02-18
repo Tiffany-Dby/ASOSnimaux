@@ -1,8 +1,10 @@
-import { setUser, setisAuth } from "../redux/reducers/user.reducer";
+import { resetFollowIDs, resetFollowedAnimals, setUser, setisAuth } from "../redux/reducers/user.reducer";
 import { clearStorage } from "./storage.utils";
 
 export const signOut = (dispatch) => {
   clearStorage();
+  dispatch(resetFollowIDs());
+  dispatch(resetFollowedAnimals());
   dispatch(setUser({ id: "", username: "", email: "", avatar: "", role: "" }));
   dispatch(setisAuth(false));
 }

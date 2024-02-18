@@ -454,7 +454,7 @@ const Admin = () => {
             </div>
           }
           {(isDeleteArticleForm || isDeleteAnimalForm) &&
-            <div className="dialog-wrapper">
+            <div className="dialog-wrapper confirm-deletion">
               <div className="title-wrapper">
                 <h2>Supprimer</h2>
               </div>

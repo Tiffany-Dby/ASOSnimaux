@@ -2,7 +2,7 @@ import "./articleDetails.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from 'react-router-dom';
 import { setToLocalDateLong } from "../../utils/date.utils";
-import { splitDescription } from "../../utils/articleDescription.utils";
+import { formatDescription } from "../../utils/articleDescription.utils";
 import { useEffect } from "react";
 import { getOneArticleThunk } from "../../api/article.api";
 
@@ -19,7 +19,7 @@ const ArticleDetails = () => {
     }
   }, []);
 
-  const paragraphs = splitDescription(one.description);
+  const paragraphs = formatDescription(one.description);
 
   return (
     <>

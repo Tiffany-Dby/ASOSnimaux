@@ -1,13 +1,18 @@
 import "./filters.scss";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
+import InputCheckbox from "../InputCheckbox/InputCheckbox";
+import { FaXmark } from "react-icons/fa6";
 
-const Filters = () => {
+const Filters = ({ onClick }) => {
   return (
     <>
-      <div className="filters-wrapper">
-        <h2>Filtres</h2>
-        <div className="search">
+      <div className="filters__wrapper">
+        <div className="filters__header">
+          <h2>Filtres</h2>
+          <FaXmark className="manage-icons" onClick={onClick} role="button" aria-label="Fermer le menu des filtres" />
+        </div>
+        <div className="filters__search">
           <Input label="Rechercher" id="search" />
           <Button btnStyle="" text="Rechercher" />
         </div>
@@ -15,81 +20,31 @@ const Filters = () => {
         <form className="filters">
           <fieldset>
             <legend>Espèces</legend>
-            <div className="inputs-wrapper">
-              <label htmlFor="cats">
-                <div className="switch">
-                  <input type="checkbox" name="cats" id="cats" />
-                  <span></span>
-                </div>
-                Chats
-              </label>
-              <label htmlFor="dogs">
-                <div className="switch">
-                  <input type="checkbox" name="dogs" id="dogs" />
-                  <span></span>
-                </div>
-                Chiens
-              </label>
-              <label htmlFor="others">
-                <div className="switch">
-                  <input type="checkbox" name="others" id="others" />
-                  <span></span>
-                </div>
-                Autres
-              </label>
+            <div className="filters__inputs">
+              <InputCheckbox id={"cats"} label={"Chats"} />
+              <InputCheckbox id={"dogs"} label={"Chiens"} />
+              <InputCheckbox id={"others"} label={"Autres"} />
             </div>
           </fieldset>
           <fieldset>
             <legend>Sexe</legend>
-            <div className="inputs-wrapper">
-              <label htmlFor="female">
-                <div className="switch">
-                  <input type="checkbox" name="female" id="female" />
-                  <span></span>
-                </div>
-                Femelle
-              </label>
-              <label htmlFor="male">
-                <div className="switch">
-                  <input type="checkbox" name="male" id="male" />
-                  <span></span>
-                </div>
-                Mâle
-              </label>
+            <div className="filters__inputs">
+              <InputCheckbox id={"female"} label={"Femelle"} />
+              <InputCheckbox id={"male"} label={"Mâle"} />
             </div>
           </fieldset>
           <fieldset>
             <legend>Âge</legend>
-            <div className="inputs-wrapper">
-              <label htmlFor="senior">
-                <div className="switch">
-                  <input type="checkbox" name="senior" id="senior" />
-                  <span></span>
-                </div>
-                Senior
-              </label>
-              <label htmlFor="adult">
-                <div className="switch">
-                  <input type="checkbox" name="adult" id="adult" />
-                  <span></span>
-                </div>
-                Adulte
-              </label>
-              <label htmlFor="junior">
-                <div className="switch">
-                  <input type="checkbox" name="junior" id="junior" />
-                  <span></span>
-                </div>
-                Junior
-              </label>
+            <div className="filters__inputs">
+              <InputCheckbox id={"senior"} label={"Senior"} />
+              <InputCheckbox id={"adult"} label={"Adulte"} />
+              <InputCheckbox id={"junior"} label={"Junior"} />
             </div>
           </fieldset>
         </form>
 
-        <Button btnStyle="" text="Réinitialiser les filtres" />
-      </div>
-
-
+        <Button btnStyle=" filters__reset" text="Réinitialiser les filtres" />
+      </div >
     </>
   );
 }

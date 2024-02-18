@@ -12,6 +12,7 @@ const initUserRoutes = (app) => {
   userRouter.get("/user", jwtMddlwr, UserController.readOne);
   userRouter.get("/testimonies", jwtMddlwr, UserController.readUsersTestimonies);
   userRouter.get("/follow", jwtMddlwr, UserController.readUsersFollow)
+  userRouter.get("/followIDs", jwtMddlwr, UserController.readUsersFollowIDs)
   userRouter.get("/all", jwtMddlwr, isSuperAdmin, UserController.readAll);
 
   // POST
