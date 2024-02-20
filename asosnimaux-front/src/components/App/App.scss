@@ -2,7 +2,6 @@
 
 .title-wrapper {
   @include mxn.title;
-  margin-bottom: 2rem;
 
   h1 {
     font-size: var(--font-size-xxl);
@@ -14,7 +13,7 @@
 }
 
 section {
-  padding: var(--padding-m) var(--padding-s);
+  // padding: var(--padding-m) var(--padding-s);
 
   &:last-of-type {
     padding-bottom: var(--padding-xl);

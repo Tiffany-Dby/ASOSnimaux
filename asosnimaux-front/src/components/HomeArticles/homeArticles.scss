@@ -1,10 +1,15 @@
 @use "../../styles/mixins" as mxn;
 
 .articles {
+  &__wrapper {
+    @include mxn.container;
+  }
+
   &-overview {
     @include mxn.flex("column", "nowrap");
     gap: 2rem;
     background-color: var(--secondary-50);
+    padding: var(--padding-m) 0 var(--padding-xl);
 
     .btn-wrapper {
       @include mxn.btnStylish;

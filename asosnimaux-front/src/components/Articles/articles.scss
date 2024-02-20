@@ -1,8 +1,6 @@
 @use "../../styles/mixins" as mxn;
 
 .articles {
-  @include mxn.container;
-
   h2 {
     font-size: var(--font-size-xl);
   }
@@ -19,7 +17,7 @@
   }
 
   &__header {
-    @include mxn.container($padding: 0 0 var(--padding-l));
+    @include mxn.container;
   }
 
   &__wrapper {
@@ -32,6 +30,7 @@
     }
 
     &>a {
+      width: 100%;
       text-decoration: none;
       color: var(--dark-brown);
 

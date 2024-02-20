@@ -66,6 +66,7 @@
 }
 
 @mixin title {
+  @include container;
   position: relative;
   display: grid;
   justify-content: center;

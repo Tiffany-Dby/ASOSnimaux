@@ -2,7 +2,7 @@ import "./user.scss";
 import Button from "../Button/Button";
 import Dialog from "../Dialog/Dialog";
 import Input from "../Input/Input";
-import { FaPencil, FaTrashCan } from "react-icons/fa6";
+import { FaAngleRight, FaPencil, FaTrashCan } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { resetDialogForm, setUpdatedAvatar, updateDialogForm } from "../../redux/reducers/user.reducer";
 import { createPortal } from "react-dom";
@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import { AVATAR } from "../../constants/avatar.const";
 import { APP_ROUTES } from "../../constants/route.const";
 import Toast from "../Toast/Toast";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import { Link } from "react-router-dom";
 
 const User = ({ date, testimonie }) => {
   const dispatch = useDispatch();
@@ -78,82 +80,96 @@ const User = ({ date, testimonie }) => {
         <div className="title-wrapper">
           <h1>Dashboard</h1>
         </div>
-
-        <div className="user__content-wrapper">
-          <section>
+        <Breadcrumbs>
+          <li className="breadcrumbs__link">
+            <Link to={APP_ROUTES.HOME} >
+              Accueil
+            </Link>
+            <FaAngleRight className="breadcrumbs__icon" />
+          </li>
+          <li className="breadcrumbs__link">
+            <p>Dashboard</p>
+          </li>
+        </Breadcrumbs>
+        <section>
+          <div className="user__infos__title">
             <h2>Informations de compte</h2>
-            <article className="user__avatar">
-              <div className="content__header">
+          </div>
+          <div className="user__infos__wrapper">
+            <article className="user__infos">
+              <div className="infos__header">
                 <h3>Avatar</h3>
                 <FaPencil className="manage-icons" onClick={handleUpdateAvatarDialog} role="button" aria-label="Bouton de modification d'avatar" />
               </div>
-              <div className="content img">
-                <img crossOrigin="anonymous" src={user.avatar} alt={"Un sticker animal"} />
+              <div className="infos">
+                <div className="infos__img">
+                  <img crossOrigin="anonymous" src={user.avatar} alt={"Un sticker animal"} />
+                </div>
               </div>
             </article>
-            <article className="user__username">
-              <div className="content__header">
+            <article className="user__infos">
+              <div className="infos__header">
                 <h3>Pseudo</h3>
                 <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Pseudo", id: "username", type: "text" })} role="button" aria-label="Bouton de modification du Pseudo" />
               </div>
-              <div className="content">
+              <div className="infos">
                 <p>{user.username}</p>
               </div>
             </article>
-            <article className="user__email">
-              <div className="content__header">
+            <article className="user__infos">
+              <div className="infos__header">
                 <h3>Email</h3>
                 <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Email", id: "email", type: "email" })} role="button" aria-label="Bouton de modification de l'email" />
               </div>
-              <div className="content">
+              <div className="infos">
                 <p>{user.email}</p>
               </div>
             </article>
-          </section>
-
-          <section>
-            <h2>Sécurité</h2>
-            <article className="user__password">
-              <div className="content__header">
+            <article className="user__infos">
+              <div className="infos__header">
                 <h3>Mot de passe</h3>
                 <FaPencil className="manage-icons" onClick={() => handleDialog({ label: "Nouveau mot de passe", id: "newPassword", type: "password" })} role="button" aria-label="Bouton de modification du mot de passe" />
               </div>
-              <div className="content">
-                <p className="content__password"></p>
+              <div className="infos">
+                <p className="infos__password"></p>
               </div>
             </article>
-            <Button btnStyle={""} text="Supprimer le compte" btnClick={handleDeleteForm} />
-          </section>
+          </div>
+          <Button btnStyle={""} text="Supprimer le compte" btnClick={handleDeleteForm} />
+        </section>
 
-          <section>
+        <section>
+          <div className="user__infos__title">
             <h2>Témoignages (nmbr)</h2>
-            <article className="user__testimonies">
-              <div className="content__header">
+          </div>
+          <div className="user__testimonies__wrapper">
+            <article className="user__infos">
+              <div className="infos__header">
                 <h3>Témoignage du {date}</h3>
                 <div>
                   <FaPencil className="manage-icons" onClick={handleDialog} role="button" aria-label="Bouton de modification du témoignage" />
-                  <FaTrashCan className="manage-icons" color="var(--dark-red)" role="button" aria-label="Bouton de suppression du témoignage" />
+                  <FaTrashCan className="manage-icons" color="var(--light-red)" role="button" aria-label="Bouton de suppression du témoignage" />
                 </div>
               </div>
-              <div className="content">
+              <div className="infos">
                 <p>{testimonie}</p>
               </div>
             </article>
-          </section>
+          </div>
+        </section>
 
-        </div>
         <Dialog>
           {isUpdateAccountAvatar &&
             <div className="dialog-wrapper">
+              <div className="title-wrapper">
+                <h2>Choisir un Avatar</h2>
+              </div>
               <section className="avatars">
-                <div className="title-wrapper">
-                  <h2>Choisir un Avatar</h2>
-                </div>
                 <div className="avatar__wrapper">
                   {AVATAR.URL.map((u, index) => (
-                    <article key={index} className={`avatar${avatarIndex === index ? ' selected' : ''}`}>
+                    <div key={index} className={`avatar${avatarIndex === index ? ' selected' : ''}`}>
                       <img crossOrigin="anonymous" src={`${APP_ROUTES.API_URL}${u}`} alt={"Un sticker animal"} onClick={() => { dispatch(setUpdatedAvatar(u)); setAvatarIndex(avatarIndex === index ? null : index) }} />
-                    </article>
+                    </div>
                   ))
                   }
                 </div>
@@ -171,12 +187,12 @@ const User = ({ date, testimonie }) => {
               </div>
               <form className="user__update" onSubmit={handleSubmit}>
                 {input.id === "newPassword" &&
-                  <>
-                    <p className="text-error">Après modification, vous devrez vous reconnecter</p>
-                    <Input label={"Ancien mot de passe"} id={"oldPassword"} type={"password"} value={dialogForms.oldPassword} onChange={(value) => updateForm("oldPassword", value)} />
-                  </>
+                  <Input label={"Ancien mot de passe"} id={"oldPassword"} type={"password"} value={dialogForms.oldPassword} onChange={(value) => updateForm("oldPassword", value)} />
                 }
                 <Input label={input.label} id={input.id} type={input.type} value={dialogForms[input.id]} onChange={(value) => updateForm(input.id, value)} />
+                {input.id === "newPassword" &&
+                  <p className="text-error">Après modification, vous devrez vous reconnecter</p>
+                }
                 <div className="btns-wrapper">
                   <Button btnStyle="" text="Valider" type="submit" />
                   <Button btnStyle={""} text="Annuler" btnClick={handleDialogClose} />

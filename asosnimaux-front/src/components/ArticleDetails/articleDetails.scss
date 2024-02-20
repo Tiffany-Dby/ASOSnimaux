@@ -1,15 +1,16 @@
 @use "../../styles/mixins" as mxn;
 
 .article-page {
+  padding: var(--padding-l) 0;
 
   article {
     background-color: var(--white);
     border-radius: var(--radius-s);
+    box-shadow: var(--box-shadow-2-2-5);
   }
 
   &__wrapper {
-    @include mxn.container($padding: 0);
-    box-shadow: var(--box-shadow-2-2-5);
+    @include mxn.container;
     border-radius: var(--radius-s);
   }
 

@@ -4,9 +4,10 @@ import "./favorites.scss";
 import { useEffect } from "react";
 import { APP_ROUTES } from "../../constants/route.const";
 import { Link } from "react-router-dom";
-import { FaCircleInfo } from "react-icons/fa6";
-import AnimalCard from "../AnimalCard/AnimalCard";
+import { FaAngleRight, FaCircleInfo } from "react-icons/fa6";
 import FavoriteCard from "../FavoriteCard/FavoriteCard";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import { getOneAnimalThunk } from "../../api/animal.api";
 
 const Favorites = () => {
   const dispatch = useDispatch();
@@ -22,12 +23,28 @@ const Favorites = () => {
     }
   }, [isAuth]);
 
+  const handleOneAnimalClick = (animal) => {
+    dispatch(getOneAnimalThunk(animal.id));
+    console.log("click")
+  }
+
   return (
     <>
       <div className="favorites__page">
         <div className="title-wrapper">
           <h1>Favoris</h1>
         </div>
+        <Breadcrumbs>
+          <li className="breadcrumbs__link">
+            <Link to={APP_ROUTES.HOME} >
+              Accueil
+            </Link>
+            <FaAngleRight className="breadcrumbs__icon" />
+          </li>
+          <li className="breadcrumbs__link">
+            <p>Favoris</p>
+          </li>
+        </Breadcrumbs>
         <section className="favorites">
           <div className="favorites__header">
             {!isAuth &&
@@ -37,34 +54,29 @@ const Favorites = () => {
               </div>
             }
             <h2>Animaux coups coeur</h2>
-            {followedAnimals ?
+            {followedAnimals.length > 0 ?
               <p>Vous suivez actuellement {followedAnimals.length} {followedAnimals.length === 1 && "animal"}{followedAnimals.length > 1 && "animaux"} !</p>
               :
               <p>Vous n'avez aucun favoris.</p>
             }
           </div>
-          <div className="favorites__wrapper">
-            {followedAnimals?.map(animal => (
-              <FavoriteCard
-                key={animal.id}
-                animalName={animal.name}
-                imgUrl={`${APP_ROUTES.API_URL}${animal.picture_url}`}
-                imgAlt={animal.picture_caption}
-                description={animal.truncated_description}
-                status={animal.status}
-                animalSex={animal.sex}
-              />
-              // <AnimalCard
-              //   key={animal.id}
-              //   animalName={animal.name}
-              //   imgUrl={`${APP_ROUTES.API_URL}${animal.picture_url}`}
-              //   imgAlt={animal.picture_caption}
-              //   animalSex={animal.sex}
-              //   status={animal.status}
-              //   color={followIDs.includes(animal.id) && "var(--light-red)"}
-              //   followClick={() => { }} />
-            ))}
-          </div>
+          {followedAnimals.length > 0 &&
+            <div className="favorites__wrapper">
+              {followedAnimals.map(animal => (
+                <FavoriteCard
+                  key={animal.id}
+                  animalName={animal.name}
+                  imgUrl={`${APP_ROUTES.API_URL}${animal.picture_url}`}
+                  imgAlt={animal.picture_caption}
+                  description={animal.truncated_description}
+                  status={animal.status}
+                  animalSex={animal.sex}
+                  linkRedirect={`${APP_ROUTES.ADOPTION}/${animal.id}`}
+                  linkClick={() => handleOneAnimalClick(animal)}
+                />
+              ))}
+            </div>
+          }
         </section>
       </div>
     </>

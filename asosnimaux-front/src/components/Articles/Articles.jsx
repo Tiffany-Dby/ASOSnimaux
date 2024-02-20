@@ -6,6 +6,8 @@ import { getAllArticlesThunk, getOneArticleThunk } from "../../api/article.api";
 import { setToLocalDateLong } from "../../utils/date.utils";
 import { APP_ROUTES } from "../../constants/route.const";
 import { Link } from "react-router-dom";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import { FaAngleRight } from "react-icons/fa6";
 
 const Articles = () => {
   const dispatch = useDispatch();
@@ -27,6 +29,17 @@ const Articles = () => {
         <div className="title-wrapper">
           <h1>Actualités</h1>
         </div>
+        <Breadcrumbs>
+          <li className="breadcrumbs__link">
+            <Link to={APP_ROUTES.HOME} >
+              Accueil
+            </Link>
+            <FaAngleRight className="breadcrumbs__icon" />
+          </li>
+          <li className="breadcrumbs__link">
+            <p>Actualités</p>
+          </li>
+        </Breadcrumbs>
         <section className="articles">
           <div className="articles__header">
             <h2>Les actualités de l'association</h2>

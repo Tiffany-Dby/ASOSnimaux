@@ -15,7 +15,8 @@ const ANIMAL_STATE = {
       exit_date: "",
       species: "",
       picture_url: "",
-      picture_caption: ""
+      picture_caption: "",
+      time_spent: ""
     },
     newAnimal: {
       name: "",
@@ -59,7 +60,7 @@ const animalSlice = createSlice({
   initialState: ANIMAL_STATE,
   reducers: {
     setOneAnimal: (state, action) => {
-      const { id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption } = action.payload;
+      const { id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption, time_spent } = action.payload;
       return {
         ...state,
         animals: {
@@ -76,7 +77,8 @@ const animalSlice = createSlice({
             exit_date,
             species,
             picture_url,
-            picture_caption
+            picture_caption,
+            time_spent
           }
         },
         oneAnimalLoading: false

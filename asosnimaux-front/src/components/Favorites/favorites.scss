@@ -13,7 +13,7 @@
   }
 
   &__header {
-    @include mxn.container($padding: 0)
+    @include mxn.container;
   }
 
   .notAuth {
@@ -39,7 +39,7 @@
   }
 
   &__wrapper {
-    @include mxn.container($padding: 0);
+    @include mxn.container;
     display: grid;
     gap: 3rem;
 

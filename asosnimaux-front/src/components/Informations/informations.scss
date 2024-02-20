@@ -3,11 +3,12 @@
 .informations {
   @include mxn.flex("column", "nowrap");
   gap: 1rem;
+  padding-top: var(--padding-m);
 
   &__wrapper {
+    @include mxn.container;
     display: grid;
     gap: 2rem;
-    @include mxn.container($padding: 0);
 
     @media screen and (min-width: 400px) {
       grid-template-columns: repeat(2, 1fr);

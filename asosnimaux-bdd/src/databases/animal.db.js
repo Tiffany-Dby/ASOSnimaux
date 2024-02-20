@@ -106,7 +106,7 @@ const readAllBySpecies = async (species) => {
 
 const readOne = async (id) => {
   const sql = `
-    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption
+    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption, DATEDIFF(NOW(), entry_date) as time_spent
     FROM animals
     WHERE id = ?
   `;

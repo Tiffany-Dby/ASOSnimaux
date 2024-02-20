@@ -27,7 +27,7 @@ export const getOneAnimalThunk = (id) => async (dispatch, getState) => {
   const { result, error, status } = await getRequest(`animals/${id}`);
   if (!result?.message || status >= 400 || !!error) return dispatch(setOneAnimalError({ error: `Something went wrong : ${error}` }));
 
-  dispatch(setOneAnimal({ id: result.animal.id, entry_date: result.animal.entryDate, name: result.animal.name, age: result.animal.age, sex: result.animal.sex, description: result.animal.description, race: result.animal.race, status: result.animal.status, exit_date: result.animal.exitDate, species: result.animal.species, picture_url: `${APP_ROUTES.API_URL}${result.animal.pictureURL}`, picture_caption: result.animal.pictureCaption }));
+  dispatch(setOneAnimal({ id: result.animal.id, entry_date: result.animal.entryDate, name: result.animal.name, age: result.animal.age, sex: result.animal.sex, description: result.animal.description, race: result.animal.race, status: result.animal.status, exit_date: result.animal.exitDate, species: result.animal.species, picture_url: `${APP_ROUTES.API_URL}${result.animal.pictureURL}`, picture_caption: result.animal.pictureCaption, time_spent: result.animal.timeSpent }));
 }
 
 export const postNewAnimalThunk = (file) => async (dispatch, getState) => {

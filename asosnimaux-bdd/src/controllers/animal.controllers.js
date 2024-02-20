@@ -121,7 +121,8 @@ const readOne = async ({ params: { id } }, res) => {
     exitDate: result[0].exit_date,
     species: result[0].species,
     pictureURL: result[0].picture_url,
-    pictureCaption: result[0].picture_caption
+    pictureCaption: result[0].picture_caption,
+    timeSpent: result[0].time_spent
   }
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request for animal with id: ${id} successful`, animal });

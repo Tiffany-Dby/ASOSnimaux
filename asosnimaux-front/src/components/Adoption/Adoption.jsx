@@ -10,9 +10,11 @@ import { APP_ROUTES } from "../../constants/route.const";
 import { getAge } from "../../utils/animals.utils";
 import { getUsersFollowIDsThunk, postUserFollowThunk, unfollowThunk } from "../../api/user.api";
 import { setSelectedAnimalFollow } from "../../redux/reducers/user.reducer";
-import { FaSliders } from "react-icons/fa6";
+import { FaAngleRight, FaSliders } from "react-icons/fa6";
 import { closeDialog, setIsFilters } from "../../redux/reducers/dialog.reducer";
 import { updateScroll } from "../../redux/reducers/window.reducer";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import { Link } from "react-router-dom";
 
 const Adoption = () => {
   const dispatch = useDispatch();
@@ -103,6 +105,17 @@ const Adoption = () => {
         <div className="title-wrapper">
           <h1>Adoption</h1>
         </div>
+        <Breadcrumbs>
+          <li className="breadcrumbs__link">
+            <Link to={APP_ROUTES.HOME} >
+              Accueil
+            </Link>
+            <FaAngleRight className="breadcrumbs__icon" />
+          </li>
+          <li className="breadcrumbs__link">
+            <p>Adoption</p>
+          </li>
+        </Breadcrumbs>
         <section className="animals">
           <div className="animals__header">
             <h2>Les animaux du refuge</h2>

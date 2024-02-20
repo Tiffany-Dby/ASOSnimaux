@@ -3,7 +3,7 @@ import Button from "../Button/Button";
 import { FaHeartCircleXmark, FaMars, FaVenus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
-const FavoriteCard = ({ status, imgUrl, imgAlt, animalName, animalSex, description, btnClick, redirect }) => {
+const FavoriteCard = ({ status, imgUrl, imgAlt, animalName, animalSex, description, btnClick, linkRedirect, linkClick }) => {
   return (
     <>
       <article className="followed-animal">
@@ -37,7 +37,7 @@ const FavoriteCard = ({ status, imgUrl, imgAlt, animalName, animalSex, descripti
             </div>
             <p>{description}</p>
             <div className="btn-wrapper">
-              <Link className="btn followed-animal__redirect" to={redirect}>Voir la fiche détaillée</Link>
+              <Link className="btn followed-animal__redirect" to={linkRedirect} onClick={linkClick}>Voir la fiche détaillée</Link>
             </div>
           </div>
         </div>
