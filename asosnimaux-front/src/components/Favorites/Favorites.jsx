@@ -6,6 +6,7 @@ import { APP_ROUTES } from "../../constants/route.const";
 import { Link } from "react-router-dom";
 import { FaCircleInfo } from "react-icons/fa6";
 import AnimalCard from "../AnimalCard/AnimalCard";
+import FavoriteCard from "../FavoriteCard/FavoriteCard";
 
 const Favorites = () => {
   const dispatch = useDispatch();
@@ -35,24 +36,33 @@ const Favorites = () => {
                 <p>La liste actuelle est <strong>temporaire</strong>, pour garantir la récupération de celle-ci à votre prochaine visite, <Link to={APP_ROUTES.SIGN_IN}>connectez-vous</Link>.</p>
               </div>
             }
-            <h2>Vos animaux coups coeur</h2>
+            <h2>Animaux coups coeur</h2>
             {followedAnimals ?
-              <p>Vous avez actuellement {followedAnimals.length} animaux en favoris !</p>
+              <p>Vous suivez actuellement {followedAnimals.length} {followedAnimals.length === 1 && "animal"}{followedAnimals.length > 1 && "animaux"} !</p>
               :
               <p>Vous n'avez aucun favoris.</p>
             }
           </div>
-          <div className="animals__wrapper">
+          <div className="favorites__wrapper">
             {followedAnimals?.map(animal => (
-              <AnimalCard
+              <FavoriteCard
                 key={animal.id}
                 animalName={animal.name}
                 imgUrl={`${APP_ROUTES.API_URL}${animal.picture_url}`}
                 imgAlt={animal.picture_caption}
-                animalSex={animal.sex}
+                description={animal.truncated_description}
                 status={animal.status}
-                color={followIDs.includes(animal.id) && "var(--light-red)"}
-                followClick={() => { }} />
+                animalSex={animal.sex}
+              />
+              // <AnimalCard
+              //   key={animal.id}
+              //   animalName={animal.name}
+              //   imgUrl={`${APP_ROUTES.API_URL}${animal.picture_url}`}
+              //   imgAlt={animal.picture_caption}
+              //   animalSex={animal.sex}
+              //   status={animal.status}
+              //   color={followIDs.includes(animal.id) && "var(--light-red)"}
+              //   followClick={() => { }} />
             ))}
           </div>
         </section>

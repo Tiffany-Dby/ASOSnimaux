@@ -1,6 +1,9 @@
 @use "../../styles/mixins" as mxn;
 
 .favorites {
+  @include mxn.flex("column", "nowrap");
+  gap: 3rem;
+
   &__page {
     padding-top: var(--padding-l);
   }
@@ -32,6 +35,16 @@
     a {
       font-weight: var(--fw-bold);
       color: var(--dark-red);
+    }
+  }
+
+  &__wrapper {
+    @include mxn.container($padding: 0);
+    display: grid;
+    gap: 3rem;
+
+    @media screen and (min-width: 600px) {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 }

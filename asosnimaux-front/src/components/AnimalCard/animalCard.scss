@@ -14,7 +14,7 @@
   transition: all .5s;
 
   &:hover img,
-  &:hover .heart,
+  &:hover &__follow-icon,
   &:has(.status--adopted):hover img {
     transform: scale(1.075);
     filter: grayscale(0%);
@@ -30,17 +30,6 @@
     font-size: var(--font-size-m);
   }
 
-  .status {
-    &--reserved {
-      background-color: var(--accent);
-    }
-
-    &--adopted {
-      background-color: var(--dark-red);
-      color: var(--white);
-    }
-  }
-
   &:has(.status--adopted) img {
     filter: grayscale(100%);
   }
@@ -51,14 +40,21 @@
     align-self: center;
     z-index: 1;
 
-    &.icon {
+    &.heart {
+      height: 4.8rem;
+      width: 4.8rem;
       background-color: var(--white);
-      transition: all .3s ease;
+      transition: transform .5s ease;
+
+      &:active {
+        transform: scale(2);
+      }
     }
   }
 
   &__redirect {
-    @include mxn.flex("column", "nowrap");
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     grid-column: 1/-1;
     grid-row: 1/-1;
     text-decoration: none;
@@ -68,25 +64,6 @@
 
   &__sex {
     transition: color .3s ease;
-  }
-
-  .male {
-    color: #0099ff;
-  }
-
-  .female {
-    color: #ED50A9;
-  }
-
-
-  .heart {
-    height: 4.5rem;
-    width: 4.5rem;
-    transition: transform .5s ease;
-
-    &:active {
-      transform: scale(2);
-    }
   }
 
   &__img {

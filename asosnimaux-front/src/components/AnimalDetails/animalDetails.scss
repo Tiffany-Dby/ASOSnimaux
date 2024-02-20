@@ -1,0 +1,30 @@
+@use "../../styles/mixins" as mxn;
+
+.animal-page {
+  &__img {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 100px) 70px;
+    background-color: var(--white);
+    padding: var(--padding-s) var(--padding-xs) 0;
+    box-shadow: var(--box-shadow-2-2-5);
+    border-radius: var(--radius-xs);
+    max-width: 400px;
+    margin: 0 auto;
+
+    img {
+      grid-column: 1/-1;
+      grid-row: 1/4;
+      display: block;
+      border-radius: var(--radius-xs);
+    }
+
+    p {
+      font-size: var(--font-size-xl);
+      font-weight: var(--fw-semi-bold);
+      grid-column: 2/4;
+      align-self: center;
+      justify-self: center;
+    }
+  }
+}

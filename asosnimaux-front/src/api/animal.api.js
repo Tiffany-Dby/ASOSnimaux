@@ -1,4 +1,5 @@
-import { resetFormNewAnimal, setAllAnimals, setAllAnimalsError, setDeleteAnimal, setDeleteAnimalError, setNewAnimal, setNewAnimalError, setSelectedwAnimalError, setUpdateSelectedAnimal, startAllAnimalsLoading, startDeleteAnimalLoading, startNewAnimalLoading, startSelectedAnimalLoading } from "../redux/reducers/animal.reducer";
+import { APP_ROUTES } from "../constants/route.const";
+import { resetFormNewAnimal, setAllAnimals, setAllAnimalsError, setDeleteAnimal, setDeleteAnimalError, setNewAnimal, setNewAnimalError, setOneAnimal, setOneAnimalError, setSelectedwAnimalError, setUpdateSelectedAnimal, startAllAnimalsLoading, startDeleteAnimalLoading, startNewAnimalLoading, startOneAnimalLoading, startSelectedAnimalLoading } from "../redux/reducers/animal.reducer";
 import { setFormData } from "../utils/formidable.utils";
 import { getFromStorage } from "../utils/storage.utils";
 import { showToast } from "../utils/toast.utils";
@@ -6,8 +7,7 @@ import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 
 
 export const getAllAnimalsThunk = () => async (dispatch, getState) => {
-  const { animals, allAnimalsLoading, allAnimalsError } = getState().animalReducer;
-  const { all } = animals;
+  const { allAnimalsLoading } = getState().animalReducer;
   if (allAnimalsLoading) return;
 
   dispatch(startAllAnimalsLoading());
@@ -16,6 +16,18 @@ export const getAllAnimalsThunk = () => async (dispatch, getState) => {
   if (!result?.message || status >= 400 || !!error) return dispatch(setAllAnimalsError({ error: `Something went wrong : ${error}` }));
 
   dispatch(setAllAnimals({ all: result.result }));
+}
+
+export const getOneAnimalThunk = (id) => async (dispatch, getState) => {
+  const { oneAnimalLoading } = getState().animalReducer;
+  if (oneAnimalLoading) return;
+
+  dispatch(startOneAnimalLoading());
+
+  const { result, error, status } = await getRequest(`animals/${id}`);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setOneAnimalError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setOneAnimal({ id: result.animal.id, entry_date: result.animal.entryDate, name: result.animal.name, age: result.animal.age, sex: result.animal.sex, description: result.animal.description, race: result.animal.race, status: result.animal.status, exit_date: result.animal.exitDate, species: result.animal.species, picture_url: `${APP_ROUTES.API_URL}${result.animal.pictureURL}`, picture_caption: result.animal.pictureCaption }));
 }
 
 export const postNewAnimalThunk = (file) => async (dispatch, getState) => {

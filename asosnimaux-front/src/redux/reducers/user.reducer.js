@@ -379,7 +379,7 @@ const userSlice = createSlice({
       const { animals } = action.payload;
       return {
         ...state,
-        followedAnimals: animals?.map((animal) => ({ id: animal.animal_id, entry_date: animal.entry_date, name: animal.name, age: animal.age, sex: animal.sex, description: animal.description, race: animal.race, status: animal.status, exit_date: animal.exit_date, species: animal.species, picture_url: animal.picture_url, picture_caption: animal.picture_caption })),
+        followedAnimals: animals?.map((animal) => ({ id: animal.animal_id, entry_date: animal.entry_date, name: animal.name, age: animal.age, sex: animal.sex, truncated_description: animal.truncated_description, race: animal.race, status: animal.status, exit_date: animal.exit_date, species: animal.species, picture_url: animal.picture_url, picture_caption: animal.picture_caption })),
         followedAnimalsLoading: false,
       }
     },

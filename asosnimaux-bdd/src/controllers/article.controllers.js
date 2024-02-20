@@ -1,7 +1,7 @@
 import { ArticleDB } from "../databases/article.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
 import formidable from "formidable";
-import { deleteImg, setDeleteImgUrl, setImgUrl } from "../utils/formidable.utils.js";
+import { deleteImg, setImgUrl } from "../utils/formidable.utils.js";
 
 const create_ = async ({ body: { name, location, description, pictureURL, pictureCaption, userID } }, res) => {
   const areStrings = areStringsFilled([name, location, description, pictureURL, pictureCaption]);
@@ -20,7 +20,7 @@ const create = async (req, res) => {
     uploadDir: "./public/articles",
     keepExtensions: true,
     createDirsFromUploads: true,
-    maxFileSize: 5 * 1024 * 1024, // 5MB,
+    maxFileSize: 5 * 1024 * 1024, // 5MB
     filter: opts => {
       const { mimetype } = opts;
       return mimetype === "image/png" || mimetype === "image/jpg" || mimetype === "image/jpeg";
@@ -135,7 +135,7 @@ const deleteOne = async ({ params: { articleID } }, res) => {
   const response = await ArticleDB.deleteOne(articleID);
 
   const { imgPathResult, error } = response;
-  // transaction (SQL)
+  // Opti with -> transaction (SQL)
   const err = await deleteImg(imgPathResult);
   if (err) return res.status(403).json({ message: err });
 

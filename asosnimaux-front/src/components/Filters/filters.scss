@@ -4,6 +4,11 @@
   @include mxn.flex;
   gap: 1rem;
 
+  @media screen and (min-width: 480px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
   &__wrapper {
     @include mxn.container("600px", "0 0 var(--padding-m)");
     @include mxn.flex("column", "nowrap");
@@ -39,7 +44,7 @@
     justify-content: end;
     gap: 1rem;
 
-    @media screen and (min-width: 443px) {
+    @media screen and (min-width: 480px) {
       flex-wrap: nowrap;
     }
 
@@ -59,7 +64,7 @@
   }
 
   fieldset {
-    @include mxn.grow;
+    width: 100%;
     padding: var(--padding-xs) var(--padding-s) var(--padding-s);
     border-color: var(--secondary125);
     border-radius: var(--radius-m);

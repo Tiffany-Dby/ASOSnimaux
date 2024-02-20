@@ -1,7 +1,7 @@
 import { AnimalDB } from "../databases/animal.db.js";
-import { deleteImg, setImgUrl } from "../utils/formidable.utils.js";
 import { areStringsFilled } from "../utils/string.utils.js";
 import formidable from "formidable";
+import { deleteImg, setImgUrl } from "../utils/formidable.utils.js";
 
 const create_ = async (req, res) => {
   const { name, age, sex, description, race, status, species, picture_url, picture_caption } = req.body;
@@ -25,7 +25,7 @@ const create = async (req, res) => {
     uploadDir: "./public/animals",
     keepExtensions: true,
     createDirsFromUploads: true,
-    maxFileSize: 5 * 1024 * 1024, // 5MB,
+    maxFileSize: 5 * 1024 * 1024, // 5MB
     filter: opts => {
       const { mimetype } = opts;
       return mimetype === "image/png" || mimetype === "image/jpg" || mimetype === "image/jpeg";
@@ -52,6 +52,8 @@ const create = async (req, res) => {
   const picture_url = setImgUrl(filePath, "animals");
   console.log("picture_url : ", picture_url)
   const { name, age, sex, description, race, status, species, picture_caption } = fields;
+
+  // Age (number) verification missing
 
   const areStrings = areStringsFilled([name[0], sex[0], description[0], race[0], status[0], species[0], picture_url, picture_caption[0]]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
@@ -141,7 +143,7 @@ const updateDetails = async (req, res) => {
 }
 
 const updateExitDate = async ({ body: { exitDate, id } }, res) => {
-  // Verif de date à faire
+  // Date verification missing
 
   const response = await AnimalDB.updateExitDate(exitDate, id);
 
@@ -154,9 +156,12 @@ const updateExitDate = async ({ body: { exitDate, id } }, res) => {
 const deleteOne = async ({ params: { id } }, res) => {
   const reponse = await AnimalDB.deleteOne(id);
 
-  const { result, error } = reponse;
+  const { imgPathResult, error } = reponse;
 
-  return res.status(error ? 500 : 200).json({ message: error ? error : `Animal with id: ${id} has been successfully deleted`, result });
+  const err = await deleteImg(imgPathResult);
+  if (err) return res.status(403).json({ message: err });
+
+  return res.status(error ? 500 : 200).json({ message: error ? error : `Animal with id: ${id} has been successfully deleted` });
 }
 
 export const AnimalController = {

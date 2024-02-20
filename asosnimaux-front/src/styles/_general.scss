@@ -102,3 +102,22 @@ h3 {
   text-align: center;
   padding: var(--padding-s) var(--padding-xxs);
 }
+
+.male {
+  color: #0099ff;
+}
+
+.female {
+  color: #ED50A9;
+}
+
+.status {
+  &--reserved {
+    background-color: var(--accent);
+  }
+
+  &--adopted {
+    background-color: var(--dark-red);
+    color: var(--white);
+  }
+}

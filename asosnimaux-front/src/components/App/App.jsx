@@ -22,6 +22,7 @@ import { getFromStorage } from '../../utils/storage.utils.js';
 import Articles from '../Articles/Articles.jsx';
 import ArticleDetails from '../ArticleDetails/ArticleDetails.jsx';
 import Favorites from '../Favorites/Favorites.jsx';
+import AnimalDetails from '../AnimalDetails/AnimalDetails.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -112,6 +113,14 @@ const App = () => {
               element={
                 <>
                   <Adoption />
+                </>
+              }
+            />
+            <Route
+              path={APP_ROUTES.ANIMAL}
+              element={
+                <>
+                  <AnimalDetails />
                 </>
               }
             />

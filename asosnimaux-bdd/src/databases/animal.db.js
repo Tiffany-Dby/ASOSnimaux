@@ -174,16 +174,23 @@ const deleteOne = async (id) => {
     WHERE id = ?
   `;
 
+  const imgPathSql = `
+    SELECT picture_url
+    FROM animals
+    WHERE id = ?
+  `;
+
   const usersFollowSql = `
     DELETE FROM users_animals
     WHERE animal_id = ?
   `;
 
   let result = [];
+  let imgPathResult = [];
   let error = null;
   try {
     await query(usersFollowSql, [id]);
-
+    imgPathResult = await query(imgPathSql, [id]);
     result = await query(sql, [id]);
     if (result.affectedRows !== 1) throw new Error(`Something went wrong couldn't delete animal`);
   }
@@ -191,7 +198,7 @@ const deleteOne = async (id) => {
     error = err.message;
   }
   finally {
-    return { result, error };
+    return { result, imgPathResult, error };
   }
 }
 

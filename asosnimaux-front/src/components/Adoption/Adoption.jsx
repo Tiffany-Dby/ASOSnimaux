@@ -1,16 +1,16 @@
 import "./adoption.scss";
 import AnimalCard from "../AnimalCard/AnimalCard";
+import Dialog from "../Dialog/Dialog";
+import Button from "../Button/Button";
+import Filters from "../Filters/Filters";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllAnimalsThunk } from "../../api/animal.api";
+import { getAllAnimalsThunk, getOneAnimalThunk } from "../../api/animal.api";
 import { APP_ROUTES } from "../../constants/route.const";
-import { getFromStorage } from "../../utils/storage.utils";
+import { getAge } from "../../utils/animals.utils";
 import { getUsersFollowIDsThunk, postUserFollowThunk, unfollowThunk } from "../../api/user.api";
 import { setSelectedAnimalFollow } from "../../redux/reducers/user.reducer";
-import Button from "../Button/Button";
 import { FaSliders } from "react-icons/fa6";
-import Dialog from "../Dialog/Dialog";
-import Filters from "../Filters/Filters";
 import { closeDialog, setIsFilters } from "../../redux/reducers/dialog.reducer";
 import { updateScroll } from "../../redux/reducers/window.reducer";
 
@@ -67,6 +67,10 @@ const Adoption = () => {
     dispatch(setSelectedAnimalFollow(animal.id));
   }
 
+  const handleOneAnimalClick = (animal) => {
+    dispatch(getOneAnimalThunk(animal.id))
+  }
+
   const handleOpenFilters = () => {
     dispatch(setIsFilters());
   }
@@ -79,8 +83,7 @@ const Adoption = () => {
     const filtered = all.filter(animal => {
       const speciesFilters = newFilters.species.includes(animal.species);
       const sexFilters = newFilters.sex.includes(animal.sex);
-
-      const ageFilters = (newFilters.age.includes("junior") && animal.age >= 0 && animal.age <= 3) || (newFilters.age.includes("adulte") && animal.age >= 4 && animal.age <= 7) || (newFilters.age.includes("senior") && animal.age >= 8);
+      const ageFilters = (newFilters.age.includes(getAge(animal.age)));
 
       return speciesFilters && sexFilters && ageFilters;
     });
@@ -130,7 +133,9 @@ const Adoption = () => {
                     animalSex={animal.sex}
                     status={animal.status}
                     color={followIDs.includes(animal.id) && "var(--light-red)"}
-                    followClick={() => handleFollowClick(animal)} />
+                    followClick={() => handleFollowClick(animal)}
+                    linkRedirect={`${APP_ROUTES.ADOPTION}/${animal.id}`}
+                    linkClick={() => handleOneAnimalClick(animal)} />
                 ))
               )
             }

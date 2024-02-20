@@ -4,6 +4,7 @@ export const APP_ROUTES = {
   SIGN_IN: "/sign-in",
   SIGN_UP: "sign-up",
   ADOPTION: "/adoption",
+  ANIMAL: "/adoption/:id",
   ARTICLE: "/articles/:id",
   ARTICLES: "/articles",
   ACCOUNT: "/account",

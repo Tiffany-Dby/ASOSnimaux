@@ -3,7 +3,7 @@ import "./animalCard.scss";
 import { FaHeart, FaMars, FaVenus } from "react-icons/fa6";
 import { APP_ROUTES } from "../../constants/route.const";
 
-const AnimalCard = ({ imgUrl, imgAlt, animalName, status, animalSex, color, followClick }) => {
+const AnimalCard = ({ imgUrl, imgAlt, animalName, status, animalSex, color, followClick, linkRedirect, linkClick }) => {
   return (
     <>
       <article className="animal">
@@ -12,7 +12,7 @@ const AnimalCard = ({ imgUrl, imgAlt, animalName, status, animalSex, color, foll
           <span className={`animal__status ${status === "réservé" ? "status--reserved" : ""}${status === "adopté" ? "status--adopted" : ""}`}>{status === "réservé" && "Réservé"}{status === "adopté" && "Adopté"}</span>
         }
         <FaHeart className="icon heart animal__follow-icon" color={color || "var(--dark-grey)"} onClick={followClick} role="button" aria-label="Bouton d'ajout/retrait des favoris" />
-        <Link to={APP_ROUTES.HOME} className="animal__redirect">
+        <Link to={linkRedirect} className="animal__redirect" onClick={linkClick}>
           <div className="animal__img">
             <img loading="lazy" crossOrigin="anonymous" src={imgUrl} alt={imgAlt} />
           </div>
