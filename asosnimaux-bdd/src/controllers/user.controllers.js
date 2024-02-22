@@ -9,7 +9,7 @@ const create = async ({ body: { username, email, password } }, res) => {
 
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
-  if (username.length < 4 || username.length > 21) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 21 characters` });
+  if (username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters` });
 
   if (!isEmail(email)) return res.status(403).json({ message: `Invalid Email format` });
 
@@ -110,7 +110,7 @@ const updateUsername = async ({ body: { username, userID } }, res) => {
   const areStrings = areStringsFilled([username]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
-  if (username.length < 4 || username.length > 21) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 16 characters` });
+  if (username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters` });
 
   const response = await UserDB.updateUsername(username, userID);
   const error = response.error;

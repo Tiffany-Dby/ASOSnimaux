@@ -4,7 +4,7 @@ import Dialog from "../Dialog/Dialog";
 import Input from "../Input/Input";
 import { FaAngleRight, FaPencil, FaTrashCan } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { resetDialogForm, setUpdatedAvatar, updateDialogForm } from "../../redux/reducers/user.reducer";
+import { resetDialogForm, setSelectedUser, setUpdatedAvatar, updateDialogForm } from "../../redux/reducers/user.reducer";
 import { createPortal } from "react-dom";
 import { closeDialog, setInputFields, setIsDeleteAccountForm, setIsUpdateAccountAvatar, setIsUpdateAccountForm, toggleDialog } from "../../redux/reducers/dialog.reducer";
 import { deleteUserThunk, updateAvatarThunk, updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
@@ -19,7 +19,7 @@ const User = ({ date, testimonie }) => {
   const dispatch = useDispatch();
 
   const { isToastOpen } = useSelector(state => state.toastReducer);
-  const { user, dialogForms, updatedAvatar, updateAvatarSuccess, updateUsernameSuccess, signInSuccess } = useSelector(state => state.userReducer);
+  const { user, selectedUser, dialogForms, updatedAvatar, updateAvatarSuccess, updateUsernameSuccess, signInSuccess } = useSelector(state => state.userReducer);
   const { input, isDeleteAccountForm, isUpdateAccountForm, isUpdateAccountAvatar } = useSelector(state => state.dialogReducer);
 
   const [avatarIndex, setAvatarIndex] = useState(null);
@@ -49,10 +49,11 @@ const User = ({ date, testimonie }) => {
 
   const handleDeleteForm = () => {
     dispatch(setIsDeleteAccountForm());
+    dispatch(setSelectedUser({ id: user.id }))
   }
 
   const handleConfirmedDeletion = () => {
-    dispatch(deleteUserThunk(user.id));
+    dispatch(deleteUserThunk(selectedUser.id));
     dispatch(closeDialog());
   }
 
@@ -75,7 +76,7 @@ const User = ({ date, testimonie }) => {
     <>
       <div className="user">
         {isToastOpen &&
-          <Toast message={updateAvatarSuccess || updateUsernameSuccess || signInSuccess} />
+          <Toast message={updateAvatarSuccess || updateUsernameSuccess || signInSuccess || deleteUserSuccess} />
         }
         <div className="title-wrapper">
           <h1>Dashboard</h1>
@@ -201,7 +202,7 @@ const User = ({ date, testimonie }) => {
             </div>
           }
           {isDeleteAccountForm &&
-            <div className="dialog-wrapper">
+            <div className="dialog-wrapper confirm-deletion">
               <div className="title-wrapper">
                 <h2>Supprimer</h2>
               </div>

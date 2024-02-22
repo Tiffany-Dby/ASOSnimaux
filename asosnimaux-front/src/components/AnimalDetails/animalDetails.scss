@@ -11,7 +11,7 @@
       grid-template-rows: 50px auto auto;
       column-gap: 3rem;
       row-gap: 2.5rem;
-      background-color: var(--secondary-50);
+      background-color: var(--secondary-25);
       box-shadow: var(--box-shadow-2-2-5);
       border-radius: var(--radius-s);
       padding: var(--padding-s);
@@ -120,7 +120,7 @@
 
         tr {
           &:nth-child(odd) {
-            background-color: var(--secondary);
+            background-color: var(--secondary-50);
           }
 
           &:last-child {

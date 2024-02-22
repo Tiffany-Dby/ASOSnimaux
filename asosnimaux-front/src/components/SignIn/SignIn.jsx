@@ -14,7 +14,7 @@ const SignIn = () => {
   const navigate = useNavigate();
 
   const { isToastOpen } = useSelector(state => state.toastReducer);
-  const { signInForm, signInLoading, signInError, isAuth, updatePasswordSuccess } = useSelector(state => state.userReducer);
+  const { signInForm, signInLoading, signInError, isAuth, updatePasswordSuccess, deleteUserSuccess } = useSelector(state => state.userReducer);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,7 +39,7 @@ const SignIn = () => {
     <>
       <div className="signIn-wrapper">
         {isToastOpen &&
-          <Toast message={updatePasswordSuccess} />
+          <Toast message={updatePasswordSuccess || deleteUserSuccess} />
         }
         <div className='title-wrapper'>
           <h1>Se connecter</h1>

@@ -96,16 +96,17 @@ export const updateAnimalThunk = () => async (dispatch, getState) => {
   showToast(dispatch);
 }
 
-export const deleteAnimalThunk = (id) => async (dispatch, getState) => {
-  const { deleteAnimalLoading } = getState().animalReducer;
+export const deleteAnimalThunk = () => async (dispatch, getState) => {
+  const { deleteAnimalLoading, animals } = getState().animalReducer;
+  const { selectedAnimal } = animals;
   const token = getFromStorage("token");
   if (deleteAnimalLoading) return;
 
   dispatch(startDeleteAnimalLoading());
 
-  const { result, error, status } = await deleteRequest(`animals/${id}`, token);
+  const { result, error, status } = await deleteRequest(`animals/${selectedAnimal.id}`, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setDeleteAnimalError({ error: `Something went wrong : ${error}` }));
 
-  dispatch(setDeleteAnimal({ id }));
+  dispatch(setDeleteAnimal({ id: selectedAnimal.id }));
   showToast(dispatch);
 }

@@ -25,7 +25,9 @@ const Filters = ({ onClick, onFiltersChange, resetClick, initialFilters, resetFi
     <>
       <div className="filters__wrapper">
         <div className="filters__header">
-          <h2>Filtres</h2>
+          <div className="title-wrapper">
+            <h2>Filtres</h2>
+          </div>
           <FaXmark className="manage-icons" onClick={onClick} role="button" aria-label="Fermer le menu des filtres" />
         </div>
         <div className="filters__search">

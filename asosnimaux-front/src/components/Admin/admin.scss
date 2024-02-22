@@ -1,23 +1,143 @@
 @use "../../styles/mixins" as mxn;
 
 .admin {
-  @include mxn.flex("column", "nowrap");
   padding-top: var(--padding-l);
+
+  &__wrapper {
+    @include mxn.container($padding: 0 var(--padding-s) var(--padding-xl));
+  }
+
+  &__header {
+    display: grid;
+    gap: 1rem;
+
+    @media screen and (min-width:595px) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  &__nav {
+    @include mxn.container($padding: var(--padding-s) var(--padding-s) 0);
+
+    &__links {
+      @include mxn.flex;
+    }
+
+    &__link {
+      padding: var(--padding-xxs) var(--padding-xxs);
+      background-color: var(--primary-25);
+      box-shadow: 0px -1px 5px 0 rgba(59, 48, 48, 0.25);
+      border: 1px solid transparent;
+      text-align: center;
+      width: 50%;
+      transition: all .3s ease;
+
+      @media screen and (min-width: 345px) {
+        border-radius: var(--radius-s) var(--radius-s) 0 0;
+        width: auto;
+      }
+
+      @media screen and (min-width: 480px) {
+        padding: var(--padding-xxs) var(--padding-s);
+      }
+
+      &:hover:not(.admin__nav__link:has(.active)) {
+        background-color: var(--primary-50);
+
+        a {
+          color: var(--white);
+        }
+      }
+
+      &:has(.active) {
+        font-weight: var(--fw-bold);
+        background-color: var(--secondary-25);
+        border-top-color: var(--secondary125);
+        border-left-color: var(--secondary125);
+        border-right-color: var(--secondary125);
+        position: relative;
+        z-index: 1;
+        order: 1;
+
+        @media screen and (min-width: 345px) {
+          order: 0;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          height: 10px;
+          width: 100%;
+          bottom: -5px;
+          left: 0;
+          background-color: var(--secondary-25);
+        }
+
+        a {
+          color: var(--dark-brown);
+        }
+      }
+
+      a {
+        font-size: var(--font-size-s);
+        letter-spacing: .5px;
+        text-decoration: none;
+        display: block;
+        color: var(--dark-brown);
+        transition: all .3s ease;
+
+        &:not(.active) {
+          font-weight: var(--fw-regular);
+        }
+      }
+    }
+  }
+
+  &__all-articles {
+    &__wrapper {
+      @media screen and (min-width:500px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+
+  &__all-users {
+    &__wrapper {
+      @media screen and (min-width:530px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+
+  &__all-animals {
+    &__wrapper {
+
+      @media screen and (min-width:595px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
 
   &__all-articles,
   &__all-users,
   &__all-animals {
-    @include mxn.container($padding: var(--padding-s));
+    @include mxn.container;
     @include mxn.flex("column", "nowrap");
-    gap: 2rem;
+    gap: 1.6rem;
+    border-radius: 0 0 var(--radius-s) var(--radius-s);
+    box-shadow: 0px 3px 5px 0 rgba(59, 48, 48, 0.25);
+    background-color: var(--secondary-25);
+    border: 1px solid var(--secondary125);
+
+    @media screen and (min-width: 345px) {
+      border-top-right-radius: var(--radius-s);
+    }
 
     &__wrapper {
       display: grid;
       gap: 3rem;
-
-      @media screen and (min-width:500px) {
-        grid-template-columns: repeat(2, 1fr);
-      }
 
       @media screen and (min-width:900px) {
         grid-template-columns: repeat(3, 1fr);
@@ -32,7 +152,7 @@
     width: 100%;
     background-color: var(--white);
     border-radius: var(--radius-s);
-    box-shadow: var(--box-shadow-2-2-5);
+    box-shadow: inset 0px 0px 1.5px rgba(0, 0, 0, 0.75);
   }
 
   &__article {
@@ -55,7 +175,6 @@
         border-radius: var(--radius-s) var(--radius-s) 0 0;
       }
     }
-
   }
 
   &__animal {
@@ -66,14 +185,13 @@
       gap: .5rem;
       padding: var(--padding-xs);
       background-color: var(--dark-brown);
+      border-radius: var(--radius-s) var(--radius-s) 0 0;
       color: var(--white);
 
       span {
         display: flex;
       }
     }
-
-    &__content {}
 
     &__details {
       display: flex;
@@ -97,7 +215,8 @@
 
   .btn-wrapper {
     @include mxn.btnSimple;
-    margin: 2rem auto;
+    justify-self: center;
+    margin-right: var(--padding-xxs);
 
     .btn {
       font-size: var(--font-size-n);
@@ -116,8 +235,6 @@
   &__update-article,
   &__new-animal,
   &__update-animal {
-    // background-color: var(--secondary-50);
-
     input[type="file"] {
       &::file-selector-button {
         border: 0;

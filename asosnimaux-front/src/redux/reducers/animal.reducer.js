@@ -216,7 +216,8 @@ const animalSlice = createSlice({
       return {
         ...state,
         newAnimalSuccess: null,
-        selectedAnimalSuccess: null
+        selectedAnimalSuccess: null,
+        deleteAnimalSuccess: null
       }
     },
     setSelectedAnimal: (state, action) => {

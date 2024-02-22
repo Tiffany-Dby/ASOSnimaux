@@ -76,7 +76,7 @@ export const postArticleThunk = (file) => async (dispatch, getState) => {
 
 export const updateArticleThunk = () => async (dispatch, getState) => {
   const { articles, selectedLoading } = getState().articleReducer;
-  const { selectedArticle, all } = articles;
+  const { selectedArticle } = articles;
   const token = getFromStorage("token");
   if (selectedLoading) return;
 
@@ -104,15 +104,16 @@ export const updateArticleThunk = () => async (dispatch, getState) => {
   showToast(dispatch);
 }
 
-export const deleteArticleThunk = (id) => async (dispatch, getState) => {
-  const { deleteLoading } = getState().articleReducer;
+export const deleteArticleThunk = () => async (dispatch, getState) => {
+  const { articles, deleteLoading } = getState().articleReducer;
+  const { selectedArticle } = articles;
   const token = getFromStorage("token");
   if (deleteLoading) return;
 
   dispatch(setStartDeleteLoading());
-  const { result, error, status } = await deleteRequest(`articles/${id}`, token);
+  const { result, error, status } = await deleteRequest(`articles/${selectedArticle.id}`, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setDeleteError({ error: `Something went wrong: ${error}` }));
 
-  dispatch(setDelete({ id }));
+  dispatch(setDelete({ id: selectedArticle.id }));
   showToast(dispatch);
 }

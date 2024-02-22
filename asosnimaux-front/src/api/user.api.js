@@ -1,4 +1,4 @@
-import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading, setUpdatePasswordSuccess, startSelectedUserLoading, setSelectedUserError, setUpdateSelectedUser, startGetFollowLoading, setGetFollowError, setFollowIDs, startPostFollowLoading, setPostFollowError, setPostFollow, startUnfollowLoading, setUnfollowError, setUnfollow, setSignInSuccess, startFollowedAnimalsLoading, setFollowedAnimals } from "../redux/reducers/user.reducer";
+import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading, setUpdatePasswordSuccess, startSelectedUserLoading, setSelectedUserError, setUpdateSelectedUser, startGetFollowLoading, setGetFollowError, setFollowIDs, startPostFollowLoading, setPostFollowError, setPostFollow, startUnfollowLoading, setUnfollowError, setUnfollow, setSignInSuccess, startFollowedAnimalsLoading, setFollowedAnimals, setDeleteUser } from "../redux/reducers/user.reducer";
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { getFromStorage, setToStorage } from "../utils/storage.utils.js";
 import { signOut } from "../utils/user.utils.js";
@@ -203,20 +203,21 @@ export const unfollowThunk = () => async (dispatch, getState) => {
   dispatch(setUnfollow({ animalID: selectedAnimalFollow }));
 }
 
-export const deleteUserThunk = (id) => async (dispatch, getState) => {
-  const { user } = getState().userReducer;
+export const deleteUserThunk = () => async (dispatch, getState) => {
+  const { user, selectedUser } = getState().userReducer;
   const token = getFromStorage("token");
 
   dispatch(startDeleteUserLoading());
 
-  const { result, error, status } = await deleteRequest(`users/${id}`, token);
+  const { result, error, status } = await deleteRequest(`users/${selectedUser.id}`, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setDeleteUserError({ error: `Something went wrong : ${error}` }));
 
-  if (id === user.id) {
+  if (selectedUser.id === user.id) {
     signOut(dispatch);
+    dispatch(setDeleteUser());
   }
   else {
-    dispatch(setDeleteBySuperAdmin({ id }));
+    dispatch(setDeleteBySuperAdmin({ id: selectedUser.id }));
   }
 
   dispatch(stopDeleteUserLoading());

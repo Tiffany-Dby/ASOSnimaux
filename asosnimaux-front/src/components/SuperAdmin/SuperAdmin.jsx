@@ -113,38 +113,38 @@ const SuperAdmin = () => {
               </article>
             ))}
           </div>
-          <Dialog>
-            {isDeleteUserBySuperAdminForm &&
-              <div className="dialog-wrapper confirm-deletion">
-                <div className="title-wrapper">
-                  <h2>Supprimer</h2>
-                </div>
-                <p>Êtes vous certain(e) de vouloir <strong>supprimer cet utilisateur</strong> ?</p>
-                <p className="text-error">Attention : Cette action est irréversible !</p>
-                <div className="btns-wrapper">
-                  <Button btnStyle={""} text="Confirmer" btnClick={handleConfirmedDeletion} />
-                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
-                </div>
-              </div>
-            }
-            {isUpdateUserRoleBySuperAdminForm &&
-              <>
-                <div className="dialog-wrapper user__update">
-                  <div className="title-wrapper">
-                    <h2>Mettre à jour le rôle</h2>
-                  </div>
-                  <form onSubmit={handleUpdateSubmit}>
-                    <InputSelect id="role" label="Choisissez un nouveau rôle" options={options} value={selectedUser.role} onChange={(value) => updateFormSelected("role", value)} />
-                    <div className="btns-wrapper">
-                      <Button btnStyle={""} text="Confirmer" type="submit" />
-                      <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
-                    </div>
-                  </form>
-                </div>
-              </>
-            }
-          </Dialog>
         </section>
+        <Dialog>
+          {isDeleteUserBySuperAdminForm &&
+            <div className="dialog-wrapper confirm-deletion">
+              <div className="title-wrapper">
+                <h2>Supprimer</h2>
+              </div>
+              <p>Êtes vous certain(e) de vouloir <strong>supprimer cet utilisateur</strong> ?</p>
+              <p className="text-error">Attention : Cette action est irréversible !</p>
+              <div className="btns-wrapper">
+                <Button btnStyle={""} text="Confirmer" btnClick={handleConfirmedDeletion} />
+                <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+              </div>
+            </div>
+          }
+          {isUpdateUserRoleBySuperAdminForm &&
+            <>
+              <div className="dialog-wrapper user__update">
+                <div className="title-wrapper">
+                  <h2>Mettre à jour le rôle</h2>
+                </div>
+                <form onSubmit={handleUpdateSubmit}>
+                  <InputSelect id="role" label="Choisissez un nouveau rôle" options={options} value={selectedUser.role} onChange={(value) => updateFormSelected("role", value)} />
+                  <div className="btns-wrapper">
+                    <Button btnStyle={""} text="Confirmer" type="submit" />
+                    <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                  </div>
+                </form>
+              </div>
+            </>
+          }
+        </Dialog>
       </div>
     </>
   );

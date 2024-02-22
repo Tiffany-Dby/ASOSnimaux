@@ -13,7 +13,7 @@ import PrivateRoute from '../PrivateRoute/PrivateRoute.jsx';
 import Informations from '../Informations/Informations.jsx';
 import SuperAdmin from '../SuperAdmin/SuperAdmin.jsx';
 import Filters from '../Filters/Filters.jsx';
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,9 @@ import Articles from '../Articles/Articles.jsx';
 import ArticleDetails from '../ArticleDetails/ArticleDetails.jsx';
 import Favorites from '../Favorites/Favorites.jsx';
 import AnimalDetails from '../AnimalDetails/AnimalDetails.jsx';
+import AdminArticles from '../AdminArticles/AdminArticles.jsx';
+import AdminAnimals from '../AdminAnimals/AdminAnimals.jsx';
+import AdminUsers from '../AdminUsers/AdminUsers.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -84,7 +87,7 @@ const App = () => {
                 </>
               }
             />
-            <Route
+            {/* <Route
               path={`${APP_ROUTES.ADMIN}/users`}
               element={
                 <>
@@ -107,7 +110,35 @@ const App = () => {
                   </PrivateRoute>
                 </>
               }
-            />
+            /> */}
+            <Route
+              path={APP_ROUTES.ADMIN}
+              element={
+                <>
+                  <PrivateRoute
+                    hasAccess={isAuth && (user.role === 'admin' || user.role === 'super_admin')}
+                  >
+                    <Admin />
+                  </PrivateRoute>
+                </>
+              }
+            >
+              <Route index path={`${APP_ROUTES.ADMIN}`} element={<Navigate replace to="articles" />} />
+              <Route path="articles" element={<AdminArticles />} />
+              <Route path="animals" element={<AdminAnimals />} />
+              <Route
+                path="users"
+                element={
+                  <>
+                    <PrivateRoute
+                      hasAccess={isAuth && user.role === 'super_admin'}
+                    >
+                      <AdminUsers />
+                    </PrivateRoute>
+                  </>
+                }
+              />
+            </Route>
             <Route
               path={APP_ROUTES.ADOPTION}
               element={

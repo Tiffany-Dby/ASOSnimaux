@@ -29,7 +29,7 @@
   }
 
   &.toast-open {
-    top: 160px;
+    top: 90px;
     animation: openToast .5s ease;
   }
 }
@@ -40,6 +40,6 @@
   }
 
   to {
-    top: 160px;
+    top: 90px;
   }
 }
