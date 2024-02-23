@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { getOneUserThunk } from '../../api/user.api.js';
 import { getFromStorage } from '../../utils/storage.utils.js';
+import HomeTestimonies from '../HomeTestimonies/HomeTestimonies.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const App = () => {
   // User Reducer
   const { user, isAuth } = useSelector(state => state.userReducer);
 
-  // Fetching User infos if Local storage has a token set
+  // Fetching User infos if Local storage has a token set (in case user reloads)
   useEffect(() => {
     const token = getFromStorage("token");
     if (token) {
@@ -52,6 +53,7 @@ const App = () => {
               element={
                 <>
                   <Banner />
+                  <HomeTestimonies />
                   <HomeArticles />
                   <Informations />
                 </>

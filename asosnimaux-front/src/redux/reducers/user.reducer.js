@@ -380,6 +380,13 @@ const userSlice = createSlice({
         followIDs: [...state.followIDs, id]
       }
     },
+    setFollowIDs: (state, action) => {
+      const { animals } = action.payload;
+      return {
+        ...state,
+        followIDs: animals.map(animal => animal.id)
+      }
+    },
     resetFollowIDs: (state, action) => {
       return {
         ...state,

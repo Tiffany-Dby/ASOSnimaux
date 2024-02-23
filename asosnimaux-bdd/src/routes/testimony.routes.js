@@ -8,6 +8,7 @@ const initTestimonyRoutes = (app) => {
 
   // GET
   testimonyRouter.get("/", TestimonyController.readAllWithTheirUsername);
+  testimonyRouter.get("/overview", TestimonyController.readWithTheirUsername);
 
   // POST
   testimonyRouter.post("/", jwtMddlwr, TestimonyController.create);

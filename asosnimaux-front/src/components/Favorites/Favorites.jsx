@@ -35,6 +35,7 @@ const Favorites = () => {
     dispatch(setSelectedAnimalFollow(animal.id));
   }
 
+  // Unfollow
   useEffect(() => {
     if (selectedAnimalFollow) {
       if (isAuth) {
@@ -87,7 +88,7 @@ const Favorites = () => {
             {!isAuth &&
               <div className="notAuth">
                 <FaCircleInfo className="icon" color={"var(--dark-red)"} />
-                <p>La liste actuelle est <strong>temporaire</strong>, pour garantir la récupération de celle-ci à votre prochaine visite, <Link to={APP_ROUTES.SIGN_IN}>connectez-vous</Link>.</p>
+                <p>La liste actuelle est <strong>temporaire</strong>, si vous souhaitez la retrouver lors de votre prochaine visite, <Link to={APP_ROUTES.SIGN_IN}>connectez-vous</Link>.</p>
               </div>
             }
             <h2>Animaux coups coeur</h2>

@@ -6,6 +6,7 @@ import articleReducer from "./reducers/article.reducer";
 import dialogReducer from "./reducers/dialog.reducer";
 import toastReducer from "./reducers/toast.reducer";
 import animalReducer from "./reducers/animal.reducer";
+import testimonyReducer from "./reducers/testimony.reducer";
 
 const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
     articleReducer,
     dialogReducer,
     toastReducer,
-    animalReducer
+    animalReducer,
+    testimonyReducer
   },
 });
 

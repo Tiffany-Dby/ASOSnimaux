@@ -47,4 +47,9 @@
     padding: var(--padding-s);
     text-align: center;
   }
+
+  &__text {
+    @include mxn.flex("column", "nowrap");
+    gap: .5rem;
+  }
 }

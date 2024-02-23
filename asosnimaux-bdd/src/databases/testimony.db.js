@@ -51,6 +51,32 @@ const readAllWithTheirUsername = async () => {
     return { result, error };
   }
 }
+const readWithTheirUsername = async () => {
+  const sql = `
+    SELECT testimonies.id, testimonies.content, testimonies.date, testimonies.user_id, users.username,
+    CASE 
+        WHEN LENGTH(testimonies.content) > 150 
+        THEN CONCAT(SUBSTRING(testimonies.content, 1, 150), '...') 
+        ELSE testimonies.content 
+    END AS truncated_content
+    FROM testimonies
+    LEFT JOIN users ON testimonies.user_id = users.id
+    ORDER BY date DESC
+    LIMIT 4
+  `;
+
+  let result = [];
+  let error = null;
+  try {
+    result = await query(sql)
+  }
+  catch (err) {
+    error = err.message;
+  }
+  finally {
+    return { result, error };
+  }
+}
 
 const update = async (content, testimonyID, userID) => {
   const sql = `
@@ -114,6 +140,7 @@ const isUserAuthor = async (testimonyID, userID) => {
 export const TestimonyDB = {
   create,
   readAllWithTheirUsername,
+  readWithTheirUsername,
   update,
   deleteOne
 }

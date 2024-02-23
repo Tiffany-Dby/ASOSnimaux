@@ -18,6 +18,12 @@ const readAllWithTheirUsername = async (req, res) => {
 
   res.status(error ? 500 : 200).json({ message: error ? error : `Request on testimonies with their username successful`, result });
 }
+const readWithTheirUsername = async (req, res) => {
+  const response = await TestimonyDB.readWithTheirUsername();
+  const { result, error } = response;
+
+  res.status(error ? 500 : 200).json({ message: error ? error : `Request on 4 latest testimonies with their username successful`, result });
+}
 
 const update = async ({ body: { content, testimonyID, userID } }, res) => {
   const areStrings = areStringsFilled([content]);
@@ -40,6 +46,7 @@ const deleteOne = async ({ body: { userID }, params: { testimonyID } }, res) => 
 export const TestimonyController = {
   create,
   readAllWithTheirUsername,
+  readWithTheirUsername,
   update,
   deleteOne
 }

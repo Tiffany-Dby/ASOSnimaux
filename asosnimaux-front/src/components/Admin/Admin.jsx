@@ -7,7 +7,7 @@ import Toast from '../Toast/Toast.jsx';
 import InputSelect from "../InputSelect/InputSelect.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticleThunk } from "../../api/article.api";
 import { resetFormNewArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
@@ -16,6 +16,8 @@ import { deleteAnimalThunk, getAllAnimalsThunk, postNewAnimalThunk, updateAnimal
 import { resetFormNewAnimal, setNewAnimalError, updateFormNewAnimal, updateFormSelectedAnimal } from "../../redux/reducers/animal.reducer.js";
 import { deleteUserThunk, getAllUsersThunk, updateUserRoleThunk } from "../../api/user.api.js";
 import { setSelectedUser, updateFormSelectedUser } from "../../redux/reducers/user.reducer.js";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs.jsx";
+import { FaAngleRight } from "react-icons/fa6";
 
 const Admin = () => {
   const dispatch = useDispatch();
@@ -204,7 +206,17 @@ const Admin = () => {
         <div className="title-wrapper">
           <h1>Administrateur</h1>
         </div>
-
+        <Breadcrumbs>
+          <li className="breadcrumbs__link">
+            <Link to={APP_ROUTES.HOME} >
+              Accueil
+            </Link>
+            <FaAngleRight className="breadcrumbs__icon" />
+          </li>
+          <li className="breadcrumbs__link">
+            <p>Administrateur</p>
+          </li>
+        </Breadcrumbs>
         <nav className="admin__nav">
           <ul className="admin__nav__links">
             <li className="admin__nav__link">
