@@ -1,34 +1,87 @@
 import "./animalDetails.scss";
-import { useDispatch, useSelector } from "react-redux";
+import Button from "../Button/Button";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import { FaAngleRight, FaHeart } from "react-icons/fa6";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getOneAnimalThunk } from "../../api/animal.api";
 import { APP_ROUTES } from "../../constants/route.const";
-import { formatDescription } from "../../utils/articleDescription.utils";
-import Button from "../Button/Button";
-import { FaAngleRight, FaHeart } from "react-icons/fa6";
-import { getUsersFollowIDsThunk } from "../../api/user.api";
-import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import { formatDescription } from "../../utils/description.utils";
+import { getUsersFollowIDsThunk, postUserFollowThunk, unfollowThunk } from "../../api/user.api";
+import { setFollowIDsNotAuth, setFollowedAnimalsNotAuth, setSelectedAnimalFollow, setUnfollow } from "../../redux/reducers/user.reducer";
+import { setToStorage } from "../../utils/storage.utils";
 
 const AnimalDetails = () => {
   const dispatch = useDispatch();
+
+  // Get id from params -> case of reload from user
   const { id } = useParams();
 
+  // User Reducer
   const { isAuth, followIDs, selectedAnimalFollow, oneAnimalLoading } = useSelector(state => state.userReducer);
-  const { animals } = useSelector(state => state.animalReducer);
-  const { one } = animals;
 
+  // Animal Reducer
+  const { animals } = useSelector(state => state.animalReducer);
+  const { one, all } = animals;
+
+  // Fetching -> One animal using id from params
   useEffect(() => {
-    if (id) dispatch(getOneAnimalThunk(id))
-    console.log(one)
+    if (id) dispatch(getOneAnimalThunk(id));
   }, []);
 
+  // Fetching -> Animals IDs followed by user if authenticated 
   useEffect(() => {
     if (isAuth) {
       dispatch(getUsersFollowIDsThunk());
     }
   }, [isAuth]);
 
+  // *************** Toggle follow/unfollow animals *************** 
+  // Set the Animal for the Toggle
+  const handleFollowClick = () => {
+    dispatch(setSelectedAnimalFollow(one.id));
+  }
+
+  useEffect(() => {
+    if (selectedAnimalFollow) {
+      // Unfollow
+      if (followIDs.includes(selectedAnimalFollow)) {
+        // Authenticated user -> delete thunk
+        if (isAuth) {
+          dispatch(unfollowThunk());
+        }
+        // Non-authenticated user -> remove from local storage
+        else {
+          dispatch(setUnfollow({ animalID: selectedAnimalFollow }));
+        }
+      }
+      // Follow
+      if (!followIDs.includes(selectedAnimalFollow)) {
+        // Authenticated user -> post thunk
+        if (isAuth) {
+          dispatch(postUserFollowThunk());
+        }
+        // Non-authenticated user -> IDs in followIDs array
+        else {
+          dispatch(setFollowIDsNotAuth({ id: selectedAnimalFollow }));
+        }
+      }
+    }
+
+    dispatch(setSelectedAnimalFollow(""));
+  }, [selectedAnimalFollow]);
+
+  useEffect(() => {
+    // Non-authenticated user -> followIDs updated in local storage
+    if (!isAuth) {
+      setToStorage("followIDs", followIDs);
+      dispatch(setFollowedAnimalsNotAuth({ animals: all }));
+    }
+  }, [followIDs]);
+  // *************** End Toggle follow/unfollow animals ***************
+
+  // Utils -> description.utils.js -> returns an array of strings
   const paragraphs = formatDescription(one.description);
 
   return (
@@ -54,67 +107,72 @@ const AnimalDetails = () => {
             <p>Profil : {one.name}</p>
           </li>
         </Breadcrumbs>
-        <article className="animal-page__profile">
-          <div className="animal-page__profile__wrapper">
-            <div className="title-wrapper">
-              <h2>Fiche de {one.name}</h2>
-            </div>
-            <div className="animal-page__profile__img">
-              <img crossOrigin="anonymous" src={one.picture_url} alt={one.picture_caption} />
-              <FaHeart className="icon heart animal__follow-icon" color={followIDs.includes(one.id) ? "var(--light-red" : "var(--dark-grey)"} onClick={() => { }} role="button" aria-label="Bouton d'ajout/retrait des favoris" />
-            </div>
-            <div className="animal-page__profile__table">
-              <table>
-                <tbody>
-                  <tr>
-                    <th>Anniversaire</th>
-                    <td>07/07/2015</td>
-                  </tr>
-                  <tr>
-                    <th>Âge</th>
-                    <td>{one.age} an{one.age > 1 ? "s" : ""}</td>
-                  </tr>
-                  <tr>
-                    <th>Sexe</th>
-                    <td>{one.sex}</td>
-                  </tr>
-                  <tr>
-                    <th>Espèce</th>
-                    <td>{one.species}</td>
-                  </tr>
-                  <tr>
-                    <th>Race</th>
-                    <td>{one.race}</td>
-                  </tr>
-                  <tr>
-                    <th>Etat</th>
-                    <td>{one.status}</td>
-                  </tr>
-                  <tr>
-                    <th>Au refuge depuis</th>
-                    <td>{one.time_spent} jour{one.time_spent > 1 ? "s" : ""}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <section className="animal-page__profile__description">
-              <h3>Présentation</h3>
-              <div className="animal-page__profile__description__text">
-                {paragraphs.map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
-              </div>
-              {one.status === "adopté" || one.status === "réservé" ?
-                <Button btnStyle={" available--not"} text="Indisponible" disabled={true} />
-                :
-                <Button btnStyle={" available"} text="Rencontrer" btnClick={() => { }} />
-              }
-            </section>
+        {oneAnimalLoading ?
+          <div className="loading">
+            <p className="loading__text">Chargement...</p>
+            <span className="loading__paws"></span>
           </div>
-        </article>
-
+          :
+          <article className="animal-page__profile">
+            <div className="animal-page__profile__wrapper">
+              <div className="title-wrapper">
+                <h2>Fiche de {one.name}</h2>
+              </div>
+              <div className="animal-page__profile__img">
+                <img crossOrigin="anonymous" src={one.picture_url} alt={one.picture_caption} />
+                <FaHeart className="icon heart animal__follow-icon" color={followIDs.includes(one.id) ? "var(--light-red" : "var(--dark-grey)"} onClick={handleFollowClick} role="button" aria-label="Bouton d'ajout/retrait des favoris" />
+              </div>
+              <div className="animal-page__profile__table">
+                <table>
+                  <tbody>
+                    <tr>
+                      <th>Anniversaire</th>
+                      <td>07/07/2015</td>
+                    </tr>
+                    <tr>
+                      <th>Âge</th>
+                      <td>{one.age} an{one.age > 1 ? "s" : ""}</td>
+                    </tr>
+                    <tr>
+                      <th>Sexe</th>
+                      <td>{one.sex}</td>
+                    </tr>
+                    <tr>
+                      <th>Espèce</th>
+                      <td>{one.species}</td>
+                    </tr>
+                    <tr>
+                      <th>Race</th>
+                      <td>{one.race}</td>
+                    </tr>
+                    <tr>
+                      <th>Etat</th>
+                      <td>{one.status}</td>
+                    </tr>
+                    <tr>
+                      <th>Au refuge depuis</th>
+                      <td>{one.time_spent} jour{one.time_spent > 1 ? "s" : ""}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <section className="animal-page__profile__description">
+                <h3>Présentation</h3>
+                <div className="animal-page__profile__description__text">
+                  {paragraphs.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+                </div>
+                {one.status === "adopté" || one.status === "réservé" ?
+                  <Button btnStyle={" available--not"} text="Indisponible" disabled={true} />
+                  :
+                  <Button btnStyle={" available"} text="Rencontrer" btnClick={() => { }} />
+                }
+              </section>
+            </div>
+          </article>
+        }
       </div>
-
     </>
   );
 }

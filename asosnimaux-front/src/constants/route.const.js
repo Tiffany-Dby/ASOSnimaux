@@ -2,7 +2,7 @@ export const APP_ROUTES = {
   API_URL: "http://localhost:9000/",
   HOME: "/",
   SIGN_IN: "/sign-in",
-  SIGN_UP: "sign-up",
+  SIGN_UP: "/sign-up",
   ADOPTION: "/adoption",
   ANIMAL: "/adoption/:id",
   ARTICLE: "/articles/:id",

@@ -1,10 +1,11 @@
 import "./footer.scss";
 import SocialMediaLink from "../SocialMediaLinks/SocialMediaLinks";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/route.const";
-import { useRef } from "react";
 
 const Footer = () => {
+  // Anchor on Header
   const topPageRef = useRef();
 
   const handleScrollToTopPage = () => {

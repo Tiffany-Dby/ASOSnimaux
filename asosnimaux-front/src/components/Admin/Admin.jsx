@@ -5,33 +5,42 @@ import InputFile from "../InputFile/InputFile";
 import Dialog from "../Dialog/Dialog";
 import Toast from '../Toast/Toast.jsx';
 import InputSelect from "../InputSelect/InputSelect.jsx";
-import { FaPencil, FaTrashCan, FaMars, FaVenus } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticleThunk } from "../../api/article.api";
-import { resetFormNewArticle, setSelectedArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
 import { useEffect, useRef, useState } from "react";
-import { setToLocalDate } from "../../utils/date.utils";
-import { closeDialog, setIsDeleteAnimalForm, setIsDeleteArticleForm, setIsDeleteUserBySuperAdminForm, setIsNewAnimalForm, setIsNewArticleForm, setIsUpdateAnimalForm, setIsUpdateArticleForm } from "../../redux/reducers/dialog.reducer";
 import { NavLink, Outlet } from "react-router-dom";
+import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticleThunk } from "../../api/article.api";
+import { resetFormNewArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
+import { closeDialog } from "../../redux/reducers/dialog.reducer";
 import { APP_ROUTES } from "../../constants/route.const";
 import { deleteAnimalThunk, getAllAnimalsThunk, postNewAnimalThunk, updateAnimalThunk } from "../../api/animal.api.js";
-import { resetFormNewAnimal, setNewAnimalError, setSelectedAnimal, updateFormNewAnimal, updateFormSelectedAnimal } from "../../redux/reducers/animal.reducer.js";
+import { resetFormNewAnimal, setNewAnimalError, updateFormNewAnimal, updateFormSelectedAnimal } from "../../redux/reducers/animal.reducer.js";
 import { deleteUserThunk, getAllUsersThunk, updateUserRoleThunk } from "../../api/user.api.js";
 import { setSelectedUser, updateFormSelectedUser } from "../../redux/reducers/user.reducer.js";
 
 const Admin = () => {
   const dispatch = useDispatch();
 
+  // Toast Reducer
   const { isToastOpen } = useSelector(state => state.toastReducer);
+
+  // User Reducer
   const { user, selectedUser, selectedUserSuccess, deleteUserSuccess } = useSelector(state => state.userReducer);
+
+  // Dialog Reducer
   const { isNewArticleForm, isDeleteArticleForm, isUpdateArticleForm, isNewAnimalForm, isUpdateAnimalForm, isDeleteAnimalForm, isDeleteUserBySuperAdminForm, isUpdateUserRoleBySuperAdminForm } = useSelector(state => state.dialogReducer);
+
+  // Article Reducer
   const { articles, newArticleSuccess, selectedSuccess, deleteSuccess } = useSelector(state => state.articleReducer);
   const { newArticle, selectedArticle } = articles;
-  const { animals, allAnimalsLoading, allAnimalsError, newAnimalLoading, newAnimalError, newAnimalSuccess, selectedAnimalLoading, selectedAnimalError, selectedAnimalSuccess, deleteAnimalSuccess } = useSelector(state => state.animalReducer);
 
+  // Animal Reducer
+  const { animals, newAnimalError, newAnimalSuccess, selectedAnimalError, selectedAnimalSuccess, deleteAnimalSuccess } = useSelector(state => state.animalReducer);
+
+  // Files -> Articles and Animals
   const inputFileRef = useRef(null);
   const [file, setFile] = useState(null);
 
+  // Input select -> Animals options
   const animalOptions = {
     sex: [
       { label: "Femelle", value: "femelle" },
@@ -48,22 +57,27 @@ const Admin = () => {
     ]
   }
 
+  // Input select -> Users options
   const userOptions = [
     { label: "membre", value: "membre" },
     { label: "admin", value: "admin" },
     { label: "super_admin", value: "super_admin" }
   ]
 
+  // Add class 'active' on the current Admin tab
   const checkActiveLink = ({ isActive }) => {
     return isActive ? 'active' : '';
   }
 
+  // Fetching all Aritcles, Animals and Users
   useEffect(() => {
     dispatch(getAllArticlesThunk());
     dispatch(getAllAnimalsThunk());
     dispatch(getAllUsersThunk());
   }, []);
 
+  // *************** Submit ***************
+  // New Article
   const handleSubmitNew = e => {
     e.preventDefault();
     dispatch(postArticleThunk(file));
@@ -72,27 +86,18 @@ const Admin = () => {
     dispatch(closeDialog());
   }
 
+  // Update Article
   const handleSubmitSelected = e => {
     e.preventDefault();
     dispatch(updateArticleThunk())
     dispatch(closeDialog());
   }
 
-  const handleSubmitSelectedAnimal = e => {
-    e.preventDefault();
-
-    if (!animals.selectedAnimal.sex || !animals.selectedAnimal.status || !animals.selectedAnimal.species) {
-      dispatch(selectedAnimalError({ error: "Veuillez choisir toutes les options" }))
-      return;
-    }
-
-    dispatch(updateAnimalThunk());
-    dispatch(closeDialog());
-  }
-
+  // New Animal
   const handleSubmitNewAnimal = e => {
     e.preventDefault();
 
+    // Check if options are filled
     if (!animals.newAnimal.sex || !animals.newAnimal.status || !animals.newAnimal.species) {
       dispatch(setNewAnimalError({ error: "Veuillez choisir toutes les options" }))
       return;
@@ -104,50 +109,83 @@ const Admin = () => {
     dispatch(closeDialog());
   }
 
+  // Update Animal
+  const handleSubmitSelectedAnimal = e => {
+    e.preventDefault();
+
+    // Check if options are filled
+    if (!animals.selectedAnimal.sex || !animals.selectedAnimal.status || !animals.selectedAnimal.species) {
+      dispatch(selectedAnimalError({ error: "Veuillez choisir toutes les options" }))
+      return;
+    }
+
+    dispatch(updateAnimalThunk());
+    dispatch(closeDialog());
+  }
+
+  // Update User Role
   const handleUpdateRoleSubmit = e => {
     e.preventDefault();
     dispatch(updateUserRoleThunk());
     dispatch(closeDialog());
   }
+  // *************** End Submit ***************
 
+  // *************** Inputs onChange ***************
+  // New Article
   const updateFormNew = (input, value) => dispatch(updateFormNewArticle({ input, value }));
 
+  // Update Article
   const updateFormSelected = (input, value) => dispatch(updateFormSelectedArticle({ input, value }));
 
+  // New Animal
   const updateNewAnimalFrom = (input, value) => dispatch(updateFormNewAnimal({ input, value }));
 
+  // Update Animal
   const updateSelectedAnimalForm = (input, value) => dispatch(updateFormSelectedAnimal({ input, value }));
 
+  // Update User Role
   const updateFormUserSelected = (input, value) => dispatch(updateFormSelectedUser({ input, value }));
+  // *************** End Inputs onChange ***************
 
-
-  const handleConfirmedDeletion = () => {
+  // *************** Submit Deletion ***************
+  // Delete Article
+  const handleConfirmedArticleDeletion = () => {
     dispatch(deleteArticleThunk(selectedArticle.id));
     dispatch(closeDialog());
   }
 
+  // Delete Animal
   const handleConfirmedAnimalDeletion = () => {
     dispatch(deleteAnimalThunk(animals.selectedAnimal.id));
     dispatch(closeDialog());
   }
 
+  // Delete User
   const handleConfirmedUserDeletion = () => {
     dispatch(deleteUserThunk(selectedUser.id));
     dispatch(closeDialog());
   }
+  // *************** End Submit Deletion ***************
 
+  // *************** Open Deletion Dialog ***************
   const handleConfirmedDeleteClick = () => {
+    // Dialog delete Article
     if (isDeleteArticleForm) {
-      handleConfirmedDeletion();
+      handleConfirmedArticleDeletion();
     }
+    // Dialog delete Animal
     if (isDeleteAnimalForm) {
       handleConfirmedAnimalDeletion();
     }
+    // Dialog delete User
     if (isDeleteUserBySuperAdminForm) {
       handleConfirmedUserDeletion();
     }
   }
+  // *************** End Open Deletion Dialog ***************
 
+  // *************** Cancel ***************
   const handleCancel = () => {
     dispatch(closeDialog());
     dispatch(resetFormNewArticle());
@@ -155,6 +193,7 @@ const Admin = () => {
     dispatch(setNewAnimalError({ error: null }));
     dispatch(setSelectedUser({ id: "", username: "", role: "" }));
   }
+  // *************** End Cancel ***************
 
   return (
     <>
@@ -275,7 +314,7 @@ const Admin = () => {
                     onChange={e => updateNewAnimalFrom("description", e.target.value)}></textarea>
                 </div>
                 <div className="btns-wrapper">
-                  <Button btnStyle="" text="Valider" type="submit" />
+                  <Button btnStyle={""} text="Valider" type="submit" />
                   <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>
@@ -341,7 +380,7 @@ const Admin = () => {
                     onChange={e => updateSelectedAnimalForm("description", e.target.value)}></textarea>
                 </div>
                 <div className="btns-wrapper">
-                  <Button btnStyle="" text="Valider" type="submit" />
+                  <Button btnStyle={""} text="Valider" type="submit" />
                   <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>
@@ -389,7 +428,7 @@ const Admin = () => {
                     onChange={e => updateFormNew("description", e.target.value)}></textarea>
                 </div>
                 <div className="btns-wrapper">
-                  <Button btnStyle="" text="Valider" type="submit" />
+                  <Button btnStyle={""} text="Valider" type="submit" />
                   <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>
@@ -434,7 +473,7 @@ const Admin = () => {
                     onChange={e => updateFormSelected("description", e.target.value)}></textarea>
                 </div>
                 <div className="btns-wrapper">
-                  <Button btnStyle="" text="Valider" type="submit" />
+                  <Button btnStyle={""} text="Valider" type="submit" />
                   <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>

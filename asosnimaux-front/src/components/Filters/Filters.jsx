@@ -3,11 +3,13 @@ import Button from "../Button/Button";
 import Input from "../Input/Input";
 import InputCheckbox from "../InputCheckbox/InputCheckbox";
 import { FaXmark } from "react-icons/fa6";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Filters = ({ onClick, onFiltersChange, resetClick, initialFilters, resetFilters }) => {
+  // Filters state (initial state from Adoption.jsx)
   const [filters, setFilters] = useState({ ...initialFilters });
 
+  // Checkbox onChange
   const handleFiltersChange = (input, value) => {
     const updatedFilters = filters[input].includes(value) ? filters[input].filter(element => element !== value) : [...filters[input], value];
 
@@ -15,6 +17,7 @@ const Filters = ({ onClick, onFiltersChange, resetClick, initialFilters, resetFi
     onFiltersChange({ ...filters, [input]: updatedFilters });
   }
 
+  // Reset Filters
   const handleResetClick = () => {
     onFiltersChange({ ...resetFilters });
     setFilters({ ...resetFilters });

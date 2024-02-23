@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
 import "./animalCard.scss";
 import { FaHeart, FaMars, FaVenus } from "react-icons/fa6";
-import { APP_ROUTES } from "../../constants/route.const";
+import { Link } from "react-router-dom";
 
 const AnimalCard = ({ imgUrl, imgAlt, animalName, status, animalSex, color, followClick, linkRedirect, linkClick }) => {
   return (

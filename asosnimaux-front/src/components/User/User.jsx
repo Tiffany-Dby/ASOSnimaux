@@ -2,28 +2,48 @@ import "./user.scss";
 import Button from "../Button/Button";
 import Dialog from "../Dialog/Dialog";
 import Input from "../Input/Input";
-import { FaAngleRight, FaPencil, FaTrashCan } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
-import { resetDialogForm, setSelectedUser, setUpdatedAvatar, updateDialogForm } from "../../redux/reducers/user.reducer";
-import { createPortal } from "react-dom";
-import { closeDialog, setInputFields, setIsDeleteAccountForm, setIsUpdateAccountAvatar, setIsUpdateAccountForm, toggleDialog } from "../../redux/reducers/dialog.reducer";
-import { deleteUserThunk, updateAvatarThunk, updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
-import { useEffect, useState } from "react";
-import { AVATAR } from "../../constants/avatar.const";
-import { APP_ROUTES } from "../../constants/route.const";
 import Toast from "../Toast/Toast";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import { FaAngleRight, FaPencil, FaTrashCan } from "react-icons/fa6";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { resetDialogForm, setSelectedUser, setUpdatedAvatar, updateDialogForm } from "../../redux/reducers/user.reducer";
+import { closeDialog, setInputFields, setIsDeleteAccountForm, setIsUpdateAccountAvatar, setIsUpdateAccountForm } from "../../redux/reducers/dialog.reducer";
+import { deleteUserThunk, updateAvatarThunk, updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
+import { AVATAR } from "../../constants/avatar.const";
+import { APP_ROUTES } from "../../constants/route.const";
 
 const User = ({ date, testimonie }) => {
   const dispatch = useDispatch();
 
+  // Toast Reducer
   const { isToastOpen } = useSelector(state => state.toastReducer);
+
+  // User Reducer
   const { user, selectedUser, dialogForms, updatedAvatar, updateAvatarSuccess, updateUsernameSuccess, signInSuccess } = useSelector(state => state.userReducer);
+
+  // Dialog Reducer
   const { input, isDeleteAccountForm, isUpdateAccountForm, isUpdateAccountAvatar } = useSelector(state => state.dialogReducer);
 
+  // *************** Avatar ***************
+  // Constants -> avatar.constant.js -> url = string stored in an array
   const [avatarIndex, setAvatarIndex] = useState(null);
 
+  // Open Dialog
+  const handleUpdateAvatarDialog = () => {
+    dispatch(setIsUpdateAccountAvatar());
+  }
+
+  // Update avatar
+  const handleUpdateAvatar = () => {
+    dispatch(updateAvatarThunk(updatedAvatar));
+    dispatch(closeDialog());
+  }
+  // *************** End Avatar ***************
+
+  // *************** Submit ***************
+  // Update
   const handleSubmit = e => {
     e.preventDefault();
     if (input.id === "username") {
@@ -38,25 +58,15 @@ const User = ({ date, testimonie }) => {
     dispatch(closeDialog());
   }
 
-  const handleUpdateAvatarDialog = () => {
-    dispatch(setIsUpdateAccountAvatar());
-  }
-
-  const handleUpdateAvatar = () => {
-    dispatch(updateAvatarThunk(updatedAvatar));
-    dispatch(closeDialog());
-  }
-
-  const handleDeleteForm = () => {
-    dispatch(setIsDeleteAccountForm());
-    dispatch(setSelectedUser({ id: user.id }))
-  }
-
+  // Delete
   const handleConfirmedDeletion = () => {
     dispatch(deleteUserThunk(selectedUser.id));
     dispatch(closeDialog());
   }
+  // *************** End Submit ***************
 
+  // *************** Dialog ***************
+  // Open appropriate Update Dialog
   const handleDialog = (input, value) => {
     dispatch(resetDialogForm());
     dispatch(setInputFields({ label: input.label, id: input.id, type: input.type }));
@@ -64,13 +74,22 @@ const User = ({ date, testimonie }) => {
     dispatch(setIsUpdateAccountForm());
   }
 
+  // Open Delete Dialog
+  const handleDeleteForm = () => {
+    dispatch(setIsDeleteAccountForm());
+    dispatch(setSelectedUser({ id: user.id }))
+  }
+
+  // Inputs onChange
+  const updateForm = (input, value) => dispatch(updateDialogForm({ input, value }));
+
+  // Close Dialog
   const handleDialogClose = () => {
     setAvatarIndex(null);
     dispatch(setUpdatedAvatar(""))
     dispatch(closeDialog());
   }
-
-  const updateForm = (input, value) => dispatch(updateDialogForm({ input, value }));
+  // *************** End Dialog ***************
 
   return (
     <>

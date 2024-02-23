@@ -29,7 +29,7 @@ const USER_STATE = {
   },
   signUpLoading: false,
   signUpError: null,
-  isSignUpDone: false,
+  signUpSuccess: null,
   dialogForms: {
     username: "",
     email: "",
@@ -199,8 +199,11 @@ const userSlice = createSlice({
         signUpLoading: false
       }
     },
-    setIsSignUpDone: (state, action) => {
-      return { ...state, isSignUpDone: true }
+    setSignUpSuccess: (state, action) => {
+      return {
+        ...state,
+        signUpSuccess: "Ami'nimaux créé !"
+      }
     },
     setisAuth: (state, action) => {
       return {
@@ -316,6 +319,7 @@ const userSlice = createSlice({
         updateUsernameSuccess: null,
         selectedUserSuccess: null,
         signInSuccess: null,
+        signUpSuccess: null,
         deleteUserSuccess: null
       }
     },
@@ -369,18 +373,25 @@ const userSlice = createSlice({
         selectedUserLoading: false
       }
     },
-    setFollowIDs: (state, action) => {
-      const { animals } = action.payload;
+    setFollowIDsNotAuth: (state, action) => {
+      const { id } = action.payload;
       return {
         ...state,
-        followIDs: animals.map((animal) => animal.id),
-        getfollowLoading: false,
+        followIDs: [...state.followIDs, id]
       }
     },
     resetFollowIDs: (state, action) => {
       return {
         ...state,
         followIDs: [],
+      }
+    },
+    setFollowedAnimalsNotAuth: (state, action) => {
+      const { animals } = action.payload;
+      return {
+        ...state,
+        followedAnimals: animals?.filter(animal => state.followIDs.includes(animal.id)),
+        followedAnimalsLoading: false,
       }
     },
     setFollowedAnimals: (state, action) => {
@@ -470,6 +481,7 @@ const userSlice = createSlice({
       return {
         ...state,
         followIDs: state.followIDs.filter(id => id !== animalID),
+        followedAnimals: state.followedAnimals.filter(animal => animal.id !== animalID),
         unfollowLoading: false
       }
     },
@@ -495,5 +507,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInSuccess, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setIsSignUpDone, setisAuth, updateDialogForm, resetDialogForm, setUpdatedAvatar, startUpdatedAvatarLoading, stopUpdatedAvatarLoading, setUpdatedAvatarError, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError, setAllUsers, startAllUsersLoading, stopAllUsersLoading, setAllUsersError, setDeleteUser, setDeleteBySuperAdmin, setUpdatePasswordSuccess, resetUserSuccess, setSelectedUser, updateFormSelectedUser, setUpdateSelectedUser, startSelectedUserLoading, stopSelectedUserLoading, setSelectedUserError, setFollowIDs, resetFollowIDs, setFollowedAnimals, startFollowedAnimalsLoading, stopFollowedAnimalsLoading, setFollowedAnimalsError, resetFollowedAnimals, setSelectedAnimalFollow, startGetFollowLoading, stopGetFollowLoading, setGetFollowError, setPostFollow, startPostFollowLoading, stopPostFollowLoading, setPostFollowError, setUnfollow, startUnfollowLoading, stopUnfollowLoading, setUnfollowError } = userSlice.actions;
+export const { setUser, updateSignInForm, resetSignInForm, startSignInLoading, stopSignInLoading, setSignInSuccess, setSignInError, updateSignUpForm, resetSignUpForm, startSignUpLoading, stopSignUpLoading, setSignUpError, setSignUpSuccess, setisAuth, updateDialogForm, resetDialogForm, setUpdatedAvatar, startUpdatedAvatarLoading, stopUpdatedAvatarLoading, setUpdatedAvatarError, startDialogLoading, stopDialogLoading, setDialogError, startGetUserLoading, stopGetUserLoading, setGetUserError, startDeleteUserLoading, stopDeleteUserLoading, setDeleteUserError, setAllUsers, startAllUsersLoading, stopAllUsersLoading, setAllUsersError, setDeleteUser, setDeleteBySuperAdmin, setUpdatePasswordSuccess, resetUserSuccess, setSelectedUser, updateFormSelectedUser, setUpdateSelectedUser, startSelectedUserLoading, stopSelectedUserLoading, setSelectedUserError, setFollowIDs, resetFollowIDs, setFollowedAnimals, startFollowedAnimalsLoading, stopFollowedAnimalsLoading, setFollowedAnimalsError, resetFollowedAnimals, setSelectedAnimalFollow, startGetFollowLoading, stopGetFollowLoading, setGetFollowError, setPostFollow, startPostFollowLoading, stopPostFollowLoading, setPostFollowError, setUnfollow, startUnfollowLoading, stopUnfollowLoading, setUnfollowError, setFollowIDsNotAuth, setFollowedAnimalsNotAuth } = userSlice.actions;
 export default userSlice.reducer;

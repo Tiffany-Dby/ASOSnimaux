@@ -1,17 +1,20 @@
-import { useDispatch, useSelector } from "react-redux";
-import { APP_ROUTES } from "../../constants/route.const";
-import Article from "../Article/Article";
 import "./homeArticles.scss";
-import { setToLocalDate, setToLocalDateLong } from "../../utils/date.utils";
+import Article from "../Article/Article";
 import { useEffect } from "react";
-import { getOverviewThunk } from "../../api/article.api";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { APP_ROUTES } from "../../constants/route.const";
+import { setToLocalDateLong } from "../../utils/date.utils";
+import { getOverviewThunk } from "../../api/article.api";
 
 const HomeArticles = () => {
   const dispatch = useDispatch();
+
+  // Article Reducer
   const { articles } = useSelector(state => state.articleReducer);
   const { overview } = articles;
 
+  // Fetching -> Articles overview (4 articles)
   useEffect(() => {
     dispatch(getOverviewThunk());
   }, []);

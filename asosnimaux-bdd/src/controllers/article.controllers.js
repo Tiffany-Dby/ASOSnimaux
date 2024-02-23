@@ -59,8 +59,6 @@ const create = async (req, res) => {
     picture_caption: picture_caption[0],
   }
 
-  console.log("picture_url : ", picture_url)
-
   const response = await ArticleDB.create(article, userID);
 
   const { error, insertedId } = response;
@@ -118,7 +116,6 @@ const update = async ({ body: { name, location, description, articleID } }, res)
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
   const response = await ArticleDB.update(name, location, description, articleID);
-  console.log("response controller:", response);
   const error = response.error;
 
   const updatedArticle = await ArticleDB.readOne(articleID);
@@ -126,7 +123,6 @@ const update = async ({ body: { name, location, description, articleID } }, res)
   const result = updatedArticle.result;
 
   if (err) return res.status(500).json({ message: err });
-  console.log(result)
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Update on article with id ${articleID} successful`, result });
 }

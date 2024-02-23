@@ -1,24 +1,27 @@
 import "./articles.scss";
 import Article from "../Article/Article";
-import { useDispatch, useSelector } from "react-redux";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import { FaAngleRight } from "react-icons/fa6";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { getAllArticlesThunk, getOneArticleThunk } from "../../api/article.api";
 import { setToLocalDateLong } from "../../utils/date.utils";
 import { APP_ROUTES } from "../../constants/route.const";
-import { Link } from "react-router-dom";
-import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
-import { FaAngleRight } from "react-icons/fa6";
 
 const Articles = () => {
   const dispatch = useDispatch();
 
+  // Article Reducer
   const { articles, allLoading, allError } = useSelector(state => state.articleReducer);
   const { all } = articles;
 
+  // Gets article to redirect -> article page
   const handleOneArticleClick = (article) => {
     dispatch(getOneArticleThunk(article.id))
   }
 
+  // Fetching -> All articles
   useEffect(() => {
     dispatch(getAllArticlesThunk());
   }, []);
@@ -45,13 +48,23 @@ const Articles = () => {
             <h2>Les actualités de l'association</h2>
             <p>La liste de toutes les actualités qui ont été postées sur notre site, de la plus récente à la plus ancienne. Cliquez dessus pour plus de détails.</p>
           </div>
-          <div className="articles__wrapper">
-            {all.map((article) => (
-              <Link key={article.id} to={`${APP_ROUTES.ARTICLES}/${article.id}`} onClick={() => handleOneArticleClick(article)}>
-                <Article artclStyle="" imgUrl={`${APP_ROUTES.API_URL}${article.picture_url}`} imgAlt={article.picture_caption} title={article.name} date={setToLocalDateLong(article.date)} text={article.truncated_description} />
-              </Link>
-            ))}
-          </div>
+          {allError &&
+            <p className="text-error">{allError}</p>
+          }
+          {allLoading ?
+            <div className="loading">
+              <span className="loading__paws"></span>
+              <p className="loading__text">Chargement en cours...</p>
+            </div>
+            :
+            <div className="articles__wrapper">
+              {all.map((article) => (
+                <Link key={article.id} to={`${APP_ROUTES.ARTICLES}/${article.id}`} onClick={() => handleOneArticleClick(article)}>
+                  <Article artclStyle="" imgUrl={`${APP_ROUTES.API_URL}${article.picture_url}`} imgAlt={article.picture_caption} title={article.name} date={setToLocalDateLong(article.date)} text={article.truncated_description} />
+                </Link>
+              ))}
+            </div>
+          }
         </section>
       </div>
     </>

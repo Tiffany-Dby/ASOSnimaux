@@ -31,6 +31,14 @@
     }
   }
 
+  .loading {
+    margin: 2rem auto;
+  }
+
+  .text-error {
+    margin: 0 auto;
+  }
+
   .btn-wrapper {
     @include mxn.btnSimple;
     position: sticky;

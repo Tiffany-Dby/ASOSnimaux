@@ -38,6 +38,10 @@
     }
   }
 
+  .loading {
+    margin-top: 3rem;
+  }
+
   &__wrapper {
     @include mxn.container;
     display: grid;

@@ -1,7 +1,8 @@
-import { formatDescription } from "../../utils/articleDescription.utils";
 import "./article.scss";
+import { formatDescription } from "../../utils/description.utils";
 
 const Article = ({ artclStyle, imgUrl, imgAlt, title, date, text }) => {
+  // Utils -> description.utils.js -> returns an array of strings
   const paragraphs = formatDescription(text);
 
   return (

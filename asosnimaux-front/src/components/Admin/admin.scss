@@ -27,8 +27,8 @@
 
     &__link {
       padding: var(--padding-xxs) var(--padding-xxs);
-      background-color: var(--primary-25);
-      box-shadow: 0px -1px 5px 0 rgba(59, 48, 48, 0.25);
+      background-color: var(--secondary);
+      box-shadow: 0px 0px 4px 0 rgba(59, 48, 48, 0.25);
       border: 1px solid transparent;
       text-align: center;
       width: 50%;
@@ -44,16 +44,12 @@
       }
 
       &:hover:not(.admin__nav__link:has(.active)) {
-        background-color: var(--primary-50);
-
-        a {
-          color: var(--white);
-        }
+        background-color: var(--secondary125);
       }
 
       &:has(.active) {
         font-weight: var(--fw-bold);
-        background-color: var(--secondary-25);
+        background-color: var(--white);
         border-top-color: var(--secondary125);
         border-left-color: var(--secondary125);
         border-right-color: var(--secondary125);
@@ -72,11 +68,12 @@
           width: 100%;
           bottom: -5px;
           left: 0;
-          background-color: var(--secondary-25);
+          background-color: var(--white);
         }
 
         a {
           color: var(--dark-brown);
+          cursor: default;
         }
       }
 
@@ -95,31 +92,6 @@
     }
   }
 
-  &__all-articles {
-    &__wrapper {
-      @media screen and (min-width:500px) {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  }
-
-  &__all-users {
-    &__wrapper {
-      @media screen and (min-width:530px) {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  }
-
-  &__all-animals {
-    &__wrapper {
-
-      @media screen and (min-width:595px) {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  }
-
   &__all-articles,
   &__all-users,
   &__all-animals {
@@ -127,8 +99,8 @@
     @include mxn.flex("column", "nowrap");
     gap: 1.6rem;
     border-radius: 0 0 var(--radius-s) var(--radius-s);
-    box-shadow: 0px 3px 5px 0 rgba(59, 48, 48, 0.25);
-    background-color: var(--secondary-25);
+    box-shadow: 0px 1px 4px 0 rgba(59, 48, 48, 0.25);
+    background-color: var(--white);
     border: 1px solid var(--secondary125);
 
     @media screen and (min-width: 345px) {
@@ -153,64 +125,6 @@
     background-color: var(--white);
     border-radius: var(--radius-s);
     box-shadow: inset 0px 0px 1.5px rgba(0, 0, 0, 0.75);
-  }
-
-  &__article {
-    &__content {
-      display: grid;
-      text-align: center;
-    }
-
-    &__title {
-      padding: var(--padding-xxs);
-    }
-
-    &__date {
-      grid-area: 1/1;
-
-      p {
-        padding: var(--padding-xs);
-        background-color: var(--dark-brown);
-        color: var(--white);
-        border-radius: var(--radius-s) var(--radius-s) 0 0;
-      }
-    }
-  }
-
-  &__animal {
-    &__title {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: .5rem;
-      padding: var(--padding-xs);
-      background-color: var(--dark-brown);
-      border-radius: var(--radius-s) var(--radius-s) 0 0;
-      color: var(--white);
-
-      span {
-        display: flex;
-      }
-    }
-
-    &__details {
-      display: flex;
-      justify-content: center;
-      border-bottom: 1px solid var(--light-grey);
-
-      &>* {
-        padding-left: 2rem;
-
-        &:nth-child(2) {
-          border-left: 1px solid var(--light-grey);
-        }
-      }
-
-      &>* {
-        @include mxn.flex("column", "nowrap");
-        min-width: 120px;
-      }
-    }
   }
 
   .btn-wrapper {

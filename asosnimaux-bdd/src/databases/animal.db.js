@@ -66,7 +66,12 @@ const readAllBySpeciesForAdoption = async (species) => {
 
 const readAll = async () => {
   const sql = `
-    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption
+    SELECT id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption,
+    CASE 
+        WHEN LENGTH(description) > 150 
+        THEN CONCAT(SUBSTRING(description, 1, 150), '...') 
+        ELSE description 
+    END AS truncated_description
     FROM animals
     ORDER BY entry_date DESC
   `;

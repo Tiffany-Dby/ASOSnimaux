@@ -17,6 +17,8 @@ const create_ = async (req, res) => {
   const err = createdAnimal.error;
   const result = createdAnimal.result;
 
+  if (err) return res.status(500).json({ message: err });
+
   return res.status(error ? 500 : 200).json({ message: error ? error : `New animal successfully added to the table`, result });
 }
 
@@ -50,7 +52,6 @@ const create = async (req, res) => {
 
   const filePath = files.newAnimalImg[0].filepath;
   const picture_url = setImgUrl(filePath, "animals");
-  console.log("picture_url : ", picture_url)
   const { name, age, sex, description, race, status, species, picture_caption } = fields;
 
   // Age (number) verification missing
@@ -70,7 +71,6 @@ const create = async (req, res) => {
     const e = deleteImg(picture_url);
     if (e) return res.status(403).json({ message: e });
   }
-
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `New animal successfully added`, result });
 }

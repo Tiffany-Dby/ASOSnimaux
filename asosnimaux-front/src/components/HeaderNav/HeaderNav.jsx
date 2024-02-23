@@ -1,17 +1,21 @@
 import "./headerNav.scss";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from 'react-router-dom';
 import { APP_ROUTES } from "../../constants/route.const";
-import { useDispatch, useSelector } from "react-redux";
 import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
 
 const HeaderNav = ({ toggleClass }) => {
   const dispatch = useDispatch();
+
+  // User Reducer
   const { user } = useSelector(state => state.userReducer);
 
+  // Add class 'active' on the current page
   const checkActiveLink = ({ isActive }) => {
     return isActive ? 'active' : '';
   }
 
+  // Close header (mobile) after clicking a link
   const handleCloseClickOnLink = () => {
     dispatch(toggleMobileMenu());
   }

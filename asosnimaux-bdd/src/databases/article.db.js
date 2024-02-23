@@ -8,7 +8,6 @@ const create = async (article, userID) => {
     VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)
   `;
 
-
   let result = [];
   let insertedId = [];
   let error = null;

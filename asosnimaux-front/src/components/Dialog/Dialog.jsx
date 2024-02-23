@@ -1,6 +1,6 @@
 import "./dialog.scss";
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { createPortal } from "react-dom";
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
 import { resetFormNewArticle } from "../../redux/reducers/article.reducer";
@@ -9,8 +9,12 @@ import { resetFormNewAnimal } from "../../redux/reducers/animal.reducer";
 const Dialog = ({ children }) => {
   const dispatch = useDispatch();
   const dialogRef = useRef(null);
+
+  // Dialog Reducer
   const { isOpen } = useSelector(state => state.dialogReducer);
 
+  // *************** Close Dialog ***************
+  // Espace key
   const handleEscapeKey = e => {
     if (e.key === "Escape") {
       dispatch(closeDialog());
@@ -19,6 +23,7 @@ const Dialog = ({ children }) => {
     }
   }
 
+  // Click outside Dialog
   const handleOutsideDialogClick = (e) => {
     const dialogDimensions = dialogRef.current.getBoundingClientRect();
 
@@ -28,7 +33,10 @@ const Dialog = ({ children }) => {
       dispatch(resetFormNewAnimal());
     }
   }
+  // *************** End Close Dialog ***************
 
+  // *************** Toggle Dialog ***************
+  // Can be closed -> cancel/close button, escape key or clicking outside of it
   useEffect(() => {
     if (dialogRef.current) {
       if (isOpen) {
@@ -46,6 +54,7 @@ const Dialog = ({ children }) => {
       document.removeEventListener("keydown", handleEscapeKey);
     }
   }, [isOpen]);
+  // *************** End Toggle Dialog ***************
 
   return (
     <>

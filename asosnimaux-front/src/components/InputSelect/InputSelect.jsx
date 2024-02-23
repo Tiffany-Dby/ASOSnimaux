@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import "./inputSelect.scss";
 
 const InputSelect = ({ id, label, inputStyle, options, value, onChange }) => {
+  // Dialog Reducer
   const { isUpdateUserRoleBySuperAdminForm } = useSelector(state => state.dialogReducer);
 
   const handleChange = (value) => {

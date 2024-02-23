@@ -1,23 +1,28 @@
-import { useDispatch, useSelector } from "react-redux";
 import "./adminUsers.scss";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsDeleteUserBySuperAdminForm, setIsUpdateUserRoleBySuperAdminForm } from "../../redux/reducers/dialog.reducer";
 import { setSelectedUser } from "../../redux/reducers/user.reducer";
 
 const AdminUsers = () => {
   const dispatch = useDispatch();
 
-  const { allUsers, allUsersLoading, allUsersError, deleteUserLoading, deleteUserError, selectedUserLoading, selectedUserError } = useSelector(state => state.userReducer);
+  // User Reducer
+  const { allUsers, allUsersLoading, allUsersError, selectedUserLoading, selectedUserError, deleteUserLoading, deleteUserError } = useSelector(state => state.userReducer);
 
+  // *************** Set Dialog Type -> Open ***************
+  // Update User Role Dialog
   const handleUpdateForm = (user) => {
     dispatch(setIsUpdateUserRoleBySuperAdminForm());
     dispatch(setSelectedUser({ id: user.id, username: user.username, role: user.role }));
   }
 
+  // Delete User Dialog
   const handleDeleteUserForm = (user) => {
     dispatch(setIsDeleteUserBySuperAdminForm());
     dispatch(setSelectedUser({ id: user.id, username: user.username, role: user.role }));
   }
+  // *************** End Set Dialog Type -> Open ***************
 
   return (
     <>

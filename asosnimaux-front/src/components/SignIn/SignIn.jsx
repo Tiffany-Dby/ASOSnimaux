@@ -1,34 +1,41 @@
 import "./signIn.scss";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
-import { signInThunk } from "../../api/user.api";
+import Toast from "../Toast/Toast.jsx";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { signInThunk } from "../../api/user.api";
 import { updateSignInForm } from "../../redux/reducers/user.reducer";
 import { APP_ROUTES } from "../../constants/route.const.js"
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import Toast from "../Toast/Toast.jsx";
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Toast Reducer
   const { isToastOpen } = useSelector(state => state.toastReducer);
-  const { signInForm, signInLoading, signInError, isAuth, updatePasswordSuccess, deleteUserSuccess } = useSelector(state => state.userReducer);
 
+  // User Reducer
+  const { signInForm, signInLoading, signInError, isAuth, signUpSuccess, updatePasswordSuccess, deleteUserSuccess } = useSelector(state => state.userReducer);
+
+  // Submit Sign In Form
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(signInThunk());
   }
 
+  // Inputs onChange
   const updateForm = (input, value) => dispatch(updateSignInForm({ input, value }));
 
+  // Redirect after Sign In -> Dashboard
   const handleRedirect = () => {
     if (isAuth) {
       navigate(APP_ROUTES.ACCOUNT, { replace: true });
     }
   }
 
+  // Redirect if User is already Authenticated -> Dashboard
   useEffect(() => {
     if (isAuth) {
       navigate(APP_ROUTES.ACCOUNT, { replace: true });
@@ -37,9 +44,9 @@ const SignIn = () => {
 
   return (
     <>
-      <div className="signIn-wrapper">
+      <section className="sign">
         {isToastOpen &&
-          <Toast message={updatePasswordSuccess || deleteUserSuccess} />
+          <Toast message={signUpSuccess || updatePasswordSuccess || deleteUserSuccess} />
         }
         <div className='title-wrapper'>
           <h1>Se connecter</h1>
@@ -64,9 +71,9 @@ const SignIn = () => {
 
         <div className="redirect">
           <p>Pas encore un(e) Ami'nimaux ?</p>
-          <a href={APP_ROUTES.SIGN_UP}>S'inscrire</a>
+          <Link to={APP_ROUTES.SIGN_UP}>S'inscrire</Link>
         </div>
-      </div>
+      </section>
     </>
   );
 }

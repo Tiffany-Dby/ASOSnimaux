@@ -9,22 +9,28 @@ import { setSelectedArticle } from "../../redux/reducers/article.reducer";
 const AdminArticles = () => {
   const dispatch = useDispatch();
 
+  // Article Reducer
   const { articles, allLoading, allError, newArticleLoading, newArticleError, selectedLoading, selectedError, deleteLoading, deleteError } = useSelector(state => state.articleReducer);
   const { all } = articles;
 
+  // *************** Set Dialog Type -> Open ***************
+  // New Article Dialog
   const handleNewForm = () => {
     dispatch(setIsNewArticleForm());
   }
 
+  // Update Aritcle Dialog
   const handleUpdateForm = (article) => {
     dispatch(setIsUpdateArticleForm());
     dispatch(setSelectedArticle({ id: article.id, name: article.name, location: article.location, description: article.description }))
   }
 
+  // Delete Article Dialog
   const handleDeleteForm = (article) => {
     dispatch(setIsDeleteArticleForm());
     dispatch(setSelectedArticle({ id: article.id }));
   }
+  // *************** End Set Dialog Type -> Open ***************
 
   return (
     <>

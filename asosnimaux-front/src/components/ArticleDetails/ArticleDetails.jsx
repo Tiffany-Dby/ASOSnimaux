@@ -1,27 +1,32 @@
 import "./articleDetails.scss";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import { FaAngleRight } from "react-icons/fa6";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from 'react-router-dom';
 import { setToLocalDateLong } from "../../utils/date.utils";
-import { formatDescription } from "../../utils/articleDescription.utils";
-import { useEffect } from "react";
+import { formatDescription } from "../../utils/description.utils";
 import { getOneArticleThunk } from "../../api/article.api";
 import { APP_ROUTES } from "../../constants/route.const";
-import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
-import { FaAngleRight } from "react-icons/fa6";
 
 const ArticleDetails = () => {
   const dispatch = useDispatch();
+
+  // Get id from params -> case of reload from user
   const { id } = useParams();
 
+  // Article Reducer
   const { articles, oneLoading, oneError } = useSelector(state => state.articleReducer);
   const { one } = articles;
 
+  // Fetching -> One animal using id from params
   useEffect(() => {
     if (id) {
       dispatch(getOneArticleThunk(id));
     }
   }, []);
 
+  // Utils -> description.utils.js -> returns an array of strings
   const paragraphs = formatDescription(one.description);
 
   return (
@@ -48,22 +53,32 @@ const ArticleDetails = () => {
           </li>
         </Breadcrumbs>
         <div className="article-page__wrapper">
-          <article>
-            <div className="article-page__title__wrapper">
-              <h2 className="article-page__title">{one.name}</h2>
+          {oneError &&
+            <p className="text-error">{oneError}</p>
+          }
+          {oneLoading ?
+            <div className="loading">
+              <p className="loading__text">Chargement...</p>
+              <span className="loading__paws"></span>
             </div>
-            <div className="article-page__img">
-              <img crossOrigin="anonymous" loading="lazy" src={one.picture_url} alt={one.picture_caption} />
-            </div>
-            <div className="article-page__content">
-              <p className="article-page__date">{setToLocalDateLong(one.date)}, {one.location}</p>
-              <div className="article-page__text">
-                {paragraphs.map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
+            :
+            <article>
+              <div className="article-page__title__wrapper">
+                <h2 className="article-page__title">{one.name}</h2>
               </div>
-            </div>
-          </article>
+              <div className="article-page__img">
+                <img crossOrigin="anonymous" loading="lazy" src={one.picture_url} alt={one.picture_caption} />
+              </div>
+              <div className="article-page__content">
+                <p className="article-page__date">{setToLocalDateLong(one.date)}, {one.location}</p>
+                <div className="article-page__text">
+                  {paragraphs.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+                </div>
+              </div>
+            </article>
+          }
         </div>
       </div>
     </>

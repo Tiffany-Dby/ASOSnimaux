@@ -20,6 +20,10 @@
     @include mxn.container;
   }
 
+  .loading {
+    margin-top: 4rem;
+  }
+
   &__wrapper {
     @include mxn.flex;
     gap: 3rem;

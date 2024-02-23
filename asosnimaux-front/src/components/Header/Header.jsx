@@ -4,34 +4,36 @@ import HeaderNav from "../HeaderNav/HeaderNav";
 import { FaCircleUser, FaHeart, FaPowerOff } from "react-icons/fa6";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
 import { updateScroll, updateWindowSize } from "../../redux/reducers/window.reducer";
 import { APP_ROUTES } from "../../constants/route.const";
-import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "../../utils/user.utils";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
+  // Anchor
   const headerRef = useRef(null);
 
+  // Header Reducer
   const { isMobileMenuOpen } = useSelector(state => state.headerReducer);
+
+  // Window Reducer
   const { width, scrollY } = useSelector(state => state.windowReducer);
+
+  // User Reducer
   const { isAuth, user } = useSelector(state => state.userReducer);
 
+
+  // *************** Resize & Scroll ***************
+  // Update window's size -> width
   const handleResize = () => dispatch(updateWindowSize({ width: window.innerWidth }));
+
+  // Update window's scroll -> Y
   const handleScroll = () => dispatch(updateScroll({ scrollY: window.scrollY }));
-  const handleOutsideHeaderClick = e => {
-    if (isMobileMenuOpen) {
-      if (headerRef.current && !headerRef.current.contains(e.target)) dispatch(toggleMobileMenu(false));
-    }
-  }
 
   useEffect(() => {
-    if (isAuth) {
-      navigate(APP_ROUTES.SIGN_IN, { replace: true });
-    }
-
     handleResize();
 
     window.addEventListener("resize", handleResize);
@@ -42,6 +44,20 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     }
   }, []);
+  // *************** End Resize & Scroll ***************
+
+  // *************** Toggle Header (mobile) ***************
+  // Burger button
+  const handleBurgerClick = () => {
+    dispatch(toggleMobileMenu(!isMobileMenuOpen));
+  }
+
+  // Close header on mobile size -> click outside
+  const handleOutsideHeaderClick = e => {
+    if (isMobileMenuOpen) {
+      if (headerRef.current && !headerRef.current.contains(e.target)) dispatch(toggleMobileMenu(false));
+    }
+  }
 
   useEffect(() => {
     document.addEventListener('click', handleOutsideHeaderClick);
@@ -49,18 +65,12 @@ const Header = () => {
     return () => {
       document.removeEventListener('click', handleOutsideHeaderClick);
     }
-  }, [isMobileMenuOpen])
+  }, [isMobileMenuOpen]);
+  // *************** End Toggle Header (mobile) ***************
 
-  const handleBurgerClick = () => {
-    dispatch(toggleMobileMenu(!isMobileMenuOpen));
-  }
-
+  // Utils -> user.utils.js -> disconnect user
   const handleSignOut = () => {
     signOut(dispatch);
-
-    if (isAuth) {
-      navigate(APP_ROUTES.SIGN_IN, { replace: true });
-    }
   }
 
   return (

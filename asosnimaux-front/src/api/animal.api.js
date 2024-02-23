@@ -31,7 +31,7 @@ export const getOneAnimalThunk = (id) => async (dispatch, getState) => {
 }
 
 export const postNewAnimalThunk = (file) => async (dispatch, getState) => {
-  const { animals, newAnimalLoading, newAnimalError } = getState().animalReducer;
+  const { animals, newAnimalLoading } = getState().animalReducer;
   const { newAnimal, all } = animals;
   const token = getFromStorage("token");
   if (newAnimalLoading) return;

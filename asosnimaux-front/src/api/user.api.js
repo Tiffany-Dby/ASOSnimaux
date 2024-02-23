@@ -1,4 +1,4 @@
-import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setIsSignUpDone, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading, setUpdatePasswordSuccess, startSelectedUserLoading, setSelectedUserError, setUpdateSelectedUser, startGetFollowLoading, setGetFollowError, setFollowIDs, startPostFollowLoading, setPostFollowError, setPostFollow, startUnfollowLoading, setUnfollowError, setUnfollow, setSignInSuccess, startFollowedAnimalsLoading, setFollowedAnimals, setDeleteUser } from "../redux/reducers/user.reducer";
+import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading, setUpdatePasswordSuccess, startSelectedUserLoading, setSelectedUserError, setUpdateSelectedUser, startGetFollowLoading, setGetFollowError, setFollowIDs, startPostFollowLoading, setPostFollowError, setPostFollow, startUnfollowLoading, setUnfollowError, setUnfollow, setSignInSuccess, startFollowedAnimalsLoading, setFollowedAnimals, setDeleteUser, setSignUpSuccess, resetFollowIDs } from "../redux/reducers/user.reducer";
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { getFromStorage, setToStorage } from "../utils/storage.utils.js";
 import { signOut } from "../utils/user.utils.js";
@@ -21,6 +21,7 @@ export const signInThunk = () => async (dispatch, getState) => {
   dispatch(setSignInSuccess({ username: result.user.username }));
   showToast(dispatch);
   dispatch(resetSignInForm());
+  dispatch(resetFollowIDs());
 }
 
 export const signUpThunk = () => async (dispatch, getState) => {
@@ -34,7 +35,8 @@ export const signUpThunk = () => async (dispatch, getState) => {
 
   dispatch(stopSignUpLoading());
   dispatch(resetSignUpForm());
-  dispatch(setIsSignUpDone());
+  dispatch(setSignUpSuccess());
+  showToast(dispatch);
 }
 
 export const updateUsernameThunk = () => async (dispatch, getState) => {

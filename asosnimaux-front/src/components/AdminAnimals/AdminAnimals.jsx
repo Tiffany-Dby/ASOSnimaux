@@ -9,21 +9,27 @@ import { setSelectedAnimal } from "../../redux/reducers/animal.reducer";
 const AdminAnimals = () => {
   const dispatch = useDispatch();
 
+  // Animal Reducer
   const { animals, allAnimalsLoading, allAnimalsError, newAnimalLoading, newAnimalError, selectedAnimalLoading, selectedAnimalError, deleteAnimalLoading, deleteAnimalError } = useSelector(state => state.animalReducer);
 
+  // *************** Set Dialog Type -> Open ***************
+  // New Animal Dialog
   const handleNewAnimalForm = () => {
     dispatch(setIsNewAnimalForm());
   }
 
+  // Update Animal Dialog
   const handleUpdateAnimalForm = (animal) => {
     dispatch(setIsUpdateAnimalForm());
     dispatch(setSelectedAnimal({ id: animal.id, age: animal.age, name: animal.name, sex: animal.sex, description: animal.description, race: animal.race, status: animal.status, species: animal.species, exit_date: animal.exit_date }));
   }
 
+  // Delete Animal Dialog
   const handleDeleteAnimalForm = (animal) => {
     dispatch(setIsDeleteAnimalForm());
     dispatch(setSelectedAnimal({ id: animal.id }));
   }
+  // *************** End Set Dialog Type -> Open ***************
 
   return (
     <>
@@ -78,10 +84,17 @@ const AdminAnimals = () => {
                     </div>
                   </div>
                 </div>
-                <div className="icons-wrapper">
-                  <FaPencil className="manage-icons" onClick={() => handleUpdateAnimalForm(animal)} role="button" aria-label="Bouton de modification de l'animal" />
-                  <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleDeleteAnimalForm(animal)} role="button" aria-label="Bouton de suppression de l'animal" />
-                </div>
+                {selectedAnimalLoading || deleteAnimalLoading ?
+                  <div className="loading">
+                    <span className="loading__spin"></span>
+                    <p className="loading__text">{selectedAnimalLoading && "Mise à jour"}{deleteAnimalLoading && "Suppression"} en cours...</p>
+                  </div>
+                  :
+                  <div className="icons-wrapper">
+                    <FaPencil className="manage-icons" onClick={() => handleUpdateAnimalForm(animal)} role="button" aria-label="Bouton de modification de l'animal" />
+                    <FaTrashCan className="manage-icons" color="var(--dark-red)" onClick={() => handleDeleteAnimalForm(animal)} role="button" aria-label="Bouton de suppression de l'animal" />
+                  </div>
+                }
               </article>
             ))}
           </div>

@@ -1,8 +1,9 @@
-import { useSelector } from "react-redux";
 import "./toast.scss";
 import { FaCircleCheck } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 
 const Toast = ({ message }) => {
+  // Toast Reducer
   const { isToastOpen } = useSelector(state => state.toastReducer);
 
   return (

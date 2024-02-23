@@ -10,6 +10,7 @@ const ANIMAL_STATE = {
       age: "",
       sex: "",
       description: "",
+      truncated_description: "",
       race: "",
       status: "",
       exit_date: "",
@@ -60,7 +61,7 @@ const animalSlice = createSlice({
   initialState: ANIMAL_STATE,
   reducers: {
     setOneAnimal: (state, action) => {
-      const { id, entry_date, name, age, sex, description, race, status, exit_date, species, picture_url, picture_caption, time_spent } = action.payload;
+      const { id, entry_date, name, age, sex, description, truncated_description, race, status, exit_date, species, picture_url, picture_caption, time_spent } = action.payload;
       return {
         ...state,
         animals: {
@@ -72,6 +73,7 @@ const animalSlice = createSlice({
             age,
             sex,
             description,
+            truncated_description,
             race,
             status,
             exit_date,
@@ -110,27 +112,27 @@ const animalSlice = createSlice({
           ...state.animals,
           all: action.payload.all
         },
-        allAnimalError: null,
-        allAnimalLoading: false
+        allAnimalsError: null,
+        allAnimalsLoading: false
       }
     },
     startAllAnimalsLoading: (state, action) => {
       return {
         ...state,
-        allAnimalLoading: true
+        allAnimalsLoading: true
       }
     },
     stopAllAnimalsLoading: (state, action) => {
       return {
         ...state,
-        allAnimalLoading: false
+        allAnimalsLoading: false
       }
     },
     setAllAnimalsError: (state, action) => {
       return {
         ...state,
-        allAnimalError: action.payload.error,
-        allAnimalLoading: false
+        allAnimalsError: action.payload.error,
+        allAnimalsLoading: false
       }
     },
     updateFormNewAnimal: (state, action) => {

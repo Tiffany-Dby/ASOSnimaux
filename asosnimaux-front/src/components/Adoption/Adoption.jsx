@@ -3,27 +3,34 @@ import AnimalCard from "../AnimalCard/AnimalCard";
 import Dialog from "../Dialog/Dialog";
 import Button from "../Button/Button";
 import Filters from "../Filters/Filters";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import { FaAngleRight, FaSliders } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { getAllAnimalsThunk, getOneAnimalThunk } from "../../api/animal.api";
 import { APP_ROUTES } from "../../constants/route.const";
 import { getAge } from "../../utils/animals.utils";
 import { getUsersFollowIDsThunk, postUserFollowThunk, unfollowThunk } from "../../api/user.api";
-import { setSelectedAnimalFollow } from "../../redux/reducers/user.reducer";
-import { FaAngleRight, FaSliders } from "react-icons/fa6";
+import { setFollowIDsNotAuth, setFollowedAnimalsNotAuth, setSelectedAnimalFollow, setUnfollow } from "../../redux/reducers/user.reducer";
 import { closeDialog, setIsFilters } from "../../redux/reducers/dialog.reducer";
 import { updateScroll } from "../../redux/reducers/window.reducer";
-import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
-import { Link } from "react-router-dom";
+import { setToStorage } from "../../utils/storage.utils";
 
 const Adoption = () => {
   const dispatch = useDispatch();
 
+  // Window Reducer
   const { scrollY } = useSelector(state => state.windowReducer);
-  const { animals } = useSelector(state => state.animalReducer);
-  const { isAuth, followIDs, selectedAnimalFollow, allAnimalsLoading } = useSelector(state => state.userReducer);
+
+  // Animal Reducer
+  const { animals, allAnimalsLoading, allAnimalsError } = useSelector(state => state.animalReducer);
   const { all } = animals;
 
+  // User Reducer
+  const { isAuth, followIDs, selectedAnimalFollow } = useSelector(state => state.userReducer);
+
+  // *************** Filters State ***************
   const initialFiltersState = {
     species: ["chat", "chien", "autres"],
     sex: ["femelle", "mâle"],
@@ -31,15 +38,19 @@ const Adoption = () => {
   }
   const [filters, setFilters] = useState({ ...initialFiltersState });
   const [filteredAnimals, setFilteredAnimals] = useState([]);
+  // *************** End Filters State ***************
 
+  // Update scrollY for the Filters button
   const handleScroll = () => dispatch(updateScroll({ scrollY: window.scrollY }));
 
+  // Fetching -> Animals IDs followed by user if authenticated
   useEffect(() => {
     if (isAuth) {
       dispatch(getUsersFollowIDsThunk());
     }
   }, [isAuth]);
 
+  // Fetching -> All animals & add/removeEventlistener on "scroll"
   useEffect(() => {
     dispatch(getAllAnimalsThunk());
 
@@ -50,37 +61,72 @@ const Adoption = () => {
     }
   }, []);
 
+  // Set filters when component loads
   useEffect(() => {
     setFilteredAnimals([...all]);
   }, [all]);
 
-  useEffect(() => {
-    if (isAuth && followIDs.includes(selectedAnimalFollow) && selectedAnimalFollow) {
-      dispatch(unfollowThunk());
-      dispatch(setSelectedAnimalFollow(""));
-    }
-    if (isAuth && !followIDs.includes(selectedAnimalFollow) && selectedAnimalFollow) {
-      dispatch(postUserFollowThunk());
-      dispatch(setSelectedAnimalFollow(""));
-    }
-  }, [selectedAnimalFollow]);
-
+  // *************** Toggle follow/unfollow animals *************** 
+  // Set the Animal for the Toggle
   const handleFollowClick = (animal) => {
     dispatch(setSelectedAnimalFollow(animal.id));
   }
 
+  useEffect(() => {
+    if (selectedAnimalFollow) {
+      // Unfollow
+      if (followIDs.includes(selectedAnimalFollow)) {
+        // Authenticated user -> delete thunk
+        if (isAuth) {
+          dispatch(unfollowThunk());
+        }
+        // Non-authenticated user -> remove from local storage
+        else {
+          dispatch(setUnfollow({ animalID: selectedAnimalFollow }));
+        }
+      }
+      // Follow
+      if (!followIDs.includes(selectedAnimalFollow)) {
+        // Authenticated user -> post thunk
+        if (isAuth) {
+          dispatch(postUserFollowThunk());
+        }
+        // Non-authenticated user -> IDs in followIDs array
+        else {
+          dispatch(setFollowIDsNotAuth({ id: selectedAnimalFollow }));
+        }
+      }
+    }
+
+    dispatch(setSelectedAnimalFollow(""));
+  }, [selectedAnimalFollow]);
+
+  useEffect(() => {
+    // Non-authenticated user -> followIDs updated in local storage
+    if (!isAuth) {
+      setToStorage("followIDs", followIDs);
+      dispatch(setFollowedAnimalsNotAuth({ animals: all }));
+    }
+  }, [followIDs]);
+  // *************** End Toggle follow/unfollow animals ***************
+
+  // Gets animal to redirect -> animal page
   const handleOneAnimalClick = (animal) => {
     dispatch(getOneAnimalThunk(animal.id))
   }
 
+  // *************** Filters ***************
+  // Open
   const handleOpenFilters = () => {
     dispatch(setIsFilters());
   }
 
+  // Close
   const handleCloseFilters = () => {
     dispatch(closeDialog());
   }
 
+  // Checkbox onChange
   const handleApplyFilters = (newFilters) => {
     const filtered = all.filter(animal => {
       const speciesFilters = newFilters.species.includes(animal.species);
@@ -94,10 +140,12 @@ const Adoption = () => {
     setFilteredAnimals(filtered);
   }
 
+  // Reset
   const handleResetFilters = () => {
     setFilters(initialFiltersState);
     setFilteredAnimals([...all]);
   }
+  // *************** End Filters ***************
 
   return (
     <>
@@ -129,30 +177,32 @@ const Adoption = () => {
                 {scrollY < 230 ? "Filtres" : ""}
               </>}
             btnClick={handleOpenFilters} />
-          <div className="animals__wrapper">
-            {allAnimalsLoading ?
-              <div className="loading">
-                <span className="loading__paws"></span>
-                <p className="loading__text">Chargement en cours...</p>
-              </div>
-              :
-              (
-                filteredAnimals.map(animal => (
-                  <AnimalCard
-                    key={animal.id}
-                    animalName={animal.name}
-                    imgUrl={`${APP_ROUTES.API_URL}${animal.picture_url}`}
-                    imgAlt={animal.picture_caption}
-                    animalSex={animal.sex}
-                    status={animal.status}
-                    color={followIDs.includes(animal.id) && "var(--light-red)"}
-                    followClick={() => handleFollowClick(animal)}
-                    linkRedirect={`${APP_ROUTES.ADOPTION}/${animal.id}`}
-                    linkClick={() => handleOneAnimalClick(animal)} />
-                ))
-              )
-            }
-          </div>
+          {allAnimalsError &&
+            <p className="text-error">{allAnimalsError}</p>
+          }
+          {allAnimalsLoading ?
+            <div className="loading">
+              <span className="loading__paws"></span>
+              <p className="loading__text">Chargement en cours...</p>
+            </div>
+            :
+            <div className="animals__wrapper">
+              {filteredAnimals.map(animal => (
+                <AnimalCard
+                  key={animal.id}
+                  animalName={animal.name}
+                  imgUrl={`${APP_ROUTES.API_URL}${animal.picture_url}`}
+                  imgAlt={animal.picture_caption}
+                  animalSex={animal.sex}
+                  status={animal.status}
+                  color={followIDs.includes(animal.id) && "var(--light-red)"}
+                  followClick={() => handleFollowClick(animal)}
+                  linkRedirect={`${APP_ROUTES.ADOPTION}/${animal.id}`}
+                  linkClick={() => handleOneAnimalClick(animal)} />
+              ))
+              }
+            </div>
+          }
         </section>
         <Dialog>
           <Filters

@@ -1,21 +1,27 @@
-import { useDispatch, useSelector } from "react-redux";
-import { getUsersFollowIDsThunk, getUsersFollowThunk } from "../../api/user.api";
 import "./favorites.scss";
-import { useEffect } from "react";
-import { APP_ROUTES } from "../../constants/route.const";
-import { Link } from "react-router-dom";
-import { FaAngleRight, FaCircleInfo } from "react-icons/fa6";
-import FavoriteCard from "../FavoriteCard/FavoriteCard";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import FavoriteCard from "../FavoriteCard/FavoriteCard";
+import { FaAngleRight, FaCircleInfo } from "react-icons/fa6";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { getUsersFollowIDsThunk, getUsersFollowThunk, unfollowThunk } from "../../api/user.api";
+import { APP_ROUTES } from "../../constants/route.const";
 import { getOneAnimalThunk } from "../../api/animal.api";
+import { setFollowedAnimalsNotAuth, setSelectedAnimalFollow, setUnfollow } from "../../redux/reducers/user.reducer";
+import { setToStorage } from "../../utils/storage.utils";
 
 const Favorites = () => {
   const dispatch = useDispatch();
 
+  // User Reducer
+  const { isAuth, followIDs, followedAnimals, followedAnimalsLoading, followedAnimalsError, selectedAnimalFollow } = useSelector(state => state.userReducer);
+
+  // Animal Reducer
   const { animals } = useSelector(state => state.animalReducer);
-  const { isAuth, followIDs, selectedAnimalFollow, followedAnimals } = useSelector(state => state.userReducer);
   const { all } = animals;
 
+  // Fetching -> Animals and their IDs followed by user if authenticated
   useEffect(() => {
     if (isAuth) {
       dispatch(getUsersFollowIDsThunk());
@@ -23,9 +29,40 @@ const Favorites = () => {
     }
   }, [isAuth]);
 
+  // *************** Unfollow animal *************** 
+  // Set the Animal to Unfollow
+  const handleUnfollow = (animal) => {
+    dispatch(setSelectedAnimalFollow(animal.id));
+  }
+
+  useEffect(() => {
+    if (selectedAnimalFollow) {
+      if (isAuth) {
+        // Authenticated user -> delete thunk
+        dispatch(unfollowThunk());
+      }
+      else {
+        // Non-authenticated user -> remove from local storage
+        dispatch(setUnfollow({ animalID: selectedAnimalFollow }));
+      }
+    }
+
+    dispatch(setSelectedAnimalFollow(""));
+  }, [selectedAnimalFollow]);
+
+  useEffect(() => {
+    if (!isAuth) {
+      // Non-authenticated user -> followIDs updated in local storage
+      setToStorage("followIDs", followIDs);
+      dispatch(setFollowedAnimalsNotAuth({ animals: all }));
+    }
+  }, [followIDs]);
+  // *************** End Unfollow animal ***************
+
+
+  // Gets animal to redirect -> animal page
   const handleOneAnimalClick = (animal) => {
     dispatch(getOneAnimalThunk(animal.id));
-    console.log("click")
   }
 
   return (
@@ -54,13 +91,23 @@ const Favorites = () => {
               </div>
             }
             <h2>Animaux coups coeur</h2>
-            {followedAnimals.length > 0 ?
-              <p>Vous suivez actuellement {followedAnimals.length} {followedAnimals.length === 1 && "animal"}{followedAnimals.length > 1 && "animaux"} !</p>
+            {followedAnimalsError &&
+              <p className="text-error">{followedAnimalsError}</p>
+            }
+            {followedAnimalsLoading ?
+              <div className="loading">
+                <span className="loading__paws"></span>
+                <p className="loading__text">Chargement en cours...</p>
+              </div>
               :
-              <p>Vous n'avez aucun favoris.</p>
+              (followedAnimals.length > 0 ?
+                <p>Vous suivez actuellement {followedAnimals.length} {followedAnimals.length === 1 && "animal"}{followedAnimals.length > 1 && "animaux"} !</p>
+                :
+                <p>Vous n'avez aucun favoris.</p>
+              )
             }
           </div>
-          {followedAnimals.length > 0 &&
+          {!followedAnimalsLoading && followedAnimals.length > 0 &&
             <div className="favorites__wrapper">
               {followedAnimals.map(animal => (
                 <FavoriteCard
@@ -71,6 +118,7 @@ const Favorites = () => {
                   description={animal.truncated_description}
                   status={animal.status}
                   animalSex={animal.sex}
+                  btnClick={() => handleUnfollow(animal)}
                   linkRedirect={`${APP_ROUTES.ADOPTION}/${animal.id}`}
                   linkClick={() => handleOneAnimalClick(animal)}
                 />
@@ -83,4 +131,4 @@ const Favorites = () => {
   );
 }
 
-export default Favorites
+export default Favorites;

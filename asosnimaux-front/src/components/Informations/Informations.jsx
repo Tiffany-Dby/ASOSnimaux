@@ -4,15 +4,17 @@ import Address from "../Address/Address";
 import Contact from "../Contact/Contact";
 import Schedules from "../Schedules/Schedules";
 import SocialMedia from "../SocialMedia/SocialMedia";
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { updateWindowSize } from "../../redux/reducers/window.reducer";
 
 const Informations = () => {
   const dispatch = useDispatch();
 
+  // Window Reducer
   const { width } = useSelector(state => state.windowReducer);
 
+  // Update window's size -> width
   useEffect(() => {
     const handleResize = () => dispatch(updateWindowSize({ width: window.innerWidth }));
 
