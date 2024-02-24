@@ -53,7 +53,7 @@ const readAllWithTheirUsername = async () => {
 }
 const readWithTheirUsername = async () => {
   const sql = `
-    SELECT testimonies.id, testimonies.content, testimonies.date, testimonies.user_id, users.username,
+    SELECT testimonies.id, testimonies.content, testimonies.date, testimonies.user_id, users.username, users.avatar_url,
     CASE 
         WHEN LENGTH(testimonies.content) > 150 
         THEN CONCAT(SUBSTRING(testimonies.content, 1, 150), '...') 
