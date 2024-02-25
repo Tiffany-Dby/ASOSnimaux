@@ -1,9 +1,7 @@
 import './App.scss';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import Banner from '../Banner/Banner';
-import HomeArticles from '../HomeArticles/HomeArticles';
-import Informations from '../Informations/Informations.jsx';
+import Home from '../Home/Home.jsx';
 import SignIn from '../SignIn/SignIn';
 import SignUp from '../SignUp/SignUp';
 import User from '../User/User';
@@ -24,7 +22,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { getOneUserThunk } from '../../api/user.api.js';
 import { getFromStorage } from '../../utils/storage.utils.js';
-import HomeTestimonies from '../HomeTestimonies/HomeTestimonies.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -48,17 +45,7 @@ const App = () => {
           <Routes>
             <Route path={APP_ROUTES.SIGN_UP} element={<SignUp />} />
             <Route path={APP_ROUTES.SIGN_IN} element={<SignIn />} />
-            <Route
-              path={APP_ROUTES.HOME}
-              element={
-                <>
-                  <Banner />
-                  <HomeTestimonies />
-                  <HomeArticles />
-                  <Informations />
-                </>
-              }
-            />
+            <Route path={APP_ROUTES.HOME} element={<Home />} />
             <Route
               path={APP_ROUTES.ACCOUNT}
               element={
@@ -67,8 +54,7 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-            <Route
-              path={APP_ROUTES.ADMIN}
+            <Route path={APP_ROUTES.ADMIN}
               element={
                 <PrivateRoute hasAccess={isAuth && (user.role === 'admin' || user.role === 'super_admin')}>
                   <Admin />

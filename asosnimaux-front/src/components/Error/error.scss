@@ -4,6 +4,20 @@
   padding: var(--padding-m);
   text-align: center;
 
+  &__wrapper {
+    display: grid;
+    grid-template-rows: 1fr 45px 1fr;
+  }
+
+  &__text {
+    grid-row: 1/3;
+    grid-column: 1/1;
+    @include mxn.container("450px", var(--padding-s) var(--padding-s) var(--font-size-xxl));
+    background-color: var(--white);
+    box-shadow: var(--box-shadow-2-2-5);
+    border-radius: var(--radius-m);
+  }
+
   h1 {
     font-size: calc(3rem + .6vmin);
   }
@@ -19,13 +33,17 @@
   }
 
   img {
-    max-width: 300px;
+    grid-column: 1/1;
+    grid-row: 2/4;
+    transform: translateX(18.5%);
+    max-width: 250px;
     margin: 0 auto;
+    filter: drop-shadow(.2rem .2rem .5rem var(--primary))
   }
 
   .btn-wrapper {
     @include mxn.btnSimple;
-    margin-top: 2rem;
+    margin: 2rem 0;
   }
 
   a {

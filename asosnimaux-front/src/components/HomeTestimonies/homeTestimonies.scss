@@ -2,10 +2,10 @@
 
 .testimonies {
   &-overview {
-    padding-top: var(--padding-l);
+    // padding-top: var(--padding-l);
 
     .breadcrumbs {
-      // position: absolute;
+      padding: 0;
 
       &__links {
         display: flex;
@@ -17,6 +17,10 @@
           width: 1.2rem;
           border-radius: 50%;
           background-color: var(--dark-brown);
+        }
+
+        .active {
+          background-color: var(--accent);
         }
       }
     }
@@ -60,12 +64,12 @@
 
     &::before {
       left: 0;
-      transform: translate(calc(100% / 3), calc(-50% - 2.2rem)) rotate(135deg);
+      transform: translate(calc(100% / 3), calc(-50% - .6rem)) rotate(135deg);
     }
 
     &::after {
       right: 0;
-      transform: translate(calc(-100% / 3), calc(-50% - 2.2rem)) rotate(-45deg);
+      transform: translate(calc(-100% / 3), calc(-50% - .6rem)) rotate(-45deg);
     }
   }
 
@@ -83,9 +87,8 @@
     position: relative;
     display: flex;
     padding: 2rem 0;
-    overflow-x: hidden;
+    overflow: hidden;
     scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
   }
 
   &__slide {
@@ -94,7 +97,6 @@
     display: flex;
     justify-content: center;
     flex-shrink: 0;
-    scroll-snap-align: center;
   }
 
   &__link {

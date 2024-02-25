@@ -3,7 +3,7 @@
 .informations {
   @include mxn.flex("column", "nowrap");
   gap: 1rem;
-  padding-top: var(--padding-m);
+  // padding-top: var(--padding-m);
 
   &__wrapper {
     @include mxn.container;

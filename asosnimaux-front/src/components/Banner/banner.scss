@@ -10,16 +10,17 @@
   background-size: 900px;
 
   @media screen and (min-width: 767px) {
-    background-position: left -210px top 120px;
+    background-position: left -198px top 120px;
   }
 
   &__header {
-    @include mxn.container("650px");
+    @include mxn.container("650px", var(--padding-l) var(--padding-s));
     @include mxn.flex("column", "nowrap");
-    margin-bottom: 3rem;
   }
 
   &__logo {
+    padding-top: var(--padding-xxs);
+
     img {
       max-width: 400px;
     }

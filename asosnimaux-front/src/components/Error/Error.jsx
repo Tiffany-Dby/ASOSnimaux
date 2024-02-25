@@ -6,27 +6,32 @@ const Error = () => {
   return (
     <>
       <section className="error">
-        <h1>OOPS</h1>
-        <p><strong>Erreur 404</strong></p>
-        <p>Il semblerait que cette page n'existe pas..</p>
+        <div className="title-wrapper">
+          <h1>MIAOUPS</h1>
+        </div>
+        <div className="error__wrapper">
+          <div className="error__text">
 
-        <img src="/bateau.png" alt="Sticker d'un chat, les yeux équarquillés, dans un bateau qui avance vite" />
-
-        <p>Revenez parmis nous !</p>
-        <nav>
-          <ul>
-            <li>
-              <div className="btn-wrapper">
-                <Link to={APP_ROUTES.HOME} className="btn">Accueil</Link>
-              </div>
-            </li>
-            <li>
-              <div className="btn-wrapper">
-                <Link to={APP_ROUTES.ACCOUNT} className="btn">Compte</Link>
-              </div>
-            </li>
-          </ul>
-        </nav>
+            <p className="text-error"><strong>Erreur 404</strong></p>
+            <p>Il semblerait que cette page n'existe pas..</p>
+            <p>Revenez parmis nous !</p>
+            <nav>
+              <ul>
+                <li>
+                  <div className="btn-wrapper">
+                    <Link to={APP_ROUTES.HOME} className="btn">Accueil</Link>
+                  </div>
+                </li>
+                <li>
+                  <div className="btn-wrapper">
+                    <Link to={APP_ROUTES.ACCOUNT} className="btn">Compte</Link>
+                  </div>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <img src="/bateau.png" alt="Sticker d'un chat, les yeux équarquillés, dans un bateau qui avance vite" />
+        </div>
       </section>
     </>
   )
