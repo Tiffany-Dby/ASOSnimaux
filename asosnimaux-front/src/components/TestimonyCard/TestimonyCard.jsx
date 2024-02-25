@@ -19,7 +19,7 @@ const TestimonyCard = ({ imgUrl, date, text, author, btnClick }) => {
           <div className="testimony__img">
             <img crossOrigin="anonymous" src={imgUrl} alt={`Avatar utilisateur : un sticker animal`} />
           </div>
-          <p><span>{author}</span> le {date}</p>
+          <p><span>{author}</span> {date}</p>
         </cite>
       </blockquote>
     </>

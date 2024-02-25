@@ -42,8 +42,16 @@
     margin: 0 auto;
     position: relative;
 
+    @media screen and (min-width: 480px) {
+      max-width: 500px;
+    }
+
     @media screen and (min-width: 767px) {
       max-width: 600px;
+    }
+
+    @media screen and (min-width: 1024px) {
+      max-width: 800px;
     }
 
     &::before,
@@ -64,12 +72,12 @@
 
     &::before {
       left: 0;
-      transform: translate(calc(100% / 3), calc(-50% - .6rem)) rotate(135deg);
+      transform: translate(50%, calc(-50% - .6rem)) rotate(135deg);
     }
 
     &::after {
       right: 0;
-      transform: translate(calc(-100% / 3), calc(-50% - .6rem)) rotate(-45deg);
+      transform: translate(-50%, calc(-50% - .6rem)) rotate(-45deg);
     }
   }
 
@@ -78,6 +86,9 @@
   &__link {
     position: absolute;
     top: 50%;
+  }
+
+  &__link {
     display: flex;
     justify-content: center;
     align-items: center;

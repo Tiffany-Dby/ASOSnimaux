@@ -7,7 +7,7 @@ const Error = () => {
     <>
       <section className="error">
         <div className="title-wrapper">
-          <h1>MIAOUPS</h1>
+          <h1>Miaoups</h1>
         </div>
         <div className="error__wrapper">
           <div className="error__text">

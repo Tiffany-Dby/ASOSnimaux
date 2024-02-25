@@ -1,15 +1,23 @@
 @use "../../styles/mixins" as mxn;
 
 .testimony {
-  @include mxn.container("290px", var(--padding-s) var(--padding-m) var(--padding-m));
+  @include mxn.container("255px", var(--padding-s) var(--padding-m) var(--padding-m));
   @include mxn.flex("column", "nowrap");
   justify-content: space-between;
   background-color: var(--white);
   box-shadow: var(--box-shadow-2-2-5);
   border-radius: var(--radius-m);
 
+  @media screen and (min-width: 480px) {
+    max-width: 300px;
+  }
+
   @media screen and (min-width: 767px) {
     max-width: 400px;
+  }
+
+  @media screen and (min-width: 1024px) {
+    max-width: 600px;
   }
 
   &__text {
