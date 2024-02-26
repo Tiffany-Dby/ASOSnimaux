@@ -5,6 +5,8 @@ const TESTIMONY_STATE = {
     one: {
       id: "",
       userID: "",
+      username: "",
+      avatar_url: "",
       content: "",
       date: ""
     },
@@ -60,7 +62,7 @@ const testimonySlice = createSlice({
       }
     },
     setOneTestimony: (state, action) => {
-      const { id, userID, content, date } = action.payload;
+      const { id, userID, username, avatar_url, content, date } = action.payload;
       return {
         ...state,
         testimonies: {
@@ -68,6 +70,8 @@ const testimonySlice = createSlice({
           one: {
             id,
             userID,
+            username,
+            avatar_url,
             content,
             date
           }
@@ -95,8 +99,24 @@ const testimonySlice = createSlice({
         oneTestimonyLoading: false
       }
     },
+    resetOneTestimony: (state, action) => {
+      return {
+        ...state,
+        testimonies: {
+          ...state.testimonies,
+          one: {
+            id: "",
+            userID: "",
+            username: "",
+            avatar_url: "",
+            content: "",
+            date: ""
+          }
+        }
+      }
+    }
   }
 });
 
-export const { setTestimonyOverview, startOverviewTestimonyLoading, stopOverviewTestimonyLoading, setOverviewTestimonyError, setOneTestimony, startOneTestimonyLoading, stopOneTestimonyLoading, setOneTestimonyError } = testimonySlice.actions;
+export const { setTestimonyOverview, startOverviewTestimonyLoading, stopOverviewTestimonyLoading, setOverviewTestimonyError, setOneTestimony, startOneTestimonyLoading, stopOneTestimonyLoading, setOneTestimonyError, resetOneTestimony } = testimonySlice.actions;
 export default testimonySlice.reducer;

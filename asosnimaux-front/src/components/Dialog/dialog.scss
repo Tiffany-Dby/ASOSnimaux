@@ -105,6 +105,46 @@ dialog {
     }
   }
 
+  &:has(.not-auth),
+  &:has(.dialog--read-one-testimony) {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+
+    .dialog-wrapper {
+      padding: 0;
+    }
+  }
+
+  &:has(.not-auth) {
+    max-width: 680px;
+  }
+
+  &:has(.dialog--read-one-testimony) {
+    .testimony {
+      display: grid;
+      max-width: 900px;
+    }
+
+    .btn-wrapper {
+      grid-row: 1/1;
+      padding-right: 0;
+      justify-self: end;
+
+      .btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        font-size: var(--font-size-xs);
+
+        &:hover {
+          color: var(--white);
+        }
+      }
+    }
+  }
+
   &:has(.user__update),
   &:has(.confirm-deletion) {
     max-width: 425px;
@@ -122,7 +162,6 @@ dialog {
   }
 }
 
-
 @keyframes openDialog {
   from {
     top: -25%;
@@ -138,10 +177,5 @@ dialog {
   from {
     top: 100%;
     transform: translateY(0);
-    // opacity: 0;
-  }
-
-  to {
-    // opacity: 1;
   }
 }

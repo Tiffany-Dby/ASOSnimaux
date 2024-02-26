@@ -1,11 +1,18 @@
 import "./homeTestimonies.scss";
 import TestimonyCard from "../TestimonyCard/TestimonyCard";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import Dialog from "../Dialog/Dialog";
+import { FaXmark } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { getTestimoniesOverviewThunk } from "../../api/testimony.api";
 import { setToLocalDate } from "../../utils/date.utils";
 import { APP_ROUTES } from "../../constants/route.const";
+import { resetOneTestimony, setOneTestimony } from "../../redux/reducers/testimony.reducer";
+import { closeDialog, setIsNewTestimonyForm, setIsReadMoreTestimoniesOverview } from "../../redux/reducers/dialog.reducer";
+import Button from "../Button/Button";
+import NotAuth from "../NotAuth/NotAuth";
 
 const HomeTestimonies = () => {
   const dispatch = useDispatch();
@@ -13,11 +20,16 @@ const HomeTestimonies = () => {
 
   // Testimony Reducer
   const { testimonies } = useSelector(state => state.testimonyReducer);
-  const { overview } = testimonies;
+  const { overview, one } = testimonies;
+
+  // Dialog Reducer
+  const { isReadMoreTestimoniesOverview, isNewTestimonyForm } = useSelector(state => state.dialogReducer);
+
+  // User Reducer
+  const { isAuth } = useSelector(state => state.userReducer);
 
   // Overview -> Index of current testimony displayed
   const [currentIndex, setCurrentIndex] = useState(0);
-
 
   // Fetching Testimonies overview
   useEffect(() => {
@@ -77,6 +89,23 @@ const HomeTestimonies = () => {
   }
   // *************** End Testimonies Overview Slider ***************
 
+  // *************** Dialog ***************
+  // Open One Testimony
+  const handleReadMore = (testimony) => {
+    dispatch(setIsReadMoreTestimoniesOverview());
+    dispatch(setOneTestimony({ id: testimony.id, userID: testimony.user_id, username: testimony.username, avatar_url: `${APP_ROUTES.API_URL}${testimony.avatar_url}`, content: testimony.content, date: testimony.date }));
+  }
+
+  const handleNewTestimonyForm = () => {
+    dispatch(setIsNewTestimonyForm());
+  }
+
+  // Close dialog
+  const handleClose = () => {
+    dispatch(resetOneTestimony());
+    dispatch(closeDialog());
+  }
+
   return (
     <>
       <section className="testimonies-overview">
@@ -84,7 +113,10 @@ const HomeTestimonies = () => {
           <h2>Témoignages</h2>
         </div>
         <article className="testimonies__wrapper">
-          <h3>Les derniers témoignages</h3>
+          <div className="testimonies__header">
+            <h3>Les derniers témoignages</h3>
+            <Button btnStyle={" btn--post-testimonies"} text="Poster un témoignage" btnClick={handleNewTestimonyForm} />
+          </div>
           <div className="testimonies__slider">
             <ul className="testimonies__slides" ref={testimoniesRef}>
               {overview.map((testimony, index) => (
@@ -93,7 +125,9 @@ const HomeTestimonies = () => {
                     author={testimony.username}
                     imgUrl={`${APP_ROUTES.API_URL}${testimony.avatar_url}`}
                     date={setToLocalDate(testimony.date)}
-                    text={testimony.truncated_content}
+                    content={testimony.truncated_content}
+                    btnText={'Lire la suite'}
+                    btnClick={() => handleReadMore(testimony)}
                   />
                   <a
                     onClick={handlePrevious}
@@ -117,6 +151,35 @@ const HomeTestimonies = () => {
             </Breadcrumbs>
           </div>
         </article>
+        <div className="btn-wrapper">
+          <Link className="btn btn--read-more-testimonies" to={APP_ROUTES.ARTICLES}>Voir plus de témoignages</Link>
+        </div>
+        <Dialog>
+          {isReadMoreTestimoniesOverview &&
+            <div className="dialog-wrapper dialog--read-one-testimony">
+              <TestimonyCard
+                author={one.username}
+                imgUrl={one.avatar_url}
+                date={setToLocalDate(one.date)}
+                content={one.content}
+                btnText={
+                  <FaXmark className="manage-icons" role="button" aria-label="Fermer le témoignage" />
+                }
+                btnClick={handleClose}
+              />
+            </div>
+          }
+          {(isNewTestimonyForm && isAuth) &&
+            <div className="dialog-wrapper">
+
+            </div>
+          }
+          {(isNewTestimonyForm && !isAuth) &&
+            <div className="dialog-wrapper not-auth">
+              <NotAuth actionText="Poster un témoignage" />
+            </div>
+          }
+        </Dialog>
       </section>
     </>
   );

@@ -24,7 +24,6 @@
     padding: var(--padding-s);
     position: relative;
     text-align: justify;
-    font-size: 1.6rem;
 
     &::before,
     &::after {
@@ -52,7 +51,7 @@
     align-items: center;
     gap: .5rem;
     padding: 0 var(--padding-s);
-    font-size: 1.2rem;
+    font-size: var(--font-size-s);
 
     p {
       @include mxn.flex("column", "nowrap");
@@ -84,7 +83,7 @@
       background: transparent;
       font-family: "Noto Sans", sans-serif;
       transition: color .3s ease;
-      font-size: 1.2rem;
+      font-size: var(--font-size-s);
 
       &:hover {
         color: var(--accent);

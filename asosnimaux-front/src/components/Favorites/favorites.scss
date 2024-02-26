@@ -23,8 +23,7 @@
     padding: var(--padding-s);
     border-radius: var(--radius-m);
     box-shadow: var(--box-shadow-2-2-5);
-
-    font-size: 1.4rem;
+    font-size: var(--font-size-xs);
 
     .icon {
       width: 2.5rem;

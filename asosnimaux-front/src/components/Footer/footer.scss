@@ -6,13 +6,18 @@
   padding: var(--padding-s);
   color: white;
 
-  &__img>a {
+  &__img {
     display: flex;
     justify-content: center;
 
-    img {
-      min-width: 180px;
-      max-width: 250px;
+    &>a {
+      display: block;
+
+      img {
+        object-fit: contain;
+        min-width: 180px;
+        max-width: 250px;
+      }
     }
   }
 
