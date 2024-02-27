@@ -56,7 +56,7 @@ const AdminArticles = () => {
                 <p className="loading__text">{newArticleLoading && "Création de l'article"}{allLoading && "Chargement des articles"} en cours...</p>
               </div>
               :
-              <Button btnStyle={""} text={"Créer un nouvel article"} btnClick={handleNewForm} />
+              <Button btnStyle={""} text={"Ajouter un article"} btnClick={handleNewForm} />
             }
           </div>
 

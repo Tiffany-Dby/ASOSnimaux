@@ -71,7 +71,6 @@ const readByStaffRole = async (staffRole) => {
   let error = null;
   try {
     result = await query(sql, [staffRole]);
-    console.log(result)
   }
   catch (err) {
     error = err.message;

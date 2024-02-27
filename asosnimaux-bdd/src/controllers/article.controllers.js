@@ -66,7 +66,6 @@ const create = async (req, res) => {
   const createdArticle = await ArticleDB.readOne(insertedId);
   const err = createdArticle.error;
   const result = createdArticle.result;
-  console.log(result);
 
   if (error || err) {
     const e = deleteImg(picture_url);

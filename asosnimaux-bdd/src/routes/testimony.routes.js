@@ -19,6 +19,9 @@ const initTestimonyRoutes = (app) => {
   // DELETE
   testimonyRouter.delete("/:testimonyID", jwtMddlwr, isAdminOrOwner, TestimonyController.deleteOne);
 
+  // GET
+  testimonyRouter.get("/:testimonyID", TestimonyController.readOneWithTheirUsername);
+
   // Attaching router to /testimonies path
   app.use("/testimonies", testimonyRouter);
 }

@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
 import { resetFormNewArticle } from "../../redux/reducers/article.reducer";
 import { resetFormNewAnimal } from "../../redux/reducers/animal.reducer";
+import { resetFormNewTestimony } from "../../redux/reducers/testimony.reducer";
 
 const Dialog = ({ children }) => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const Dialog = ({ children }) => {
       dispatch(closeDialog());
       dispatch(resetFormNewArticle());
       dispatch(resetFormNewAnimal());
+      dispatch(resetFormNewTestimony());
     }
   }
 
@@ -31,6 +33,7 @@ const Dialog = ({ children }) => {
       dispatch(closeDialog());
       dispatch(resetFormNewArticle());
       dispatch(resetFormNewAnimal());
+      dispatch(resetFormNewTestimony());
     }
   }
   // *************** End Close Dialog ***************

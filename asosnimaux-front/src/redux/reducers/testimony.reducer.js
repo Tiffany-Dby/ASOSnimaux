@@ -4,7 +4,7 @@ const TESTIMONY_STATE = {
   testimonies: {
     one: {
       id: "",
-      userID: "",
+      user_id: "",
       username: "",
       avatar_url: "",
       content: "",
@@ -62,14 +62,14 @@ const testimonySlice = createSlice({
       }
     },
     setOneTestimony: (state, action) => {
-      const { id, userID, username, avatar_url, content, date } = action.payload;
+      const { id, user_id, username, avatar_url, content, date } = action.payload;
       return {
         ...state,
         testimonies: {
           ...state.testimonies,
           one: {
             id,
-            userID,
+            user_id,
             username,
             avatar_url,
             content,
@@ -114,9 +114,72 @@ const testimonySlice = createSlice({
           }
         }
       }
-    }
+    },
+    updateFormNewTestimony: (state, action) => {
+      const { input, value } = action.payload;
+      return {
+        ...state,
+        testimonies: {
+          ...state.testimonies,
+          newTestimony: {
+            ...state.testimonies.newTestimony,
+            [input]: value
+          }
+        }
+      }
+    },
+    resetFormNewTestimony: (state, action) => {
+      return {
+        ...state,
+        testimonies: {
+          ...state.testimonies,
+          newTestimony: {
+            content: ""
+          }
+        }
+      }
+    },
+    setNewTestimony: (state, action) => {
+      const { testimony } = action.payload;
+      return {
+        ...state,
+        testimonies: {
+          ...state.testimonies,
+          all: [...state.testimonies.all, { ...testimony }],
+          overview: [{ ...testimony }, ...state.testimonies.overview.slice(0, -1)]
+        },
+        newTestimonyError: null,
+        newTestimonyLoading: false,
+        newTestimonySuccess: "Témoignage posté !"
+      }
+    },
+    startNewTestimonyLoading: (state, action) => {
+      return {
+        ...state,
+        newTestimonyLoading: true
+      }
+    },
+    stopNewTestimonyLoading: (state, action) => {
+      return {
+        ...state,
+        newTestimonyLoading: false
+      }
+    },
+    setNewTestimonyError: (state, action) => {
+      return {
+        ...state,
+        newTestimonyError: action.payload.error,
+        newTestimonyLoading: false
+      }
+    },
+    resetTestimoniesSuccess: (state, action) => {
+      return {
+        ...state,
+        newTestimonySuccess: null
+      }
+    },
   }
 });
 
-export const { setTestimonyOverview, startOverviewTestimonyLoading, stopOverviewTestimonyLoading, setOverviewTestimonyError, setOneTestimony, startOneTestimonyLoading, stopOneTestimonyLoading, setOneTestimonyError, resetOneTestimony } = testimonySlice.actions;
+export const { setTestimonyOverview, startOverviewTestimonyLoading, stopOverviewTestimonyLoading, setOverviewTestimonyError, setOneTestimony, startOneTestimonyLoading, stopOneTestimonyLoading, setOneTestimonyError, resetOneTestimony, updateFormNewTestimony, resetFormNewTestimony, setNewTestimony, startNewTestimonyLoading, stopNewTestimonyLoading, setNewTestimonyError, resetTestimoniesSuccess } = testimonySlice.actions;
 export default testimonySlice.reducer;

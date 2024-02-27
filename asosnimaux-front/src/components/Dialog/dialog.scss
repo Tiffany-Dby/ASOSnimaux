@@ -124,6 +124,8 @@ dialog {
     .testimony {
       display: grid;
       max-width: 900px;
+      grid-template-columns: 1fr;
+
     }
 
     .btn-wrapper {
@@ -153,7 +155,8 @@ dialog {
   &:has(.admin__new-article),
   &:has(.admin__update-article),
   &:has(.admin__new-animal),
-  &:has(.admin__update-animal) {
+  &:has(.admin__update-animal),
+  &:has(.testimonies__new-testimony) {
     max-width: 700px;
   }
 

@@ -5,8 +5,10 @@ import InputFile from "../InputFile/InputFile";
 import Dialog from "../Dialog/Dialog";
 import Toast from '../Toast/Toast.jsx';
 import InputSelect from "../InputSelect/InputSelect.jsx";
-import { useDispatch, useSelector } from "react-redux";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs.jsx";
+import { FaAngleRight } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticleThunk } from "../../api/article.api";
 import { resetFormNewArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
@@ -16,8 +18,6 @@ import { deleteAnimalThunk, getAllAnimalsThunk, postNewAnimalThunk, updateAnimal
 import { resetFormNewAnimal, setNewAnimalError, updateFormNewAnimal, updateFormSelectedAnimal } from "../../redux/reducers/animal.reducer.js";
 import { deleteUserThunk, getAllUsersThunk, updateUserRoleThunk } from "../../api/user.api.js";
 import { setSelectedUser, updateFormSelectedUser } from "../../redux/reducers/user.reducer.js";
-import Breadcrumbs from "../Breadcrumbs/Breadcrumbs.jsx";
-import { FaAngleRight } from "react-icons/fa6";
 
 const Admin = () => {
   const dispatch = useDispatch();
@@ -461,7 +461,7 @@ const Admin = () => {
           {isUpdateArticleForm &&
             <div className="dialog-wrapper admin__update-article">
               <div className="title-wrapper">
-                <h2>Mettre à jour</h2>
+                <h2>Mettre à jour un article</h2>
               </div>
               <form onSubmit={handleSubmitSelected}>
                 <Input

@@ -14,21 +14,22 @@ const create = async (content, userID) => {
   `;
 
   let result = [];
+  let insertedId = [];
   let error = null;
   try {
     const isUserMember = await query(userRoleSql, [userID]);
-    console.log(isUserMember);
 
     if (isUserMember[0].user_role !== "super_admin" && isUserMember[0].user_role !== "admin" && isUserMember[0].user_role !== "membre") throw new Error(`Something went wrong : You have to atleast be a member to post a testimony.`);
 
     const id = uuidv4();
     result = await query(sql, [id, content, userID])
+    insertedId = id;
   }
   catch (err) {
     error = err.message;
   }
   finally {
-    return { result, error };
+    return { result, error, insertedId };
   }
 }
 
@@ -69,6 +70,32 @@ const readWithTheirUsername = async () => {
   let error = null;
   try {
     result = await query(sql)
+  }
+  catch (err) {
+    error = err.message;
+  }
+  finally {
+    return { result, error };
+  }
+}
+
+const readOneWithTheirUsername = async (testimonyID) => {
+  const sql = `
+    SELECT testimonies.id, testimonies.content, testimonies.date, testimonies.user_id, users.username, users.avatar_url,
+    CASE 
+        WHEN LENGTH(testimonies.content) > 150 
+        THEN CONCAT(SUBSTRING(testimonies.content, 1, 150), '...') 
+        ELSE testimonies.content 
+    END AS truncated_content
+    FROM testimonies
+    LEFT JOIN users ON testimonies.user_id = users.id
+    WHERE testimonies.id = ?
+  `;
+
+  let result = [];
+  let error = null;
+  try {
+    result = await query(sql, [testimonyID]);
   }
   catch (err) {
     error = err.message;
@@ -141,6 +168,7 @@ export const TestimonyDB = {
   create,
   readAllWithTheirUsername,
   readWithTheirUsername,
+  readOneWithTheirUsername,
   update,
   deleteOne
 }

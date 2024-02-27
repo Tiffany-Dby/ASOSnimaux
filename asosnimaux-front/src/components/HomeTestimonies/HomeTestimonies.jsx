@@ -2,31 +2,35 @@ import "./homeTestimonies.scss";
 import TestimonyCard from "../TestimonyCard/TestimonyCard";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Dialog from "../Dialog/Dialog";
+import Button from "../Button/Button";
+import NotAuth from "../NotAuth/NotAuth";
+import Toast from "../Toast/Toast";
 import { FaXmark } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getTestimoniesOverviewThunk } from "../../api/testimony.api";
+import { getTestimoniesOverviewThunk, postTestimonyThunk } from "../../api/testimony.api";
 import { setToLocalDate } from "../../utils/date.utils";
 import { APP_ROUTES } from "../../constants/route.const";
-import { resetOneTestimony, setOneTestimony } from "../../redux/reducers/testimony.reducer";
+import { resetFormNewTestimony, resetOneTestimony, setOneTestimony, updateFormNewTestimony } from "../../redux/reducers/testimony.reducer";
 import { closeDialog, setIsNewTestimonyForm, setIsReadMoreTestimoniesOverview } from "../../redux/reducers/dialog.reducer";
-import Button from "../Button/Button";
-import NotAuth from "../NotAuth/NotAuth";
 
 const HomeTestimonies = () => {
   const dispatch = useDispatch();
   const testimoniesRef = useRef(null);
 
   // Testimony Reducer
-  const { testimonies } = useSelector(state => state.testimonyReducer);
-  const { overview, one } = testimonies;
+  const { testimonies, newTestimonySuccess } = useSelector(state => state.testimonyReducer);
+  const { overview, one, newTestimony } = testimonies;
 
   // Dialog Reducer
   const { isReadMoreTestimoniesOverview, isNewTestimonyForm } = useSelector(state => state.dialogReducer);
 
   // User Reducer
   const { isAuth } = useSelector(state => state.userReducer);
+
+  // Toast Reducer
+  const { isToastOpen } = useSelector(state => state.toastReducer);
 
   // Overview -> Index of current testimony displayed
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -90,19 +94,33 @@ const HomeTestimonies = () => {
   // *************** End Testimonies Overview Slider ***************
 
   // *************** Dialog ***************
-  // Open One Testimony
+  // Open one Testimony
   const handleReadMore = (testimony) => {
     dispatch(setIsReadMoreTestimoniesOverview());
-    dispatch(setOneTestimony({ id: testimony.id, userID: testimony.user_id, username: testimony.username, avatar_url: `${APP_ROUTES.API_URL}${testimony.avatar_url}`, content: testimony.content, date: testimony.date }));
+    dispatch(setOneTestimony({ id: testimony.id, user_id: testimony.user_id, username: testimony.username, avatar_url: `${APP_ROUTES.API_URL}${testimony.avatar_url}`, content: testimony.content, date: testimony.date }));
+
   }
 
+  // User authenticated -> Open new testimony form
+  // User not authenticated -> Open not auth message
   const handleNewTestimonyForm = () => {
     dispatch(setIsNewTestimonyForm());
   }
 
+  // Input onChange
+  const updateNewTestimonyFrom = (input, value) => dispatch(updateFormNewTestimony({ input, value }));
+
+  // Submit new Testimony
+  const handleSubmitNewTestimony = e => {
+    e.preventDefault();
+    dispatch(postTestimonyThunk());
+    dispatch(closeDialog());
+  }
+
   // Close dialog
-  const handleClose = () => {
+  const handleCancel = () => {
     dispatch(resetOneTestimony());
+    dispatch(resetFormNewTestimony());
     dispatch(closeDialog());
   }
 
@@ -112,6 +130,9 @@ const HomeTestimonies = () => {
         <div className="title-wrapper">
           <h2>Témoignages</h2>
         </div>
+        {isToastOpen &&
+          <Toast message={newTestimonySuccess} />
+        }
         <article className="testimonies__wrapper">
           <div className="testimonies__header">
             <h3>Les derniers témoignages</h3>
@@ -165,13 +186,31 @@ const HomeTestimonies = () => {
                 btnText={
                   <FaXmark className="manage-icons" role="button" aria-label="Fermer le témoignage" />
                 }
-                btnClick={handleClose}
+                btnClick={handleCancel}
               />
             </div>
           }
           {(isNewTestimonyForm && isAuth) &&
-            <div className="dialog-wrapper">
-
+            <div className="dialog-wrapper testimonies__new-testimony">
+              <div className="title-wrapper">
+                <h3>Nouveau Témoignage</h3>
+              </div>
+              <form onSubmit={handleSubmitNewTestimony}>
+                <div className="input__wrapper">
+                  <label htmlFor="content" className="input__label">Votre témoignage</label>
+                  <textarea
+                    className="input"
+                    name="content"
+                    id="content"
+                    required={true}
+                    value={newTestimony.content || ""}
+                    onChange={e => updateNewTestimonyFrom("content", e.target.value)}></textarea>
+                </div>
+                <div className="btns-wrapper">
+                  <Button btnStyle={""} text="Poster" type="submit" />
+                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                </div>
+              </form>
             </div>
           }
           {(isNewTestimonyForm && !isAuth) &&
