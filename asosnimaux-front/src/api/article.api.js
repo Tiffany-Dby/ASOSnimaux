@@ -111,6 +111,7 @@ export const deleteArticleThunk = () => async (dispatch, getState) => {
   if (deleteLoading) return;
 
   dispatch(setStartDeleteLoading());
+
   const { result, error, status } = await deleteRequest(`articles/${selectedArticle.id}`, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setDeleteError({ error: `Something went wrong: ${error}` }));
 

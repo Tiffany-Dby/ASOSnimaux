@@ -1,6 +1,6 @@
 import query from "../databases/init.db.js";
 
-const isAdminOrOwner = async (req, res, next) => {
+const isAdminOrOwner = async ({ body: { userID }, params: { id } }, res, next) => {
   let error = null;
   try {
     const sql = `
@@ -9,8 +9,6 @@ const isAdminOrOwner = async (req, res, next) => {
       WHERE id = ?
     `;
 
-    const { id } = req.params;
-    const { userID } = req.body;
     const response = await query(sql, [userID]);
     const user = response[0];
     const role = user.user_role;

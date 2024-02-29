@@ -13,18 +13,31 @@ const TESTIMONY_STATE = {
     newTestimony: {
       content: ""
     },
+    selectedTestimony: {
+      id: "",
+      content: ""
+    },
     all: [],
-    overview: []
+    overview: [],
+    allByOneUser: []
   },
   oneTestimonyLoading: false,
   oneTestimonyError: null,
   newTestimonyLoading: false,
   newTestimonySuccess: null,
   newTestimonyError: null,
+  selectedTestimonyLoading: false,
+  selectedTestimonySuccess: null,
+  selectedTestimonyError: null,
   allTestimonyLoading: false,
   allTestimonyError: null,
   overviewTestimonyLoading: false,
-  overviewTestimonyError: null
+  overviewTestimonyError: null,
+  allByOneUserLoading: false,
+  allByOneUserError: null,
+  deleteTestimonyLoading: false,
+  deleteTestimonySuccess: null,
+  deleteTestimonyError: null
 }
 
 const testimonySlice = createSlice({
@@ -175,11 +188,133 @@ const testimonySlice = createSlice({
     resetTestimoniesSuccess: (state, action) => {
       return {
         ...state,
-        newTestimonySuccess: null
+        newTestimonySuccess: null,
+        selectedTestimonySuccess: null
       }
     },
+    setSelectedTestimony: (state, action) => {
+      const { id, content } = action.payload;
+      return {
+        ...state,
+        testimonies: {
+          ...state.testimonies,
+          selectedTestimony: {
+            id,
+            content
+          }
+        }
+      }
+    },
+    updateFormSelectedTestimony: (state, action) => {
+      const { input, value } = action.payload;
+      return {
+        ...state,
+        testimonies: {
+          ...state.testimonies,
+          selectedTestimony: {
+            ...state.testimonies.selectedTestimony,
+            [input]: value
+          }
+        }
+      }
+    },
+    setUpdateSelectedTestimony: (state, action) => {
+      const { testimony } = action.payload;
+      return {
+        ...state,
+        testimonies: {
+          ...state.testimonies,
+          allByOneUser: state.testimonies.allByOneUser.map((t) => t.id === testimony.id ? { ...testimony } : { ...t })
+        }
+        ,
+        selectedTestimonyError: null,
+        selectedTestimonyLoading: false,
+        selectedTestimonySuccess: "Témoignage mis à jour !"
+      }
+    },
+    startSelectedTestimonyLoading: (state, action) => {
+      return {
+        ...state,
+        selectedTestimonyLoading: true
+      }
+    },
+    stopSelectedTestimonyLoading: (state, action) => {
+      return {
+        ...state,
+        selectedTestimonyLoading: false
+      }
+    },
+    setSelectedTestimonyError: (state, action) => {
+      return {
+        ...state,
+        selectedTestimonyError: action.payload.error,
+        selectedTestimonyLoading: false
+      }
+    },
+    setAllByOneUser: (state, action) => {
+      const { testimonies } = action.payload;
+      return {
+        ...state,
+        testimonies: {
+          ...state.testimonies,
+          allByOneUser: [...testimonies]
+        },
+        allByOneUserLoading: false,
+        allByOneUserError: null
+      }
+    },
+    startAllByOneUserLoading: (state, action) => {
+      return {
+        ...state,
+        allByOneUserLoading: true
+      }
+    },
+    stopAllByOneUserLoading: (state, action) => {
+      return {
+        ...state,
+        allByOneUserLoading: false
+      }
+    },
+    setAllByOneUserError: (state, action) => {
+      return {
+        ...state,
+        allByOneUserError: action.payload.error,
+        allByOneUserLoading: false
+      }
+    },
+    setDeleteTestimony: (state, action) => {
+      const { id } = action.payload;
+      return {
+        ...state,
+        testimonies: {
+          ...state.testimonies,
+          allByOneUser: state.testimonies.allByOneUser.filter(testimony => testimony.id !== id)
+        },
+        deleteTestimonyLoading: false,
+        deleteTestimonySuccess: "Témoignage supprimé !"
+      }
+    },
+    startDeleteTestimonyLoading: (state, action) => {
+      return {
+        ...state,
+        deleteTestimonyLoading: true
+      }
+    },
+    stopDeleteTestimonyLoading: (state, action) => {
+      return {
+        ...state,
+        deleteTestimonyLoading: false
+      }
+    },
+    setDeleteTestimonyError: (state, action) => {
+      return {
+        ...state,
+        deleteTestimonyError: action.payload.error,
+        deleteTestimonyLoading: false
+      }
+    }
   }
 });
 
-export const { setTestimonyOverview, startOverviewTestimonyLoading, stopOverviewTestimonyLoading, setOverviewTestimonyError, setOneTestimony, startOneTestimonyLoading, stopOneTestimonyLoading, setOneTestimonyError, resetOneTestimony, updateFormNewTestimony, resetFormNewTestimony, setNewTestimony, startNewTestimonyLoading, stopNewTestimonyLoading, setNewTestimonyError, resetTestimoniesSuccess } = testimonySlice.actions;
+export const { setTestimonyOverview, startOverviewTestimonyLoading, stopOverviewTestimonyLoading, setOverviewTestimonyError, setOneTestimony, startOneTestimonyLoading, stopOneTestimonyLoading, setOneTestimonyError, resetOneTestimony, updateFormNewTestimony, resetFormNewTestimony, setNewTestimony, startNewTestimonyLoading, stopNewTestimonyLoading, setNewTestimonyError, resetTestimoniesSuccess, setSelectedTestimony, updateFormSelectedTestimony, setUpdateSelectedTestimony, startSelectedTestimonyLoading, stopSelectedTestimonyLoading, setSelectedTestimonyError, setAllByOneUser, startAllByOneUserLoading, stopAllByOneUserLoading, setAllByOneUserError, setDeleteTestimony, startDeleteTestimonyLoading, stopDeleteTestimonyLoading, setDeleteTestimonyError } = testimonySlice.actions;
 export default testimonySlice.reducer;

@@ -1,7 +1,7 @@
 import express from "express";
 import { TestimonyController } from "../controllers/testimony.controllers.js";
 import jwtMddlwr from "../middlewares/jwt.mddlwrs.js";
-import isAdminOrOwner from "../middlewares/isAdminOrOwner.mddlwrs.js";
+import isAdminOrAuthor from "../middlewares/isAdminOrAuthor.mddlwrs.js";
 
 const initTestimonyRoutes = (app) => {
   const testimonyRouter = express.Router();
@@ -9,6 +9,7 @@ const initTestimonyRoutes = (app) => {
   // GET
   testimonyRouter.get("/", TestimonyController.readAllWithTheirUsername);
   testimonyRouter.get("/overview", TestimonyController.readWithTheirUsername);
+  testimonyRouter.get("/all/user", jwtMddlwr, TestimonyController.readAllByOneUser);
 
   // POST
   testimonyRouter.post("/", jwtMddlwr, TestimonyController.create);
@@ -17,7 +18,7 @@ const initTestimonyRoutes = (app) => {
   testimonyRouter.put("/", jwtMddlwr, TestimonyController.update);
 
   // DELETE
-  testimonyRouter.delete("/:testimonyID", jwtMddlwr, isAdminOrOwner, TestimonyController.deleteOne);
+  testimonyRouter.delete("/:testimonyID", jwtMddlwr, isAdminOrAuthor, TestimonyController.deleteOne);
 
   // GET
   testimonyRouter.get("/:testimonyID", TestimonyController.readOneWithTheirUsername);

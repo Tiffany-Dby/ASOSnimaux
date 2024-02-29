@@ -32,6 +32,13 @@ const readWithTheirUsername = async (req, res) => {
   res.status(error ? 500 : 200).json({ message: error ? error : `Request on 4 latest testimonies with their username successful`, result });
 }
 
+const readAllByOneUser = async ({ body: { userID } }, res) => {
+  const response = await TestimonyDB.readAllByOneUser(userID);
+  const { result, error } = response;
+
+  res.status(error ? 500 : 200).json({ message: error ? error : `Request on all testimonies from user with id "${userID}" successful`, result });
+}
+
 const readOneWithTheirUsername = async ({ params: { testimonyID } }, res) => {
   const response = await TestimonyDB.readOneWithTheirUsername(testimonyID);
   const { result, error } = response;
@@ -57,7 +64,14 @@ const update = async ({ body: { content, testimonyID, userID } }, res) => {
   const response = await TestimonyDB.update(content, testimonyID, userID);
   const error = response.error;
 
-  return res.status(error ? 500 : 200).json({ message: error ? error : `Testimony with id "${testimonyID}" has been successfully edited` })
+  const updatedTestimony = await TestimonyDB.readOneWithTheirUsername(testimonyID);
+  const err = updatedTestimony.error;
+  const result = updatedTestimony.result;
+  const testimony = result[0];
+
+  if (err) return res.status(500).json({ message: err });
+
+  return res.status(error ? 500 : 200).json({ message: error ? error : `Testimony with id "${testimonyID}" has been successfully edited`, testimony })
 }
 
 const deleteOne = async ({ body: { userID }, params: { testimonyID } }, res) => {
@@ -70,6 +84,7 @@ const deleteOne = async ({ body: { userID }, params: { testimonyID } }, res) => 
 export const TestimonyController = {
   create,
   readAllWithTheirUsername,
+  readAllByOneUser,
   readWithTheirUsername,
   readOneWithTheirUsername,
   update,

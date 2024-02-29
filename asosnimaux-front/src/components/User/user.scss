@@ -13,7 +13,9 @@
     }
 
     @media screen and (min-width: 480px) {
-      @include mxn.flex;
+      &:not(.user__testimonies__wrapper .user__infos) {
+        @include mxn.flex;
+      }
 
       &:has(img) {
         grid-column: 1/2;
@@ -39,6 +41,7 @@
     &__wrapper {
       @include mxn.container;
       display: grid;
+      gap: 3rem;
 
       @media screen and (min-width: 480px) {
         grid-template-columns: repeat(2, 1fr);
@@ -97,18 +100,14 @@
       display: grid;
       gap: 3rem;
 
-      @media screen and (min-width:500px) {
+      @media screen and (min-width:767px) {
         grid-template-columns: repeat(2, 1fr);
       }
 
-      @media screen and (min-width:900px) {
-        grid-template-columns: repeat(3, 1fr);
+      .user__infos {
+        display: grid;
       }
     }
-  }
-
-  & div:has(.manage-icons) {
-    gap: 1.5rem;
   }
 
   .btn-wrapper {
@@ -120,5 +119,13 @@
       background-color: var(--dark-red);
       box-shadow: var(--shadow-border-m) var(--dark-red);
     }
+  }
+
+  .icons-wrapper {
+    @include mxn.flex;
+    justify-content: center;
+    align-self: end;
+    gap: 5rem;
+    padding: var(--padding-s) var(--padding-xs);
   }
 }

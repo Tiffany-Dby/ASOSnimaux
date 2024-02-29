@@ -52,13 +52,35 @@ const readAllWithTheirUsername = async () => {
     return { result, error };
   }
 }
+
+const readAllByOneUser = async (userID) => {
+  const sql = `
+    SELECT id, content, date, user_id
+    FROM testimonies
+    WHERE user_id = ?
+    ORDER BY date DESC
+  `;
+
+  let result = [];
+  let error = null;
+  try {
+    result = await query(sql, [userID]);
+  }
+  catch (err) {
+    error = err.message;
+  }
+  finally {
+    return { result, error };
+  }
+}
+
 const readWithTheirUsername = async () => {
   const sql = `
     SELECT testimonies.id, testimonies.content, testimonies.date, testimonies.user_id, users.username, users.avatar_url,
     CASE 
-        WHEN LENGTH(testimonies.content) > 150 
-        THEN CONCAT(SUBSTRING(testimonies.content, 1, 150), '...') 
-        ELSE testimonies.content 
+      WHEN LENGTH(testimonies.content) > 150 
+      THEN CONCAT(SUBSTRING(testimonies.content, 1, 150), '...') 
+      ELSE testimonies.content 
     END AS truncated_content
     FROM testimonies
     LEFT JOIN users ON testimonies.user_id = users.id
@@ -83,9 +105,9 @@ const readOneWithTheirUsername = async (testimonyID) => {
   const sql = `
     SELECT testimonies.id, testimonies.content, testimonies.date, testimonies.user_id, users.username, users.avatar_url,
     CASE 
-        WHEN LENGTH(testimonies.content) > 150 
-        THEN CONCAT(SUBSTRING(testimonies.content, 1, 150), '...') 
-        ELSE testimonies.content 
+      WHEN LENGTH(testimonies.content) > 150 
+      THEN CONCAT(SUBSTRING(testimonies.content, 1, 150), '...') 
+      ELSE testimonies.content 
     END AS truncated_content
     FROM testimonies
     LEFT JOIN users ON testimonies.user_id = users.id
@@ -136,7 +158,6 @@ const deleteOne = async (testimonyID, userID) => {
   let result = [];
   let error = null;
   try {
-    await isUserAuthor(testimonyID, userID);
     result = await query(sql, [testimonyID]);
     if (result.affectedRows !== 1) throw new Error(`Something went wrong couldn't delete testimony`);
   }
@@ -167,6 +188,7 @@ const isUserAuthor = async (testimonyID, userID) => {
 export const TestimonyDB = {
   create,
   readAllWithTheirUsername,
+  readAllByOneUser,
   readWithTheirUsername,
   readOneWithTheirUsername,
   update,
