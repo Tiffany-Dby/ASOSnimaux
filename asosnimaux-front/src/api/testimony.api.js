@@ -1,4 +1,4 @@
-import { resetFormNewTestimony, setAllByOneUser, setAllByOneUserError, setDeleteTestimony, setDeleteTestimonyError, setNewTestimony, setNewTestimonyError, setOverviewTestimonyError, setSelectedTestimonyError, setTestimonyOverview, setUpdateSelectedTestimony, startAllByOneUserLoading, startDeleteTestimonyLoading, startNewTestimonyLoading, startOverviewTestimonyLoading, startSelectedTestimonyLoading } from "../redux/reducers/testimony.reducer";
+import { resetFormNewTestimony, setAllByOneUser, setAllByOneUserError, setAllTestimonies, setAllTestimoniesError, setDeleteTestimony, setDeleteTestimonyByAdmin, setDeleteTestimonyError, setNewTestimony, setNewTestimonyError, setOverviewTestimonyError, setSelectedTestimonyError, setTestimonyOverview, setUpdateSelectedTestimony, startAllByOneUserLoading, startAllTestimoniesLoading, startDeleteTestimonyLoading, startNewTestimonyLoading, startOverviewTestimonyLoading, startSelectedTestimonyLoading } from "../redux/reducers/testimony.reducer";
 import { getFromStorage } from "../utils/storage.utils";
 import { showToast } from "../utils/toast.utils";
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
@@ -14,6 +14,18 @@ export const getTestimoniesOverviewThunk = () => async (dispatch, getState) => {
   if (!result?.message || status >= 400 || !!error) return dispatch(setOverviewTestimonyError({ error: `Something went wrong : ${error}` }));
 
   dispatch(setTestimonyOverview({ overview: result.result }))
+}
+
+export const getAllTestimoniesThunk = () => async (dispatch, getState) => {
+  const { allTestimoniesLoading } = getState().testimonyReducer;
+  if (allTestimoniesLoading) return;
+
+  dispatch(startAllTestimoniesLoading());
+
+  const { result, error, status } = await getRequest("testimonies");
+  if (!result?.message || status >= 400 || !!error) return dispatch(setAllTestimoniesError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setAllTestimonies({ testimonies: result.result }));
 }
 
 export const getOneUserTestimoniesThunk = () => async (dispatch, getState) => {
@@ -69,6 +81,7 @@ export const updateTestimonyThunk = () => async (dispatch, getState) => {
 export const deleteTestimonyThunk = () => async (dispatch, getState) => {
   const { deleteTestimonyLoading, testimonies } = getState().testimonyReducer;
   const { selectedTestimony } = testimonies;
+  const { user } = getState().userReducer;
   const token = getFromStorage("token");
   if (deleteTestimonyLoading) return;
 
@@ -77,6 +90,12 @@ export const deleteTestimonyThunk = () => async (dispatch, getState) => {
   const { result, error, status } = await deleteRequest(`testimonies/${selectedTestimony.id}`, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setDeleteTestimonyError({ error: `Something went wrong : ${error}` }));
 
-  dispatch(setDeleteTestimony({ id: selectedTestimony.id }));
+  if (user.role === "admin" || user.role === "super_admin") {
+    dispatch(setDeleteTestimonyByAdmin({ id: selectedTestimony.id }))
+  }
+  if (user.id === selectedTestimony.user_id) {
+    dispatch(setDeleteTestimony({ id: selectedTestimony.id }));
+  }
+
   showToast(dispatch);
 }

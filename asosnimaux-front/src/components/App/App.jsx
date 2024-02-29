@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { getOneUserThunk } from '../../api/user.api.js';
 import { getFromStorage } from '../../utils/storage.utils.js';
+import AdminTestimonies from '../AdminTestimonies/AdminTestimonies.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -64,6 +65,7 @@ const App = () => {
               <Route index path={`${APP_ROUTES.ADMIN}`} element={<Navigate replace to="articles" />} />
               <Route path="articles" element={<AdminArticles />} />
               <Route path="animals" element={<AdminAnimals />} />
+              <Route path="testimonies" element={<AdminTestimonies />} />
               <Route
                 path="users"
                 element={

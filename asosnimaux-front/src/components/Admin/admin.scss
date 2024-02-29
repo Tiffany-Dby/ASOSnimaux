@@ -94,7 +94,8 @@
 
   &__all-articles,
   &__all-users,
-  &__all-animals {
+  &__all-animals,
+  &__all-testimonies {
     @include mxn.container;
     @include mxn.flex("column", "nowrap");
     gap: 1.6rem;
@@ -106,7 +107,11 @@
     @media screen and (min-width: 345px) {
       border-top-right-radius: var(--radius-s);
     }
+  }
 
+  &__all-articles,
+  &__all-users,
+  &__all-animals {
     &__wrapper {
       display: grid;
       gap: 3rem;

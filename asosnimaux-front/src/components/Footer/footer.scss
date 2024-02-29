@@ -1,28 +1,38 @@
 @use "../../styles/mixins" as mxn;
 
 .footer {
+  @include mxn.flex("column", "nowrap");
   background-color: var(--dark-brown);
   box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.25);
-  padding: var(--padding-s);
   color: white;
 
-  &__img {
+  &>* {
+    @include mxn.container;
+  }
+
+  a {
+    color: var(--white);
+    transition: all .5s ease;
+
+    &:hover {
+      color: var(--accent);
+    }
+  }
+
+  &__img,
+  &__copyright {
     display: flex;
     justify-content: center;
+  }
 
-    &>a {
-      display: block;
-
+  &__img {
+    a {
       img {
         object-fit: contain;
         min-width: 180px;
         max-width: 250px;
       }
     }
-  }
-
-  nav:has(.footer__links) {
-    @include mxn.container($padding: var(--padding-m) 0);
   }
 
   &__links {
@@ -38,7 +48,7 @@
       padding-top: var(--padding-xs);
     }
 
-    & ul:nth-child(2) {
+    ul:nth-child(2) {
       @include mxn.flex;
       gap: 1rem;
       min-width: 180px;
@@ -55,18 +65,9 @@
     }
   }
 
-  a {
-    color: var(--white);
-    transition: all .5s ease;
-
-    &:hover {
-      color: var(--accent);
+  &__copyright {
+    a {
+      text-decoration: none;
     }
-  }
-
-  .copyright {
-    display: block;
-    text-decoration: none;
-    text-align: center;
   }
 }

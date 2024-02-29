@@ -18,6 +18,7 @@ const DIALOG_STATE = {
   isNewTestimonyForm: false,
   isUpdateTestimony: false,
   isDeleteTestimony: false,
+  isDeleteTestimonyByAdmin: false,
   input: {
     label: "",
     id: "",
@@ -50,6 +51,7 @@ const dialogSlice = createSlice({
       state.isNewTestimonyForm = false;
       state.isUpdateTestimony = false;
       state.isDeleteTestimony = false;
+      state.isDeleteTestimonyByAdmin = false;
     },
     setInputFields: (state, action) => {
       const { label, id, type } = action.payload;
@@ -126,9 +128,13 @@ const dialogSlice = createSlice({
     setIsDeleteTestimony: (state, action) => {
       state.isOpen = true;
       state.isDeleteTestimony = true;
+    },
+    setIsDeleteTestimonyByAdmin: (state, action) => {
+      state.isOpen = true;
+      state.isDeleteTestimonyByAdmin = true;
     }
   }
 });
 
-export const { toggleDialog, setInputFields, closeDialog, setIsNewArticleForm, setIsDeleteArticleForm, setIsUpdateArticleForm, setIsDeleteAccountForm, setIsUpdateAccountForm, setIsUpdateAccountAvatar, setIsDeleteUserBySuperAdminForm, setIsUpdateUserRoleBySuperAdminForm, setIsNewAnimalForm, setIsUpdateAnimalForm, setIsDeleteAnimalForm, setIsFilters, setIsReadMoreTestimoniesOverview, setIsNewTestimonyForm, setIsUpdateTestimony, setIsDeleteTestimony } = dialogSlice.actions;
+export const { toggleDialog, setInputFields, closeDialog, setIsNewArticleForm, setIsDeleteArticleForm, setIsUpdateArticleForm, setIsDeleteAccountForm, setIsUpdateAccountForm, setIsUpdateAccountAvatar, setIsDeleteUserBySuperAdminForm, setIsUpdateUserRoleBySuperAdminForm, setIsNewAnimalForm, setIsUpdateAnimalForm, setIsDeleteAnimalForm, setIsFilters, setIsReadMoreTestimoniesOverview, setIsNewTestimonyForm, setIsUpdateTestimony, setIsDeleteTestimony, setIsDeleteTestimonyByAdmin } = dialogSlice.actions;
 export default dialogSlice.reducer;

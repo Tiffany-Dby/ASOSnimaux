@@ -24,7 +24,7 @@ const NotAuth = ({ actionText }) => {
         </div>
         <div className="not-auth__text">
           <p><strong>{actionText}</strong> nécessite d'être un <strong>Ami'nimaux connecté.</strong></p>
-          <p>Si vous le souhaitez vous pouvez <Link to={APP_ROUTES.SIGN_IN} onClick={handleClose}>être redirigé vers la page de connexion</Link> ou <Link to={APP_ROUTES.SIGN_UP} onClick={handleClose}>être redirigé vers la page de création de compte</Link>.</p>
+          <p>Vous pouvez <Link to={APP_ROUTES.SIGN_IN} onClick={handleClose}>être redirigé vers la page de connexion</Link> ou <Link to={APP_ROUTES.SIGN_UP} onClick={handleClose}>être redirigé vers la page de création de compte</Link>.</p>
         </div>
       </article>
     </>

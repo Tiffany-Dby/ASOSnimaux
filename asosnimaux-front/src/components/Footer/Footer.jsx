@@ -38,7 +38,9 @@ const Footer = () => {
           </ul>
         </nav>
 
-        <a className="copyright" href="https://github.com/Tiffany-Dby" target="_blank">Tiffany-Dby&copy;</a>
+        <div className="footer__copyright">
+          <a href="https://github.com/Tiffany-Dby" target="_blank">Tiffany-Dby&copy;</a>
+        </div>
       </footer>
     </>
   )

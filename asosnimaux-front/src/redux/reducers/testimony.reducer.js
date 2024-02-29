@@ -15,6 +15,7 @@ const TESTIMONY_STATE = {
     },
     selectedTestimony: {
       id: "",
+      user_id: "",
       content: ""
     },
     all: [],
@@ -29,8 +30,8 @@ const TESTIMONY_STATE = {
   selectedTestimonyLoading: false,
   selectedTestimonySuccess: null,
   selectedTestimonyError: null,
-  allTestimonyLoading: false,
-  allTestimonyError: null,
+  allTestimoniesLoading: false,
+  allTestimoniesError: null,
   overviewTestimonyLoading: false,
   overviewTestimonyError: null,
   allByOneUserLoading: false,
@@ -158,7 +159,6 @@ const testimonySlice = createSlice({
         ...state,
         testimonies: {
           ...state.testimonies,
-          all: [...state.testimonies.all, { ...testimony }],
           overview: [{ ...testimony }, ...state.testimonies.overview.slice(0, -1)]
         },
         newTestimonyError: null,
@@ -193,13 +193,14 @@ const testimonySlice = createSlice({
       }
     },
     setSelectedTestimony: (state, action) => {
-      const { id, content } = action.payload;
+      const { id, user_id, content } = action.payload;
       return {
         ...state,
         testimonies: {
           ...state.testimonies,
           selectedTestimony: {
             id,
+            user_id,
             content
           }
         }
@@ -294,6 +295,18 @@ const testimonySlice = createSlice({
         deleteTestimonySuccess: "Témoignage supprimé !"
       }
     },
+    setDeleteTestimonyByAdmin: (state, action) => {
+      const { id } = action.payload;
+      return {
+        ...state,
+        testimonies: {
+          ...state.testimonies,
+          all: state.testimonies.all.filter(testimony => testimony.id !== id)
+        },
+        deleteTestimonyLoading: false,
+        deleteTestimonySuccess: "Témoignage supprimé !"
+      }
+    },
     startDeleteTestimonyLoading: (state, action) => {
       return {
         ...state,
@@ -312,9 +325,40 @@ const testimonySlice = createSlice({
         deleteTestimonyError: action.payload.error,
         deleteTestimonyLoading: false
       }
+    },
+    setAllTestimonies: (state, action) => {
+      const { testimonies } = action.payload;
+      return {
+        ...state,
+        testimonies: {
+          ...state.testimonies,
+          all: [...testimonies]
+        },
+        allTestimoniesLoading: false,
+        allTestimoniesError: null
+      }
+    },
+    startAllTestimoniesLoading: (state, action) => {
+      return {
+        ...state,
+        allTestimoniesLoading: true
+      }
+    },
+    stopAllTestimoniesLoading: (state, action) => {
+      return {
+        ...state,
+        allTestimoniesLoading: false
+      }
+    },
+    setAllTestimoniesError: (state, action) => {
+      return {
+        ...state,
+        allTestimoniesError: action.payload.error,
+        allTestimoniesLoading: false
+      }
     }
   }
 });
 
-export const { setTestimonyOverview, startOverviewTestimonyLoading, stopOverviewTestimonyLoading, setOverviewTestimonyError, setOneTestimony, startOneTestimonyLoading, stopOneTestimonyLoading, setOneTestimonyError, resetOneTestimony, updateFormNewTestimony, resetFormNewTestimony, setNewTestimony, startNewTestimonyLoading, stopNewTestimonyLoading, setNewTestimonyError, resetTestimoniesSuccess, setSelectedTestimony, updateFormSelectedTestimony, setUpdateSelectedTestimony, startSelectedTestimonyLoading, stopSelectedTestimonyLoading, setSelectedTestimonyError, setAllByOneUser, startAllByOneUserLoading, stopAllByOneUserLoading, setAllByOneUserError, setDeleteTestimony, startDeleteTestimonyLoading, stopDeleteTestimonyLoading, setDeleteTestimonyError } = testimonySlice.actions;
+export const { setTestimonyOverview, startOverviewTestimonyLoading, stopOverviewTestimonyLoading, setOverviewTestimonyError, setOneTestimony, startOneTestimonyLoading, stopOneTestimonyLoading, setOneTestimonyError, resetOneTestimony, updateFormNewTestimony, resetFormNewTestimony, setNewTestimony, startNewTestimonyLoading, stopNewTestimonyLoading, setNewTestimonyError, resetTestimoniesSuccess, setSelectedTestimony, updateFormSelectedTestimony, setUpdateSelectedTestimony, startSelectedTestimonyLoading, stopSelectedTestimonyLoading, setSelectedTestimonyError, setAllByOneUser, startAllByOneUserLoading, stopAllByOneUserLoading, setAllByOneUserError, setDeleteTestimony, setDeleteTestimonyByAdmin, startDeleteTestimonyLoading, stopDeleteTestimonyLoading, setDeleteTestimonyError, setAllTestimonies, startAllTestimoniesLoading, stopAllTestimoniesLoading, setAllTestimoniesError } = testimonySlice.actions;
 export default testimonySlice.reducer;

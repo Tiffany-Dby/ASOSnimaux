@@ -36,8 +36,6 @@ const User = () => {
   // Fetching -> user's testimonies
   useEffect(() => {
     dispatch(getOneUserTestimoniesThunk());
-    console.log(allByOneUser)
-    console
   }, []);
 
   // *************** Avatar ***************
@@ -52,9 +50,54 @@ const User = () => {
   // Update avatar
   const handleUpdateAvatar = () => {
     dispatch(updateAvatarThunk(updatedAvatar));
+    dispatch(setUpdatedAvatar(""));
     dispatch(closeDialog());
   }
   // *************** End Avatar ***************
+
+  // *************** Dialog ***************
+  // Open appropriate Update Dialog for users informations
+  const handleDialog = (input, value) => {
+    dispatch(resetDialogForm());
+    dispatch(setInputFields({ label: input.label, id: input.id, type: input.type }));
+    dispatch(updateDialogForm({ input, value }));
+    dispatch(setIsUpdateAccountForm());
+  }
+
+  // Open Update Dialog for Testimony
+  const handleTestimonyDialog = (testimony) => {
+    dispatch(setIsUpdateTestimony());
+    dispatch(setSelectedTestimony({ id: testimony.id, user_id: testimony.user_id, content: testimony.content }));
+  }
+
+  // Open Delete User Dialog
+  const handleDeleteUser = () => {
+    dispatch(setIsDeleteAccountForm());
+    dispatch(setSelectedUser({ id: user.id }));
+  }
+
+  // Open Delete Testimony Dialog
+  const handleDeleteTestimony = (testimony) => {
+    dispatch(setIsDeleteTestimony());
+    dispatch(setSelectedTestimony({ id: testimony.id, user_id: testimony.user_id }));
+  }
+
+  // *************** Inputs onChange ***************
+  // Update Username - Password - Email
+  const updateForm = (input, value) => dispatch(updateDialogForm({ input, value }));
+
+  // Update Testimony
+  const updateTestimonyForm = (input, value) => dispatch(updateFormSelectedTestimony({ input, value }));
+  // *************** End Inputs onChange ***************
+
+  // Close Dialog
+  const handleCancel = () => {
+    setAvatarIndex(null);
+    dispatch(setUpdatedAvatar(""));
+    dispatch(setSelectedTestimony({ id: "", user_id: "", content: "" }));
+    dispatch(closeDialog());
+  }
+  // *************** End Dialog ***************
 
   // *************** Submit ***************
   // Update User's infos
@@ -76,6 +119,7 @@ const User = () => {
   const handleSubmitSelectedTestimony = e => {
     e.preventDefault();
     dispatch(updateTestimonyThunk());
+    dispatch(setSelectedTestimony({ id: "", user_id: "", content: "" }));
     dispatch(closeDialog());
   }
 
@@ -88,6 +132,7 @@ const User = () => {
   // Delete Testimony
   const handleConfirmedTestimonyDeletion = () => {
     dispatch(deleteTestimonyThunk(selectedTestimony.id));
+    dispatch(setSelectedTestimony({ id: "", user_id: "", content: "" }));
     dispatch(closeDialog());
   }
 
@@ -102,48 +147,6 @@ const User = () => {
     }
   }
   // *************** End Submit ***************
-
-  // *************** Dialog ***************
-  // Open appropriate Update Dialog for users informations
-  const handleDialog = (input, value) => {
-    dispatch(resetDialogForm());
-    dispatch(setInputFields({ label: input.label, id: input.id, type: input.type }));
-    dispatch(updateDialogForm({ input, value }));
-    dispatch(setIsUpdateAccountForm());
-  }
-
-  // Open Update Dialog for Testimony
-  const handleTestimonyDialog = (testimony) => {
-    dispatch(setIsUpdateTestimony());
-    dispatch(setSelectedTestimony({ id: testimony.id, content: testimony.content }));
-  }
-
-  // Open Delete User Dialog
-  const handleDeleteUser = () => {
-    dispatch(setIsDeleteAccountForm());
-    dispatch(setSelectedUser({ id: user.id }))
-  }
-
-  // Open Delete Testimony Dialog
-  const handleDeleteTestimony = (testimony) => {
-    dispatch(setIsDeleteTestimony());
-    dispatch(setSelectedTestimony({ id: testimony.id }))
-  }
-
-  // *************** Inputs onChange ***************
-  // Update Username - Password - Email
-  const updateForm = (input, value) => dispatch(updateDialogForm({ input, value }));
-
-  // Update Testimony
-  const updateTestimonyForm = (input, value) => dispatch(updateFormSelectedTestimony({ input, value }));
-
-  // Close Dialog
-  const handleCancel = () => {
-    setAvatarIndex(null);
-    dispatch(setUpdatedAvatar(""))
-    dispatch(closeDialog());
-  }
-  // *************** End Dialog ***************
 
   return (
     <>

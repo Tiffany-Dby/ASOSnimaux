@@ -11,13 +11,16 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticleThunk } from "../../api/article.api";
-import { resetFormNewArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
+import { resetFormNewArticle, setSelectedArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
 import { APP_ROUTES } from "../../constants/route.const";
 import { deleteAnimalThunk, getAllAnimalsThunk, postNewAnimalThunk, updateAnimalThunk } from "../../api/animal.api.js";
-import { resetFormNewAnimal, setNewAnimalError, updateFormNewAnimal, updateFormSelectedAnimal } from "../../redux/reducers/animal.reducer.js";
+import { resetFormNewAnimal, setNewAnimalError, setSelectedAnimal, updateFormNewAnimal, updateFormSelectedAnimal } from "../../redux/reducers/animal.reducer.js";
 import { deleteUserThunk, getAllUsersThunk, updateUserRoleThunk } from "../../api/user.api.js";
 import { setSelectedUser, updateFormSelectedUser } from "../../redux/reducers/user.reducer.js";
+import { deleteTestimonyThunk, getAllTestimoniesThunk } from "../../api/testimony.api.js";
+import { setSelectedTestimony } from "../../redux/reducers/testimony.reducer.js";
+import { resetAdminForms, resetAdminSelects } from "../../utils/reset.utils.js";
 
 const Admin = () => {
   const dispatch = useDispatch();
@@ -29,7 +32,7 @@ const Admin = () => {
   const { user, selectedUser, selectedUserSuccess, deleteUserSuccess } = useSelector(state => state.userReducer);
 
   // Dialog Reducer
-  const { isNewArticleForm, isDeleteArticleForm, isUpdateArticleForm, isNewAnimalForm, isUpdateAnimalForm, isDeleteAnimalForm, isDeleteUserBySuperAdminForm, isUpdateUserRoleBySuperAdminForm } = useSelector(state => state.dialogReducer);
+  const { isNewArticleForm, isDeleteArticleForm, isUpdateArticleForm, isNewAnimalForm, isUpdateAnimalForm, isDeleteAnimalForm, isDeleteUserBySuperAdminForm, isUpdateUserRoleBySuperAdminForm, isDeleteTestimonyByAdmin } = useSelector(state => state.dialogReducer);
 
   // Article Reducer
   const { articles, newArticleSuccess, selectedSuccess, deleteSuccess } = useSelector(state => state.articleReducer);
@@ -37,6 +40,9 @@ const Admin = () => {
 
   // Animal Reducer
   const { animals, newAnimalError, newAnimalSuccess, selectedAnimalError, selectedAnimalSuccess, deleteAnimalSuccess } = useSelector(state => state.animalReducer);
+
+  // Testimony Reducer
+  const { testimonies, deleteTestimonySuccess } = useSelector(state => state.testimonyReducer);
 
   // Files -> Articles and Animals
   const inputFileRef = useRef(null);
@@ -71,14 +77,16 @@ const Admin = () => {
     return isActive ? 'active' : '';
   }
 
-  // Fetching all Aritcles, Animals and Users
+  // Fetching all Aritcles, Animals, Testimonies and Users
   useEffect(() => {
     dispatch(getAllArticlesThunk());
     dispatch(getAllAnimalsThunk());
+    dispatch(getAllTestimoniesThunk());
     dispatch(getAllUsersThunk());
   }, []);
 
   // *************** Submit ***************
+  // ******* Article *******
   // New Article
   const handleSubmitNew = e => {
     e.preventDefault();
@@ -91,10 +99,20 @@ const Admin = () => {
   // Update Article
   const handleSubmitSelected = e => {
     e.preventDefault();
-    dispatch(updateArticleThunk())
+    dispatch(updateArticleThunk());
+    dispatch(setSelectedArticle({ id: "", name: "", location: "", description: "" }));
     dispatch(closeDialog());
   }
 
+  // Delete Article
+  const handleConfirmedArticleDeletion = () => {
+    dispatch(deleteArticleThunk(selectedArticle.id));
+    dispatch(setSelectedArticle({ id: "", name: "", location: "", description: "" }));
+    dispatch(closeDialog());
+  }
+  // ******* End Article *******
+
+  // ******* Animal *******
   // New Animal
   const handleSubmitNewAnimal = e => {
     e.preventDefault();
@@ -122,15 +140,43 @@ const Admin = () => {
     }
 
     dispatch(updateAnimalThunk());
+    dispatch(setSelectedAnimal({ id: "", age: "", name: "", sex: "", description: "", race: "", status: "", species: "", exit_date: "" }));
     dispatch(closeDialog());
   }
 
+  // Delete Animal
+  const handleConfirmedAnimalDeletion = () => {
+    dispatch(deleteAnimalThunk(animals.selectedAnimal.id));
+    dispatch(setSelectedAnimal({ id: "", age: "", name: "", sex: "", description: "", race: "", status: "", species: "", exit_date: "" }));
+    dispatch(closeDialog());
+  }
+  // ******* End Animal *******
+
+  // ******* User *******
   // Update User Role
   const handleUpdateRoleSubmit = e => {
     e.preventDefault();
     dispatch(updateUserRoleThunk());
+    dispatch(setSelectedUser({ id: "", username: "", role: "" }));
     dispatch(closeDialog());
   }
+
+  // Delete User
+  const handleConfirmedUserDeletion = () => {
+    dispatch(deleteUserThunk(selectedUser.id));
+    dispatch(setSelectedUser({ id: "", username: "", role: "" }));
+    dispatch(closeDialog());
+  }
+  // ******* End User *******
+
+  // ******* Testimony *******
+  // Delete Testimony
+  const handleConfirmedTestimonyDeletion = () => {
+    dispatch(deleteTestimonyThunk(testimonies.selectedTestimony.id));
+    dispatch(setSelectedTestimony({ id: "", user_id: "", content: "" }));
+    dispatch(closeDialog());
+  }
+  // ******* End Testimony *******
   // *************** End Submit ***************
 
   // *************** Inputs onChange ***************
@@ -150,27 +196,7 @@ const Admin = () => {
   const updateFormUserSelected = (input, value) => dispatch(updateFormSelectedUser({ input, value }));
   // *************** End Inputs onChange ***************
 
-  // *************** Submit Deletion ***************
-  // Delete Article
-  const handleConfirmedArticleDeletion = () => {
-    dispatch(deleteArticleThunk(selectedArticle.id));
-    dispatch(closeDialog());
-  }
-
-  // Delete Animal
-  const handleConfirmedAnimalDeletion = () => {
-    dispatch(deleteAnimalThunk(animals.selectedAnimal.id));
-    dispatch(closeDialog());
-  }
-
-  // Delete User
-  const handleConfirmedUserDeletion = () => {
-    dispatch(deleteUserThunk(selectedUser.id));
-    dispatch(closeDialog());
-  }
-  // *************** End Submit Deletion ***************
-
-  // *************** Open Deletion Dialog ***************
+  // Delete accordingly -> set on click
   const handleConfirmedDeleteClick = () => {
     // Dialog delete Article
     if (isDeleteArticleForm) {
@@ -184,24 +210,30 @@ const Admin = () => {
     if (isDeleteUserBySuperAdminForm) {
       handleConfirmedUserDeletion();
     }
+    if (isDeleteTestimonyByAdmin) {
+      handleConfirmedTestimonyDeletion();
+    }
   }
-  // *************** End Open Deletion Dialog ***************
 
-  // *************** Cancel ***************
+  // Cancel
   const handleCancel = () => {
-    dispatch(closeDialog());
-    dispatch(resetFormNewArticle());
-    dispatch(resetFormNewAnimal());
     dispatch(setNewAnimalError({ error: null }));
-    dispatch(setSelectedUser({ id: "", username: "", role: "" }));
+    // dispatch(resetFormNewArticle());
+    // dispatch(resetFormNewAnimal());
+    resetAdminForms(dispatch);
+    // dispatch(setSelectedArticle({ id: "", name: "", location: "", description: "" }));
+    // dispatch(setSelectedAnimal({ id: "", age: "", name: "", sex: "", description: "", race: "", status: "", species: "", exit_date: "" }));
+    // dispatch(setSelectedTestimony({ id: "", user_id: "", content: "" }));
+    // dispatch(setSelectedUser({ id: "", username: "", role: "" }));
+    resetAdminSelects(dispatch);
+    dispatch(closeDialog());
   }
-  // *************** End Cancel ***************
 
   return (
     <>
       <div className="admin">
         {isToastOpen &&
-          <Toast message={newArticleSuccess || selectedSuccess || deleteSuccess || newAnimalSuccess || selectedAnimalSuccess || deleteAnimalSuccess || selectedUserSuccess || deleteUserSuccess} />
+          <Toast message={newArticleSuccess || selectedSuccess || deleteSuccess || newAnimalSuccess || selectedAnimalSuccess || deleteAnimalSuccess || selectedUserSuccess || deleteUserSuccess || deleteTestimonySuccess} />
         }
         <div className="title-wrapper">
           <h1>Administrateur</h1>
@@ -446,12 +478,12 @@ const Admin = () => {
               </form>
             </div>
           }
-          {(isDeleteArticleForm || isDeleteAnimalForm || isDeleteUserBySuperAdminForm) &&
+          {(isDeleteArticleForm || isDeleteAnimalForm || isDeleteUserBySuperAdminForm || isDeleteTestimonyByAdmin) &&
             <div className="dialog-wrapper confirm-deletion">
               <div className="title-wrapper">
                 <h2>Supprimer</h2>
               </div>
-              <p>Voulez-vous vraiment supprimer cet {isDeleteArticleForm && 'article'}{isDeleteAnimalForm && 'animal'}{isDeleteUserBySuperAdminForm && 'utilisateur'} ?</p>
+              <p>Supprimer {isDeleteArticleForm && "l'article"}{isDeleteAnimalForm && "l'animal"}{isDeleteUserBySuperAdminForm && "l'utilisateur"}{isDeleteTestimonyByAdmin && "le témoignage"} ?</p>
               <div className="btns-wrapper">
                 <Button btnStyle={""} text="Confirmer" btnClick={handleConfirmedDeleteClick} />
                 <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
