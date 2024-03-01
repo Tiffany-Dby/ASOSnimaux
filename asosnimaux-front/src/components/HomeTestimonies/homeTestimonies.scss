@@ -1,36 +1,51 @@
 @use "../../styles/mixins" as mxn;
 
-.testimonies {
-  &-overview {
-    @include mxn.flex("column", "nowrap");
-    gap: 2rem;
+.testimonies-overview {
+  @include mxn.flex("column", "nowrap");
+  gap: 2rem;
 
-    .breadcrumbs {
-      padding: 0;
+  .breadcrumbs {
+    padding: 0;
 
-      &__links {
-        display: flex;
-        justify-content: center;
-        gap: 1.5rem;
+    &__links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
 
-        a {
-          height: 1.2rem;
-          width: 1.2rem;
-          border-radius: 50%;
-          background-color: var(--dark-brown);
-        }
+      a {
+        height: 1.2rem;
+        width: 1.2rem;
+        border-radius: 50%;
+        background-color: var(--dark-brown);
+      }
 
-        .active {
-          background-color: var(--accent);
-        }
+      .active {
+        background-color: var(--accent);
       }
     }
+  }
 
-    .btn-wrapper:has(.btn--read-more-testimonies) {
-      @include mxn.btnStylish;
-      margin: 0 auto;
-      padding-bottom: var(--padding-xs);
+  .testimony {
+    max-width: 255px;
+
+
+    @media screen and (min-width: 480px) {
+      max-width: 300px;
     }
+
+    @media screen and (min-width: 767px) {
+      max-width: 400px;
+    }
+
+    @media screen and (min-width: 1024px) {
+      max-width: 600px;
+    }
+  }
+
+  .btn-wrapper:has(.btn--read-more-testimonies) {
+    @include mxn.btnStylish;
+    margin: 0 auto;
+    padding-bottom: var(--padding-xs);
   }
 
   &__header {

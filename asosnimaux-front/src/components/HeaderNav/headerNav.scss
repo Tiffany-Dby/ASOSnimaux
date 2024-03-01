@@ -4,7 +4,7 @@
   &__nav {
     position: absolute;
     z-index: -1;
-    top: -400%;
+    top: -450%;
     right: 0;
     width: 100%;
     background-color: var(--secondary-25);
@@ -20,7 +20,7 @@
       padding: 0 var(--padding-xxs);
     }
 
-    &.nav-open {
+    &.nav--open {
       top: 0;
       padding-top: 95px;
 
@@ -32,9 +32,9 @@
 
   &__links {
     @include mxn.flex("column", "nowrap");
-    gap: 2rem;
-    font-size: var(--font-size-n);
-    font-weight: var(--fw-bold);
+    gap: 1.25rem;
+    font-size: var(--font-size-s);
+    font-weight: var(--fw-semi-bold);
     text-align: center;
 
     @media screen and (min-width: 767px) {

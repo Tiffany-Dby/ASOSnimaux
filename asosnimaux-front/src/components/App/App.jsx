@@ -17,12 +17,13 @@ import AdminUsers from '../AdminUsers/AdminUsers.jsx';
 import PrivateRoute from '../PrivateRoute/PrivateRoute.jsx';
 import Error from '../Error/Error.jsx';
 import { useEffect } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Link, Navigate, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { APP_ROUTES } from "../../constants/route.const.js"
 import { getOneUserThunk } from '../../api/user.api.js';
 import { getFromStorage } from '../../utils/storage.utils.js';
 import AdminTestimonies from '../AdminTestimonies/AdminTestimonies.jsx';
+import Testimonies from '../Testimonies/Testimonies.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -43,10 +44,13 @@ const App = () => {
       <BrowserRouter>
         <Header />
         <main>
+          {/* {isAuth && (user.role === 'admin' || user.role === 'super_admin') &&
+            <Link className="toAdminPage" to={APP_ROUTES.ADMIN}>Admin</Link>
+          } */}
           <Routes>
+            <Route path={APP_ROUTES.HOME} element={<Home />} />
             <Route path={APP_ROUTES.SIGN_UP} element={<SignUp />} />
             <Route path={APP_ROUTES.SIGN_IN} element={<SignIn />} />
-            <Route path={APP_ROUTES.HOME} element={<Home />} />
             <Route
               path={APP_ROUTES.ACCOUNT}
               element={
@@ -80,6 +84,7 @@ const App = () => {
             <Route path={APP_ROUTES.ANIMAL} element={<AnimalDetails />} />
             <Route path={APP_ROUTES.ARTICLES} element={<Articles />} />
             <Route path={APP_ROUTES.ARTICLE} element={<ArticleDetails />} />
+            <Route path={APP_ROUTES.TESTIMONIES} element={<Testimonies />} />
             <Route path={"*"} element={<Error />} />
           </Routes>
         </main>

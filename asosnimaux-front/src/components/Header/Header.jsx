@@ -105,7 +105,7 @@ const Header = () => {
               }
             </div>
             {width < 767 && <Burger toggleClass={isMobileMenuOpen ? " open" : ""} handleBurger={handleBurgerClick} />}
-            <HeaderNav toggleClass={isMobileMenuOpen ? "nav-open" : ""} />
+            <HeaderNav toggleClass={isMobileMenuOpen ? "nav--open" : ""} />
             <span className={`header__background${scrollY > 1 ? ' shadow' : ''}`}></span>
           </div>
         </div>

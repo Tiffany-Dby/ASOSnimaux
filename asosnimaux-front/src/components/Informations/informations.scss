@@ -3,7 +3,6 @@
 .informations {
   @include mxn.flex("column", "nowrap");
   gap: 1rem;
-  // padding-top: var(--padding-m);
 
   &__wrapper {
     @include mxn.container;
@@ -111,7 +110,7 @@
 
     &__details {
       justify-self: center;
-      padding: var(--padding-xs);
+      padding: var(--padding-s);
     }
   }
 }

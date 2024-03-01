@@ -3,7 +3,7 @@
 .animals {
   @include mxn.container;
   @include mxn.flex("column", "nowrap");
-  align-items: end;
+  gap: 2rem;
 
   &__page {
     padding-top: var(--padding-l);
@@ -11,11 +11,6 @@
 
   h2 {
     font-size: var(--font-size-xl);
-  }
-
-  &__header {
-    @include mxn.container($padding: 0);
-    margin-bottom: 1rem;
   }
 
   &__content {
@@ -41,6 +36,8 @@
 
   .btn-wrapper {
     @include mxn.btnSimple;
+    display: grid;
+    align-self: end;
     position: sticky;
     top: 100px;
     z-index: 2;
@@ -71,7 +68,6 @@
     display: grid;
     @include mxn.container($padding: 0);
     gap: 3rem;
-    margin-top: 2rem;
 
     @media screen and (min-width: 600px) {
       grid-template-columns: repeat(2, 1fr);

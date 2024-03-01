@@ -1,9 +1,9 @@
 @use "../../styles/mixins" as mxn;
 
 .articles {
-  h2 {
-    font-size: var(--font-size-xl);
-  }
+  @include mxn.container;
+  @include mxn.flex("column", "nowrap");
+  gap: 2rem;
 
   &__page {
     padding-top: var(--padding-l);
@@ -16,16 +16,13 @@
     }
   }
 
-  &__header {
-    @include mxn.container;
-  }
-
   .loading {
     margin-top: 4rem;
   }
 
   &__wrapper {
     @include mxn.flex;
+    padding: 0;
     gap: 3rem;
 
     @media screen and (min-width: 767px) {

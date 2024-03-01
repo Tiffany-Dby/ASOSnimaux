@@ -67,25 +67,24 @@
 
 @mixin title {
   @include container;
-  position: relative;
   display: grid;
   justify-content: center;
 
   &::after {
     content: url(../../assets/Paw.svg);
     grid-area: 1/1;
-    width: calc(1.3rem + .6vmin);
     justify-self: end;
     align-self: center;
-    transform: translateY(-10%);
+    transform: translateY(-20%);
+    width: var(--font-size-n);
   }
 
   h1,
   h2,
   h3 {
-    z-index: 1;
     grid-area: 1/1;
-    padding-right: calc(.7rem + .5vmin);
+    z-index: 1;
+    padding: 0 1rem;
   }
 }
 
@@ -106,7 +105,7 @@
 
 @mixin btnStylish {
   display: grid;
-  position: relative;
+  // position: relative;
   justify-content: center;
 
   .btn {
@@ -127,7 +126,7 @@
     content: "";
     grid-area: 1/1;
     border-radius: var(--radius-xxs);
-    box-shadow: 0px 0px 0px 2px var(--dark-brown);
+    box-shadow: var(--shadow-border-s) var(--dark-brown);
     background-color: var(--dark-brown);
     transform: translate(-.65rem, .65rem);
     transition: all .5s;
@@ -141,7 +140,6 @@
 @mixin loadingPaws {
   display: grid;
   grid-area: 1/1;
-  content: '';
   width: calc(6*30px);
   height: 50px;
   color: var(--accent);
@@ -154,13 +152,13 @@
     content: "";
     width: 30px;
     height: 25px;
-    --c: no-repeat radial-gradient(farthest-side, currentColor 92%, #0000);
+    --paws: no-repeat radial-gradient(farthest-side, currentColor 92%, #03030300);
     background:
-      var(--c) left /55% 55%,
-      var(--c) top 2% right 40%/27% 22%,
-      var(--c) top 23% right 5%/28% 24%,
-      var(--c) top 58% right 5%/26% 24%,
-      var(--c) bottom 12% right 30%/25% 20%;
+      var(--paws) left /55% 55%,
+      var(--paws) top 2% right 40%/27% 22%,
+      var(--paws) top 23% right 5%/28% 24%,
+      var(--paws) top 58% right 5%/26% 24%,
+      var(--paws) bottom 12% right 30%/25% 20%;
   }
 
   @keyframes laodingPaws {

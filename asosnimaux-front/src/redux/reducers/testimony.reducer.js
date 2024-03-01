@@ -159,6 +159,7 @@ const testimonySlice = createSlice({
         ...state,
         testimonies: {
           ...state.testimonies,
+          all: [{ ...testimony }, ...state.testimonies.all],
           overview: [{ ...testimony }, ...state.testimonies.overview.slice(0, -1)]
         },
         newTestimonyError: null,

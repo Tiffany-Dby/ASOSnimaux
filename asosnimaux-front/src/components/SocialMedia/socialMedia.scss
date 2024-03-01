@@ -3,15 +3,21 @@
 .socialmedia {
   text-align: center;
 
-  .informations__article__title {
-    background-color: var(--dark-brown);
-  }
+  .informations__article {
+    &__title {
+      background-color: var(--dark-brown);
+    }
 
-  p {
-    margin-bottom: 1rem;
+    &__details {
+      @include mxn.flex("column", "nowrap");
+      gap: 0.5rem;
+    }
   }
 
   .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 4.5rem;
     width: 4.5rem;
   }

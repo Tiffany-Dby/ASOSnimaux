@@ -35,9 +35,10 @@ const create = async (content, userID) => {
 
 const readAllWithTheirUsername = async () => {
   const sql = `
-    SELECT testimonies.id, testimonies.content, testimonies.date, testimonies.user_id, users.username
+    SELECT testimonies.id, testimonies.content, testimonies.date, testimonies.user_id, users.username, users.avatar_url
     FROM testimonies
     LEFT JOIN users ON testimonies.user_id = users.id
+    ORDER BY date DESC
   `;
 
   let result = [];

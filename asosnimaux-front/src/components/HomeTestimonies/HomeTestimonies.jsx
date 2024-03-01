@@ -20,7 +20,7 @@ const HomeTestimonies = () => {
   const testimoniesRef = useRef(null);
 
   // Testimony Reducer
-  const { testimonies, newTestimonySuccess } = useSelector(state => state.testimonyReducer);
+  const { testimonies, newTestimonySuccess, newTestimonyLoading, newTestimonyError } = useSelector(state => state.testimonyReducer);
   const { overview, one, newTestimony } = testimonies;
 
   // Dialog Reducer
@@ -133,15 +133,22 @@ const HomeTestimonies = () => {
         {isToastOpen &&
           <Toast message={newTestimonySuccess} />
         }
-        <article className="testimonies__wrapper">
-          <div className="testimonies__header">
+        <article className="testimonies-overview__wrapper">
+          <div className="testimonies-overview__header">
             <h3>Les derniers témoignages</h3>
-            <Button btnStyle={" btn--post-testimonies"} text="Poster un témoignage" btnClick={handleNewTestimonyForm} />
+            {newTestimonyLoading ?
+              <div className="loading">
+                <span className="loading__spin"></span>
+                <p className="loading__text">Envoi du témoignage en cours...</p>
+              </div>
+              :
+              <Button btnStyle={" btn--post-testimonies"} text="Poster un témoignage" btnClick={handleNewTestimonyForm} />
+            }
           </div>
-          <div className="testimonies__slider">
-            <ul className="testimonies__slides" ref={testimoniesRef}>
+          <div className="testimonies-overview__slider">
+            <ul className="testimonies-overview__slides" ref={testimoniesRef}>
               {overview.map((testimony, index) => (
-                <li key={testimony.id} id={`testimonies__slide--${index + 1}`} className="testimonies__slide">
+                <li key={testimony.id} id={`testimonies-overview__slide--${index + 1}`} className="testimonies-overview__slide">
                   <TestimonyCard
                     author={testimony.username}
                     imgUrl={`${APP_ROUTES.API_URL}${testimony.avatar_url}`}
@@ -152,12 +159,12 @@ const HomeTestimonies = () => {
                   />
                   <a
                     onClick={handlePrevious}
-                    className="testimonies__link testimonies--previous"
-                    href={index === 0 ? `#testimonies__slide--${overview.length}` : `#testimonies__slide--${index}`}></a>
+                    className="testimonies-overview__link testimonies-overview--previous"
+                    href={index === 0 ? `#testimonies-overview__slide--${overview.length}` : `#testimonies-overview__slide--${index}`}></a>
                   <a
                     onClick={handleNext}
-                    className="testimonies__link testimonies--next"
-                    href={overview.length === index + 1 ? `#testimonies__slide--1` : `#testimonies__slide--${index + 2}`}></a>
+                    className="testimonies-overview__link testimonies-overview--next"
+                    href={overview.length === index + 1 ? `#testimonies-overview__slide--1` : `#testimonies-overview__slide--${index + 2}`}></a>
                 </li>
               ))}
             </ul>
@@ -167,7 +174,7 @@ const HomeTestimonies = () => {
                   onClick={(e) => handleNavigate(e, index)}
                   key={index}
                   className={index === currentIndex ? "active" : ""}
-                  href={`#testimonies__slide--${index + 1}`}></a>
+                  href={`#testimonies-overview__slide--${index + 1}`}></a>
               ))}
             </Breadcrumbs>
           </div>
@@ -193,7 +200,7 @@ const HomeTestimonies = () => {
           {(isNewTestimonyForm && isAuth) &&
             <div className="dialog-wrapper testimonies__new-testimony">
               <div className="title-wrapper">
-                <h3>Nouveau Témoignage</h3>
+                <h3>Nouveau témoignage</h3>
               </div>
               <form onSubmit={handleSubmitNewTestimony}>
                 <div className="input__wrapper">
