@@ -11,6 +11,6 @@ export const APP_ROUTES = {
   ADMIN: "/admin",
   ASSOCIATION: "/association",
   TESTIMONIES: "testimonies",
-  DONATION: "/don",
+  DONATION: "/donation",
   FAVORITES: "/favoris"
 }

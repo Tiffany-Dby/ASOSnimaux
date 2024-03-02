@@ -36,6 +36,7 @@ const Adoption = () => {
     sex: ["femelle", "mâle"],
     age: ["senior", "adulte", "junior"]
   }
+  const [searchInput, setSearchInput] = useState("");
   const [filters, setFilters] = useState({ ...initialFiltersState });
   const [filteredAnimals, setFilteredAnimals] = useState([]);
   // *************** End Filters State ***************
@@ -126,6 +127,16 @@ const Adoption = () => {
     dispatch(closeDialog());
   }
 
+  // Search onChange (by animal name)
+  useEffect(() => {
+    const filtered = all.filter(animal => {
+      const searchFilters = animal.name.toLowerCase().startsWith(searchInput.toLowerCase());
+      return searchFilters;
+    });
+
+    setFilteredAnimals(filtered);
+  }, [searchInput]);
+
   // Checkbox onChange
   const handleApplyFilters = (newFilters) => {
     const filtered = all.filter(animal => {
@@ -203,11 +214,16 @@ const Adoption = () => {
               }
             </div>
           }
+          {filteredAnimals.length === 0 &&
+            <p>Aucun animal ne correspond à vos filtres actuels.</p>
+          }
         </section>
         <Dialog>
           <Filters
             onClick={handleCloseFilters}
             initialFilters={filters}
+            searchValue={searchInput}
+            onSearchChange={(value) => setSearchInput(value)}
             resetFilters={initialFiltersState}
             onFiltersChange={handleApplyFilters}
             resetClick={() => handleResetFilters()} />

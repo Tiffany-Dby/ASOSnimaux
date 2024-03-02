@@ -1,19 +1,20 @@
 @use "../../styles/mixins" as mxn;
 
 .filters {
-  @include mxn.flex;
-  gap: 1rem;
+  &__switches {
+    @include mxn.flex;
+    gap: 1rem;
 
-  @media screen and (min-width: 480px) {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    @media screen and (min-width: 480px) {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   &__wrapper {
-    @include mxn.container("600px", "0 0 var(--padding-m)");
+    @include mxn.container("600px", 0 0 var(--padding-xs));
     @include mxn.flex("column", "nowrap");
     gap: 1rem;
-    background-color: var(--secondary-50);
 
     .btn-wrapper {
       margin: 0 auto;
@@ -34,6 +35,11 @@
     .title-wrapper {
       justify-content: start;
       padding: var(--padding-xs) 0;
+
+      h2 {
+        padding-left: 0;
+        font-size: var(--font-size-xl);
+      }
     }
 
     .manage-icons {
@@ -55,6 +61,7 @@
 
     .btn-wrapper {
       margin: 0;
+      padding-right: var(--padding-xxs);
 
       .btn {
         padding: .1rem .2rem;
