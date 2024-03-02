@@ -24,6 +24,7 @@ import { getOneUserThunk } from '../../api/user.api.js';
 import { getFromStorage } from '../../utils/storage.utils.js';
 import AdminTestimonies from '../AdminTestimonies/AdminTestimonies.jsx';
 import Testimonies from '../Testimonies/Testimonies.jsx';
+import Association from '../Association/Association.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -79,6 +80,7 @@ const App = () => {
                 }
               />
             </Route>
+            <Route path={APP_ROUTES.ASSOCIATION} element={<Association />} />
             <Route path={APP_ROUTES.ADOPTION} element={<Adoption />} />
             <Route path={APP_ROUTES.FAVORITES} element={<Favorites />} />
             <Route path={APP_ROUTES.ANIMAL} element={<AnimalDetails />} />
