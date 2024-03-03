@@ -77,7 +77,8 @@
       grid-template-columns: repeat(3, 1fr);
     }
 
-    @media screen and (min-width: 1250px) {
+    @media (hover: hover) {
+
       &:has(.animal:hover) .animal:not(:hover) img {
         filter: grayscale(100%) brightness(70%);
       }

@@ -1,7 +1,6 @@
 @use "../../styles/mixins" as mxn;
 
 .articles {
-  @include mxn.container;
   @include mxn.flex("column", "nowrap");
   gap: 2rem;
 
@@ -20,9 +19,12 @@
     margin-top: 4rem;
   }
 
+  &__header {
+    @include mxn.container;
+  }
+
   &__wrapper {
     @include mxn.flex;
-    padding: 0;
     gap: 3rem;
 
     @media screen and (min-width: 767px) {

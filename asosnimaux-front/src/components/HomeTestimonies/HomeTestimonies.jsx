@@ -180,7 +180,7 @@ const HomeTestimonies = () => {
           </div>
         </article>
         <div className="btn-wrapper">
-          <Link className="btn btn--read-more-testimonies" to={APP_ROUTES.ARTICLES}>Voir plus de témoignages</Link>
+          <Link className="btn btn--read-more-testimonies" to={APP_ROUTES.TESTIMONIES}>Voir plus de témoignages</Link>
         </div>
         <Dialog>
           {isReadMoreTestimoniesOverview &&
