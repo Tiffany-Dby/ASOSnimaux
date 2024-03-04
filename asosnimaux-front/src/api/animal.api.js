@@ -1,5 +1,5 @@
 import { APP_ROUTES } from "../constants/route.const";
-import { resetFormNewAnimal, setAllAnimals, setAllAnimalsError, setDeleteAnimal, setDeleteAnimalError, setNewAnimal, setNewAnimalError, setOneAnimal, setOneAnimalError, setSelectedwAnimalError, setUpdateSelectedAnimal, startAllAnimalsLoading, startDeleteAnimalLoading, startNewAnimalLoading, startOneAnimalLoading, startSelectedAnimalLoading } from "../redux/reducers/animal.reducer";
+import { resetFormNewAnimal, setAllAnimals, setAllAnimalsError, setDeleteAnimal, setDeleteAnimalError, setNewAnimal, setNewAnimalError, setOneAnimal, setOneAnimalError, setSelectedwAnimalError, setUpdateExitDate, setUpdateSelectedAnimal, startAllAnimalsLoading, startDeleteAnimalLoading, startNewAnimalLoading, startOneAnimalLoading, startSelectedAnimalLoading } from "../redux/reducers/animal.reducer";
 import { setFormData } from "../utils/formidable.utils";
 import { getFromStorage } from "../utils/storage.utils";
 import { showToast } from "../utils/toast.utils";
@@ -93,6 +93,26 @@ export const updateAnimalThunk = () => async (dispatch, getState) => {
     }
   }));
 
+  showToast(dispatch);
+}
+
+export const updateAnimalExitDateThunk = () => async (dispatch, getState) => {
+  const { animals, selectedAnimalLoading } = getState().animalReducer;
+  const { selectedAnimal } = animals;
+  const token = getFromStorage("token");
+  if (selectedAnimalLoading) return;
+
+  dispatch(startSelectedAnimalLoading());
+
+  const formatExpectedOnRequest = {
+    id: selectedAnimal.id,
+    exitDate: selectedAnimal.exit_date
+  }
+
+  const { result, error, status } = await putRequest("animals/exitDate", formatExpectedOnRequest, token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setSelectedwAnimalError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setUpdateExitDate({ animal: result.updatedExitDate[0] }));
   showToast(dispatch);
 }
 

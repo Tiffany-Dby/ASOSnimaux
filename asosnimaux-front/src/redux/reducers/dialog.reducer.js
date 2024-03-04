@@ -12,6 +12,7 @@ const DIALOG_STATE = {
   isUpdateUserRoleBySuperAdminForm: false,
   isNewAnimalForm: false,
   isUpdateAnimalForm: false,
+  isUpdateExitAnimalForm: false,
   isDeleteAnimalForm: false,
   isFilters: false,
   isReadMoreTestimoniesOverview: false,
@@ -45,6 +46,7 @@ const dialogSlice = createSlice({
       state.isUpdateUserRoleBySuperAdminForm = false;
       state.isNewAnimalForm = false;
       state.isUpdateAnimalForm = false;
+      state.isUpdateExitAnimalForm = false;
       state.isDeleteAnimalForm = false;
       state.isFilters = false;
       state.isReadMoreTestimoniesOverview = false;
@@ -105,6 +107,10 @@ const dialogSlice = createSlice({
       state.isOpen = true;
       state.isUpdateAnimalForm = true;
     },
+    setIsUpdateExitAnimalForm: (state, action) => {
+      state.isOpen = true;
+      state.isUpdateExitAnimalForm = true;
+    },
     setIsDeleteAnimalForm: (state, action) => {
       state.isOpen = true;
       state.isDeleteAnimalForm = true;
@@ -136,5 +142,5 @@ const dialogSlice = createSlice({
   }
 });
 
-export const { toggleDialog, setInputFields, closeDialog, setIsNewArticleForm, setIsDeleteArticleForm, setIsUpdateArticleForm, setIsDeleteAccountForm, setIsUpdateAccountForm, setIsUpdateAccountAvatar, setIsDeleteUserBySuperAdminForm, setIsUpdateUserRoleBySuperAdminForm, setIsNewAnimalForm, setIsUpdateAnimalForm, setIsDeleteAnimalForm, setIsFilters, setIsReadMoreTestimoniesOverview, setIsNewTestimonyForm, setIsUpdateTestimony, setIsDeleteTestimony, setIsDeleteTestimonyByAdmin } = dialogSlice.actions;
+export const { toggleDialog, setInputFields, closeDialog, setIsNewArticleForm, setIsDeleteArticleForm, setIsUpdateArticleForm, setIsDeleteAccountForm, setIsUpdateAccountForm, setIsUpdateAccountAvatar, setIsDeleteUserBySuperAdminForm, setIsUpdateUserRoleBySuperAdminForm, setIsNewAnimalForm, setIsUpdateAnimalForm, setIsUpdateExitAnimalForm, setIsDeleteAnimalForm, setIsFilters, setIsReadMoreTestimoniesOverview, setIsNewTestimonyForm, setIsUpdateTestimony, setIsDeleteTestimony, setIsDeleteTestimonyByAdmin } = dialogSlice.actions;
 export default dialogSlice.reducer;

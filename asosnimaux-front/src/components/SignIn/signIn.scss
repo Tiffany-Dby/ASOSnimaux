@@ -3,7 +3,7 @@
 // Style for SignIn and SignUp components
 
 .sign {
-  @include mxn.container($padding: var(--padding-l) var(--padding-s) var(--padding-s));
+  @include mxn.container($padding: var(--padding-l) var(--padding-s) var(--padding-xl));
 
   form {
     @include mxn.container("400px");

@@ -14,13 +14,14 @@ import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticl
 import { resetFormNewArticle, setSelectedArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
 import { APP_ROUTES } from "../../constants/route.const";
-import { deleteAnimalThunk, getAllAnimalsThunk, postNewAnimalThunk, updateAnimalThunk } from "../../api/animal.api.js";
+import { deleteAnimalThunk, getAllAnimalsThunk, postNewAnimalThunk, updateAnimalExitDateThunk, updateAnimalThunk } from "../../api/animal.api.js";
 import { resetFormNewAnimal, setNewAnimalError, setSelectedAnimal, updateFormNewAnimal, updateFormSelectedAnimal } from "../../redux/reducers/animal.reducer.js";
 import { deleteUserThunk, getAllUsersThunk, updateUserRoleThunk } from "../../api/user.api.js";
 import { setSelectedUser, updateFormSelectedUser } from "../../redux/reducers/user.reducer.js";
 import { deleteTestimonyThunk, getAllTestimoniesThunk } from "../../api/testimony.api.js";
 import { setSelectedTestimony } from "../../redux/reducers/testimony.reducer.js";
 import { resetAdminForms, resetAdminSelects } from "../../utils/reset.utils.js";
+import { setMinMaxDate } from "../../utils/date.utils.js";
 
 const Admin = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const Admin = () => {
   const { user, selectedUser, selectedUserSuccess, deleteUserSuccess } = useSelector(state => state.userReducer);
 
   // Dialog Reducer
-  const { isNewArticleForm, isDeleteArticleForm, isUpdateArticleForm, isNewAnimalForm, isUpdateAnimalForm, isDeleteAnimalForm, isDeleteUserBySuperAdminForm, isUpdateUserRoleBySuperAdminForm, isDeleteTestimonyByAdmin } = useSelector(state => state.dialogReducer);
+  const { isNewArticleForm, isDeleteArticleForm, isUpdateArticleForm, isNewAnimalForm, isUpdateAnimalForm, isUpdateExitAnimalForm, isDeleteAnimalForm, isDeleteUserBySuperAdminForm, isUpdateUserRoleBySuperAdminForm, isDeleteTestimonyByAdmin } = useSelector(state => state.dialogReducer);
 
   // Article Reducer
   const { articles, newArticleSuccess, selectedSuccess, deleteSuccess } = useSelector(state => state.articleReducer);
@@ -141,6 +142,14 @@ const Admin = () => {
 
     dispatch(updateAnimalThunk());
     dispatch(setSelectedAnimal({ id: "", age: "", name: "", sex: "", description: "", race: "", status: "", species: "", exit_date: "" }));
+    dispatch(closeDialog());
+  }
+
+  // Update Animal Exit date
+  const handleSumbitExitAnimal = e => {
+    e.preventDefault();
+    dispatch(updateAnimalExitDateThunk());
+    dispatch(setSelectedAnimal({ id: "", exit_date: "" }));
     dispatch(closeDialog());
   }
 
@@ -423,6 +432,28 @@ const Admin = () => {
                     value={animals.selectedAnimal.description || ""}
                     onChange={e => updateSelectedAnimalForm("description", e.target.value)}></textarea>
                 </div>
+                <div className="btns-wrapper">
+                  <Button btnStyle={""} text="Valider" type="submit" />
+                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                </div>
+              </form>
+            </div>
+          }
+          {isUpdateExitAnimalForm &&
+            <div className="dialog-wrapper admin__update-animal">
+              <div className="title-wrapper">
+                <h2>Mettre à jour un animal</h2>
+              </div>
+              <form onSubmit={handleSumbitExitAnimal}>
+                <Input
+                  label="Date de sortie"
+                  id="exit_date"
+                  type="date"
+                  min={setMinMaxDate("-", 7)}
+                  max={setMinMaxDate("+", 365)}
+                  required={true}
+                  value={animals.selectedAnimal.exit_date}
+                  onChange={value => updateSelectedAnimalForm("exit_date", value)} />
                 <div className="btns-wrapper">
                   <Button btnStyle={""} text="Valider" type="submit" />
                   <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />

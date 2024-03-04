@@ -160,21 +160,25 @@ const HomeTestimonies = () => {
                   <a
                     onClick={handlePrevious}
                     className="testimonies-overview__link testimonies-overview--previous"
-                    href={index === 0 ? `#testimonies-overview__slide--${overview.length}` : `#testimonies-overview__slide--${index}`}></a>
+                    href={index === 0 ? `#testimonies-overview__slide--${overview.length}` : `#testimonies-overview__slide--${index}`}
+                    aria-label="Slide précédent"></a>
                   <a
                     onClick={handleNext}
                     className="testimonies-overview__link testimonies-overview--next"
-                    href={overview.length === index + 1 ? `#testimonies-overview__slide--1` : `#testimonies-overview__slide--${index + 2}`}></a>
+                    href={overview.length === index + 1 ? `#testimonies-overview__slide--1` : `#testimonies-overview__slide--${index + 2}`}
+                    aria-label="Slide suivant"></a>
                 </li>
               ))}
             </ul>
             <Breadcrumbs>
               {overview.map((testimony, index) => (
-                <a
-                  onClick={(e) => handleNavigate(e, index)}
-                  key={index}
-                  className={index === currentIndex ? "active" : ""}
-                  href={`#testimonies-overview__slide--${index + 1}`}></a>
+                <li key={index}>
+                  <a
+                    onClick={(e) => handleNavigate(e, index)}
+                    className={index === currentIndex ? "active" : ""}
+                    href={`#testimonies-overview__slide--${index + 1}`}
+                    aria-label={`Aller au slide ${index + 1}`}></a>
+                </li>
               ))}
             </Breadcrumbs>
           </div>

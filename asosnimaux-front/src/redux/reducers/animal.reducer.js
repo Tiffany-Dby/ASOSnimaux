@@ -286,6 +286,18 @@ const animalSlice = createSlice({
         selectedAnimalLoading: false
       }
     },
+    setUpdateExitDate: (state, action) => {
+      const { animal } = action.payload;
+      return {
+        ...state,
+        animals: {
+          ...state.animals,
+          all: state.animals.all.map((a) => a.id === animal.id ? { ...a, exit_date: animal.exit_date } : { ...a })
+        },
+        selectedAnimalLoading: false,
+        selectedAnimalSuccess: `${animal.name} mis à jour !`
+      }
+    },
     setDeleteAnimal: (state, action) => {
       const { id } = action.payload;
       return {
@@ -320,5 +332,5 @@ const animalSlice = createSlice({
   }
 });
 
-export const { setOneAnimal, startOneAnimalLoading, stopOneAnimalLoading, setOneAnimalError, setAllAnimals, startAllAnimalsLoading, stopAllAnimalsLoading, setAllAnimalsError, updateFormNewAnimal, resetFormNewAnimal, setNewAnimal, startNewAnimalLoading, stopNewAnimalLoading, setNewAnimalError, resetAnimalsSuccess, setSelectedAnimal, updateFormSelectedAnimal, setUpdateSelectedAnimal, startSelectedAnimalLoading, stopSelectedAnimalLoading, setSelectedwAnimalError, setDeleteAnimal, startDeleteAnimalLoading, stopDeleteAnimalLoading, setDeleteAnimalError } = animalSlice.actions;
+export const { setOneAnimal, startOneAnimalLoading, stopOneAnimalLoading, setOneAnimalError, setAllAnimals, startAllAnimalsLoading, stopAllAnimalsLoading, setAllAnimalsError, updateFormNewAnimal, resetFormNewAnimal, setNewAnimal, startNewAnimalLoading, stopNewAnimalLoading, setNewAnimalError, resetAnimalsSuccess, setSelectedAnimal, updateFormSelectedAnimal, setUpdateSelectedAnimal, startSelectedAnimalLoading, stopSelectedAnimalLoading, setSelectedwAnimalError, setUpdateExitDate, setDeleteAnimal, startDeleteAnimalLoading, stopDeleteAnimalLoading, setDeleteAnimalError } = animalSlice.actions;
 export default animalSlice.reducer;

@@ -2,9 +2,10 @@
 
 .admin {
   padding-top: var(--padding-l);
+  padding-bottom: var(--padding-xl);
 
   &__wrapper {
-    @include mxn.container($padding: 0 var(--padding-s) var(--padding-xl));
+    @include mxn.container($padding: 0 var(--padding-s) 0);
   }
 
   &__header {

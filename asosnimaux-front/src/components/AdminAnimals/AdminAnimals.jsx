@@ -3,7 +3,7 @@ import Button from "../Button/Button";
 import { FaMars, FaPencil, FaTrashCan, FaVenus } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { setToLocalDate } from "../../utils/date.utils";
-import { setIsDeleteAnimalForm, setIsNewAnimalForm, setIsUpdateAnimalForm } from "../../redux/reducers/dialog.reducer";
+import { setIsDeleteAnimalForm, setIsNewAnimalForm, setIsUpdateAnimalForm, setIsUpdateExitAnimalForm } from "../../redux/reducers/dialog.reducer";
 import { setSelectedAnimal } from "../../redux/reducers/animal.reducer";
 
 const AdminAnimals = () => {
@@ -22,6 +22,12 @@ const AdminAnimals = () => {
   const handleUpdateAnimalForm = (animal) => {
     dispatch(setIsUpdateAnimalForm());
     dispatch(setSelectedAnimal({ id: animal.id, age: animal.age, name: animal.name, sex: animal.sex, description: animal.description, race: animal.race, status: animal.status, species: animal.species, exit_date: animal.exit_date }));
+  }
+
+  // Update Animal Exit date Dialog
+  const handleUpdateExitAnimalForm = (animal) => {
+    dispatch(setIsUpdateExitAnimalForm());
+    dispatch(setSelectedAnimal({ id: animal.id, exit_date: animal.exit_date }));
   }
 
   // Delete Animal Dialog
@@ -65,12 +71,12 @@ const AdminAnimals = () => {
                 <div className="admin__animal__content">
                   <div className="admin__animal__details">
                     <div className="admin__animal__details__entry">
-                      <p>Entrée :</p>
-                      <p>{setToLocalDate(animal.entry_date)}</p>
+                      <p>Entrée :<span>{setToLocalDate(animal.entry_date)}</span></p>
+
                     </div>
                     <div className="admin__animal__details__exit">
-                      <p>Sortie :</p>
-                      <p>{animal.exit_date ? setToLocalDate(animal.exit_date) : "Inconnue"}</p>
+                      <p>Sortie :<span>{animal.exit_date ? setToLocalDate(animal.exit_date) : "Inconnue"}</span></p>
+                      <FaPencil className="manage-icons" onClick={() => handleUpdateExitAnimalForm(animal)} role="button" aria-label="Bouton de modification de la date de sortie de l'animal" />
                     </div>
                   </div>
                   <div className="admin__animal__details">

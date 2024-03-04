@@ -39,7 +39,7 @@ const Informations = () => {
           <SocialMedia />
           {width > 1024 &&
             <div className="informations__img">
-              <img src="/01854sdf1544847.jpg" alt="Un chien marron qui sourrit la langue pendante" />
+              <img loading="lazy" src="./src/assets/imgs/jamie.webp" alt="Jamie, un chien marron qui sourrit la langue pendante" />
             </div>
           }
         </div>

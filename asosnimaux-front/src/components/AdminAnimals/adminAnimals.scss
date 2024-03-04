@@ -32,20 +32,29 @@
 
     &__details {
       display: flex;
-      justify-content: center;
+      justify-content: left;
       border-bottom: 1px solid var(--light-grey);
 
+      &__exit {
+        @include mxn.flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+
       &>* {
-        padding-left: 2rem;
+        width: 50%;
+        min-width: 100px;
+        padding: 0 1rem;
 
         &:nth-child(2) {
           border-left: 1px solid var(--light-grey);
         }
-      }
 
-      &>* {
-        @include mxn.flex("column", "nowrap");
-        min-width: 120px;
+        p {
+          display: flex;
+          flex-direction: column
+        }
       }
     }
   }
