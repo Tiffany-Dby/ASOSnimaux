@@ -2,6 +2,10 @@ import { AnimalDB } from "../databases/animal.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
 import formidable from "formidable";
 import { deleteImg, setImgUrl } from "../utils/formidable.utils.js";
+import isDate from "validator/lib/isDate.js";
+import isUUID from "validator/lib/isUUID.js";
+import DATE from "../constants/date.const.js";
+import UUID from "../constants/uuid.const.js";
 
 const create_ = async (req, res) => {
   const { name, age, sex, description, race, status, species, picture_url, picture_caption } = req.body;
@@ -48,7 +52,7 @@ const create = async (req, res) => {
   console.log("fields", fields);
   console.log("files", files);
 
-  if (!files.newAnimalImg) return res.status(400).json({ message: "Something went wrong, check files mimetype" });
+  if (!files.newAnimalImg) return res.status(415).json({ message: "Something went wrong, check files mimetype" });
 
   const filePath = files.newAnimalImg[0].filepath;
   const picture_url = setImgUrl(filePath, "animals");
@@ -144,7 +148,8 @@ const updateDetails = async (req, res) => {
 }
 
 const updateExitDate = async ({ body: { exitDate, id } }, res) => {
-  // Date verification missing
+  if (!isDate(exitDate, DATE.OPTIONS)) return res.status(400).json({ error: "Invalid date format" });
+  if (!isUUID(id, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
 
   const response = await AnimalDB.updateExitDate(exitDate, id);
 

@@ -41,7 +41,7 @@ const create = async (req, res) => {
   console.log("fields", fields);
   console.log("files", files);
 
-  if (!files.newArticleImg) return res.status(400).json({ message: "Something went wrong, check files mimetype" });
+  if (!files.newArticleImg) return res.status(415).json({ message: "Something went wrong, check files mimetype" });
 
   const { userID } = req.body;
   const filePath = files.newArticleImg[0].filepath;
