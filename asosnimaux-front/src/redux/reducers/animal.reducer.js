@@ -7,7 +7,9 @@ const ANIMAL_STATE = {
       id: "",
       entry_date: "",
       name: "",
+      birthdate: "",
       age: "",
+      birthday: "",
       sex: "",
       description: "",
       truncated_description: "",
@@ -21,7 +23,7 @@ const ANIMAL_STATE = {
     },
     newAnimal: {
       name: "",
-      age: "",
+      birthdate: "",
       sex: "",
       description: "",
       status: "",
@@ -31,7 +33,7 @@ const ANIMAL_STATE = {
     },
     selectedAnimal: {
       id: "",
-      age: "",
+      birthdate: "",
       name: "",
       sex: "",
       description: "",
@@ -61,7 +63,7 @@ const animalSlice = createSlice({
   initialState: ANIMAL_STATE,
   reducers: {
     setOneAnimal: (state, action) => {
-      const { id, entry_date, name, age, sex, description, truncated_description, race, status, exit_date, species, picture_url, picture_caption, time_spent } = action.payload;
+      const { id, entry_date, name, birthdate, age, birthday, sex, description, truncated_description, race, status, exit_date, species, picture_url, picture_caption, time_spent } = action.payload;
       return {
         ...state,
         animals: {
@@ -70,7 +72,9 @@ const animalSlice = createSlice({
             id,
             entry_date,
             name,
+            birthdate,
             age,
+            birthday,
             sex,
             description,
             truncated_description,
@@ -155,7 +159,7 @@ const animalSlice = createSlice({
           ...state.animals,
           newAnimal: {
             name: "",
-            age: "",
+            birthdate: "",
             sex: "",
             description: "",
             status: "",
@@ -167,7 +171,7 @@ const animalSlice = createSlice({
       }
     },
     setNewAnimal: (state, action) => {
-      const { id, entry_date, exit_date, name, age, sex, description, status, race, species, picture_url, picture_caption } = action.payload;
+      const { id, entry_date, exit_date, name, birthdate, sex, description, status, race, species, picture_url, picture_caption } = action.payload;
       return {
         ...state,
         animals: {
@@ -179,7 +183,7 @@ const animalSlice = createSlice({
               entry_date,
               exit_date,
               name,
-              age,
+              birthdate,
               sex,
               description,
               status,
@@ -223,14 +227,14 @@ const animalSlice = createSlice({
       }
     },
     setSelectedAnimal: (state, action) => {
-      const { id, age, name, sex, description, race, status, species, exit_date } = action.payload;
+      const { id, birthdate, name, sex, description, race, status, species, exit_date } = action.payload;
       return {
         ...state,
         animals: {
           ...state.animals,
           selectedAnimal: {
             id,
-            age,
+            birthdate,
             name,
             sex,
             description,

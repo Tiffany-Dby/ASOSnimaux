@@ -1,7 +1,7 @@
 import "./animalDetails.scss";
 import Button from "../Button/Button";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
-import { FaAngleRight, FaHeart } from "react-icons/fa6";
+import { FaAngleRight, FaCakeCandles, FaHeart } from "react-icons/fa6";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import { formatDescription } from "../../utils/description.utils";
 import { getUsersFollowIDsThunk, postUserFollowThunk, unfollowThunk } from "../../api/user.api";
 import { setFollowIDsNotAuth, setFollowedAnimalsNotAuth, setSelectedAnimalFollow, setUnfollow } from "../../redux/reducers/user.reducer";
 import { setToStorage } from "../../utils/storage.utils";
+import { setToLocalDate } from "../../utils/date.utils";
 
 const AnimalDetails = () => {
   const dispatch = useDispatch();
@@ -126,8 +127,8 @@ const AnimalDetails = () => {
                 <table>
                   <tbody>
                     <tr>
-                      <th>Anniversaire</th>
-                      <td>07/07/2015</td>
+                      <th>Anniversaire <FaCakeCandles /></th>
+                      <td>{setToLocalDate(one.birthday)}</td>
                     </tr>
                     <tr>
                       <th>Âge</th>

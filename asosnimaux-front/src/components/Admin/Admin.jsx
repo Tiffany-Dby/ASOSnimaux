@@ -141,7 +141,7 @@ const Admin = () => {
     }
 
     dispatch(updateAnimalThunk());
-    dispatch(setSelectedAnimal({ id: "", age: "", name: "", sex: "", description: "", race: "", status: "", species: "", exit_date: "" }));
+    dispatch(setSelectedAnimal({ id: "", birthdate: "", name: "", sex: "", description: "", race: "", status: "", species: "", exit_date: "" }));
     dispatch(closeDialog());
   }
 
@@ -156,7 +156,7 @@ const Admin = () => {
   // Delete Animal
   const handleConfirmedAnimalDeletion = () => {
     dispatch(deleteAnimalThunk(animals.selectedAnimal.id));
-    dispatch(setSelectedAnimal({ id: "", age: "", name: "", sex: "", description: "", race: "", status: "", species: "", exit_date: "" }));
+    dispatch(setSelectedAnimal({ id: "", birthdate: "", name: "", sex: "", description: "", race: "", status: "", species: "", exit_date: "" }));
     dispatch(closeDialog());
   }
   // ******* End Animal *******
@@ -307,12 +307,12 @@ const Admin = () => {
                   value={animals.newAnimal.name}
                   onChange={value => updateNewAnimalFrom("name", value)} />
                 <Input
-                  label="Âge"
-                  type="number"
-                  id="age"
+                  label="Date de naissance"
+                  type="date"
+                  id="birthdate"
                   required={true}
-                  value={animals.newAnimal.age}
-                  onChange={value => updateNewAnimalFrom("age", value)} />
+                  value={animals.newAnimal.birthdate}
+                  onChange={value => updateNewAnimalFrom("birthdate", value)} />
                 {newAnimalError &&
                   <p className="text-error">{newAnimalError}</p>
                 }
@@ -386,12 +386,12 @@ const Admin = () => {
                   value={animals.selectedAnimal.name}
                   onChange={value => updateSelectedAnimalForm("name", value)} />
                 <Input
-                  label="Âge"
-                  type="number"
-                  id="age"
+                  label="Date de naissance"
+                  type="date"
+                  id="birthdate"
                   required={true}
-                  value={animals.selectedAnimal.age}
-                  onChange={value => updateSelectedAnimalForm("age", value)} />
+                  value={animals.selectedAnimal.birthdate}
+                  onChange={value => updateSelectedAnimalForm("birthdate", value)} />
                 {selectedAnimalError &&
                   <p className="text-error">{selectedAnimalError}</p>
                 }

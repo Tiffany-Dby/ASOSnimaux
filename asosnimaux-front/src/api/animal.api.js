@@ -27,7 +27,23 @@ export const getOneAnimalThunk = (id) => async (dispatch, getState) => {
   const { result, error, status } = await getRequest(`animals/${id}`);
   if (!result?.message || status >= 400 || !!error) return dispatch(setOneAnimalError({ error: `Something went wrong : ${error}` }));
 
-  dispatch(setOneAnimal({ id: result.animal.id, entry_date: result.animal.entryDate, name: result.animal.name, age: result.animal.age, sex: result.animal.sex, description: result.animal.description, race: result.animal.race, status: result.animal.status, exit_date: result.animal.exitDate, species: result.animal.species, picture_url: `${APP_ROUTES.API_URL}${result.animal.pictureURL}`, picture_caption: result.animal.pictureCaption, time_spent: result.animal.timeSpent }));
+  dispatch(setOneAnimal({
+    id: result.animal.id,
+    entry_date: result.animal.entryDate,
+    name: result.animal.name,
+    birthdate: result.animal.birthdate,
+    age: result.animal.age,
+    birthday: result.animal.birthday,
+    sex: result.animal.sex,
+    description: result.animal.description,
+    race: result.animal.race,
+    status: result.animal.status,
+    exit_date: result.animal.exitDate,
+    species: result.animal.species,
+    picture_url: `${APP_ROUTES.API_URL}${result.animal.pictureURL}`,
+    picture_caption: result.animal.pictureCaption,
+    time_spent: result.animal.timeSpent
+  }));
 }
 
 export const postNewAnimalThunk = (file) => async (dispatch, getState) => {
@@ -51,7 +67,7 @@ export const postNewAnimalThunk = (file) => async (dispatch, getState) => {
     entry_date: result.result[0].entry_date,
     exit_date: result.result[0].exit_date,
     name: result.result[0].name,
-    age: result.result[0].age,
+    birthdate: result.result[0].birthdate,
     sex: result.result[0].sex,
     description: result.result[0].description,
     status: result.result[0].status,
@@ -81,6 +97,7 @@ export const updateAnimalThunk = () => async (dispatch, getState) => {
       id: result.updatedAnimal[0].id,
       entry_date: result.updatedAnimal[0].entry_date,
       name: result.updatedAnimal[0].name,
+      birthdate: result.updatedAnimal[0].birthdate,
       age: result.updatedAnimal[0].age,
       sex: result.updatedAnimal[0].sex,
       description: result.updatedAnimal[0].description,

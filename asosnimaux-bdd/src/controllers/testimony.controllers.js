@@ -1,10 +1,13 @@
 import { TestimonyDB } from "../databases/testimony.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
+import isUUID from "validator/lib/isUUID.js";
+import UUID from "../constants/uuid.const.js";
 
 const create = async ({ body: { content, userID } }, res) => {
   const areStrings = areStringsFilled([content, userID]);
-
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
+
+  if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
 
   const response = await TestimonyDB.create(content, userID);
   const { error, insertedId } = response;
@@ -33,6 +36,8 @@ const readWithTheirUsername = async (req, res) => {
 }
 
 const readAllByOneUser = async ({ body: { userID } }, res) => {
+  if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await TestimonyDB.readAllByOneUser(userID);
   const { result, error } = response;
 
@@ -40,6 +45,8 @@ const readAllByOneUser = async ({ body: { userID } }, res) => {
 }
 
 const readOneWithTheirUsername = async ({ params: { testimonyID } }, res) => {
+  if (!isUUID(testimonyID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await TestimonyDB.readOneWithTheirUsername(testimonyID);
   const { result, error } = response;
 
@@ -58,8 +65,9 @@ const readOneWithTheirUsername = async ({ params: { testimonyID } }, res) => {
 
 const update = async ({ body: { content, testimonyID, userID } }, res) => {
   const areStrings = areStringsFilled([content]);
-
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
+
+  if (!isUUID(testimonyID, UUID.VERSION) || !isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
 
   const response = await TestimonyDB.update(content, testimonyID, userID);
   const error = response.error;
@@ -75,6 +83,8 @@ const update = async ({ body: { content, testimonyID, userID } }, res) => {
 }
 
 const deleteOne = async ({ body: { userID }, params: { testimonyID } }, res) => {
+  if (!isUUID(testimonyID, UUID.VERSION) || !isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await TestimonyDB.deleteOne(testimonyID, userID);
   const error = response.error;
 

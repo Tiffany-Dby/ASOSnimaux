@@ -2,7 +2,7 @@ import "./adminAnimals.scss";
 import Button from "../Button/Button";
 import { FaMars, FaPencil, FaTrashCan, FaVenus } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { setToLocalDate } from "../../utils/date.utils";
+import { setToLocalDate, setToYYYYMMDD } from "../../utils/date.utils";
 import { setIsDeleteAnimalForm, setIsNewAnimalForm, setIsUpdateAnimalForm, setIsUpdateExitAnimalForm } from "../../redux/reducers/dialog.reducer";
 import { setSelectedAnimal } from "../../redux/reducers/animal.reducer";
 
@@ -21,7 +21,7 @@ const AdminAnimals = () => {
   // Update Animal Dialog
   const handleUpdateAnimalForm = (animal) => {
     dispatch(setIsUpdateAnimalForm());
-    dispatch(setSelectedAnimal({ id: animal.id, age: animal.age, name: animal.name, sex: animal.sex, description: animal.description, race: animal.race, status: animal.status, species: animal.species, exit_date: animal.exit_date }));
+    dispatch(setSelectedAnimal({ id: animal.id, birthdate: setToYYYYMMDD(animal.birthdate), name: animal.name, sex: animal.sex, description: animal.description, race: animal.race, status: animal.status, species: animal.species, exit_date: animal.exit_date }));
   }
 
   // Update Animal Exit date Dialog
@@ -67,7 +67,7 @@ const AdminAnimals = () => {
           <div className="admin__all-animals__wrapper">
             {animals.all.map((animal) => (
               <article key={animal.id} className="admin__animal">
-                <h3 className="admin__animal__title">{animal.name}, {animal.age} ans <span>{animal.sex === "mâle" && <FaMars className="manage-icons" />}{animal.sex === "femelle" && <FaVenus className="manage-icons" />}</span></h3>
+                <h3 className="admin__animal__title">{animal.name}, {animal.age < 1 && "moins d'1 an"}{(animal.age >= 1 && animal.age < 2) && `${animal.age} an`}{animal.age >= 2 && `${animal.age} ans`}<span>{animal.sex === "mâle" && <FaMars className="manage-icons" />}{animal.sex === "femelle" && <FaVenus className="manage-icons" />}</span></h3>
                 <div className="admin__animal__content">
                   <div className="admin__animal__details">
                     <div className="admin__animal__details__entry">

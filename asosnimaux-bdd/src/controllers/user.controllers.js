@@ -3,10 +3,11 @@ import isEmail from "validator/lib/isEmail.js";
 import { areStringsFilled } from "../utils/string.utils.js";
 import { hashPass, compareHash } from "../utils/crypto.utils.js";
 import { jwtSign } from "../utils/jwt.utils.js";
+import isUUID from "validator/lib/isUUID.js";
+import UUID from "../constants/uuid.const.js";
 
 const create = async ({ body: { username, email, password } }, res) => {
   const areStrings = areStringsFilled([username, email, password]);
-
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
   if (username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters` });
@@ -34,6 +35,8 @@ const readAll = async (req, res) => {
 }
 
 const followAnimal = async ({ body: { userID, animalID }, res }) => {
+  if (!isUUID(userID, UUID.VERSION) || !isUUID(animalID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await UserDB.followAnimal(userID, animalID);
   const error = response.error;
 
@@ -41,6 +44,8 @@ const followAnimal = async ({ body: { userID, animalID }, res }) => {
 }
 
 const readOne = async ({ body: { userID } }, res) => {
+  if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await UserDB.readOne(userID);
   const { result, error } = response;
 
@@ -56,6 +61,9 @@ const readOne = async ({ body: { userID } }, res) => {
 }
 
 const signIn = async ({ body: { login, password } }, res) => {
+  const areStrings = areStringsFilled([login, password]);
+  if (!areStrings) return res.status(403).json({ message: `Missing data` });
+
   const { result, error } = await UserDB.readByEmailOrUsername(login);
 
   if (error) return res.status(500).json({ message: error });
@@ -80,6 +88,8 @@ const signIn = async ({ body: { login, password } }, res) => {
 }
 
 const readUsersTestimonies = async ({ body: { userID } }, res) => {
+  if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await UserDB.readUsersTestimonies(userID);
   const { result, error } = response;
 
@@ -89,6 +99,8 @@ const readUsersTestimonies = async ({ body: { userID } }, res) => {
 }
 
 const readUsersFollow = async ({ body: { userID } }, res) => {
+  if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await UserDB.readUsersFollow(userID);
   const { result, error } = response;
 
@@ -98,6 +110,8 @@ const readUsersFollow = async ({ body: { userID } }, res) => {
 }
 
 const readUsersFollowIDs = async ({ body: { userID } }, res) => {
+  if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await UserDB.readUsersFollowIDs(userID);
   const { result, error } = response;
 
@@ -107,8 +121,10 @@ const readUsersFollowIDs = async ({ body: { userID } }, res) => {
 }
 
 const updateUsername = async ({ body: { username, userID } }, res) => {
-  const areStrings = areStringsFilled([username]);
+  const areStrings = areStringsFilled([username, userID]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
+
+  if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
 
   if (username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters` });
 
@@ -119,8 +135,10 @@ const updateUsername = async ({ body: { username, userID } }, res) => {
 }
 
 const updatePassword = async ({ body: { oldPassword, newPassword, userID } }, res) => {
-  const areStrings = areStringsFilled([oldPassword, newPassword]);
+  const areStrings = areStringsFilled([oldPassword, newPassword, userID]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
+
+  if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
 
   if (newPassword.length < 8) return res.status(403).json({ message: `Invalid Password format : must contain atleast 8 characters` })
 
@@ -142,18 +160,22 @@ const updatePassword = async ({ body: { oldPassword, newPassword, userID } }, re
 }
 
 const updateAvatar = async ({ body: { userID, avatarUrl } }, res) => {
-  const areStrings = areStringsFilled([avatarUrl]);
+  const areStrings = areStringsFilled([avatarUrl, userID]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
+  if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await UserDB.updateAvatar(avatarUrl, userID);
-  const { result, error } = response;
+  const { error } = response;
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Update on avatar for user with id "${userID}" successful` });
 }
 
 const updateRole = async ({ params: { id }, body: { newRole } }, res) => {
-  const areStrings = areStringsFilled([newRole]);
+  const areStrings = areStringsFilled([newRole, id]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
+
+  if (!isUUID(id, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
 
   if (newRole !== "super_admin" && newRole !== "admin" && newRole !== "membre") return res.status(403).json({ message: `Select the appropriate role` });
 
@@ -164,6 +186,8 @@ const updateRole = async ({ params: { id }, body: { newRole } }, res) => {
 }
 
 const unfollow = async ({ body: { userID }, params: { animalID } }, res) => {
+  if (!isUUID(userID, UUID.VERSION) || !isUUID(animalID)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await UserDB.unfollow(userID, animalID);
   const error = response.error;
 
@@ -171,6 +195,8 @@ const unfollow = async ({ body: { userID }, params: { animalID } }, res) => {
 }
 
 const deleteOne = async ({ params: { id } }, res) => {
+  if (!isUUID(id, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await UserDB.deleteOne(id);
   const error = response.error;
 

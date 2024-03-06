@@ -7,25 +7,6 @@ import isUUID from "validator/lib/isUUID.js";
 import DATE from "../constants/date.const.js";
 import UUID from "../constants/uuid.const.js";
 
-const create_ = async (req, res) => {
-  const { name, age, sex, description, race, status, species, picture_url, picture_caption } = req.body;
-  const areStrings = areStringsFilled([name, sex, description, race, status, species, picture_url, picture_caption])
-
-  if (!areStrings) return res.status(403).json({ message: `Missing data` });
-
-  const response = await AnimalDB.create(name, age, sex, description, race, status, species, picture_url, picture_caption);
-
-  const { error, insertedId } = response;
-
-  const createdAnimal = await AnimalDB.readOne(insertedId);
-  const err = createdAnimal.error;
-  const result = createdAnimal.result;
-
-  if (err) return res.status(500).json({ message: err });
-
-  return res.status(error ? 500 : 200).json({ message: error ? error : `New animal successfully added to the table`, result });
-}
-
 const create = async (req, res) => {
   const form = formidable({
     uploadDir: "./public/animals",
@@ -34,7 +15,7 @@ const create = async (req, res) => {
     maxFileSize: 5 * 1024 * 1024, // 5MB
     filter: opts => {
       const { mimetype } = opts;
-      return mimetype === "image/png" || mimetype === "image/jpg" || mimetype === "image/jpeg";
+      return mimetype === "image/png" || mimetype === "image/jpg" || mimetype === "image/jpeg" || mimetype === "image/webp";
     }
   });
 
@@ -56,14 +37,13 @@ const create = async (req, res) => {
 
   const filePath = files.newAnimalImg[0].filepath;
   const picture_url = setImgUrl(filePath, "animals");
-  const { name, age, sex, description, race, status, species, picture_caption } = fields;
+  const { name, birthdate, sex, description, race, status, species, picture_caption } = fields;
 
-  // Age (number) verification missing
-
-  const areStrings = areStringsFilled([name[0], sex[0], description[0], race[0], status[0], species[0], picture_url, picture_caption[0]]);
+  const areStrings = areStringsFilled([name[0], birthdate[0], sex[0], description[0], race[0], status[0], species[0], picture_url, picture_caption[0]]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
+  if (!isDate(birthdate[0], DATE.OPTIONS)) return res.status(400).json({ error: "Invalid date format" });
 
-  const response = await AnimalDB.create(name, age, sex, description, race, status, species, picture_url, picture_caption);
+  const response = await AnimalDB.create(name, birthdate, sex, description, race, status, species, picture_url, picture_caption);
 
   const { error, insertedId } = response;
 
@@ -110,6 +90,8 @@ const readAllBySpecies = async ({ params: { species } }, res) => {
 }
 
 const readOne = async ({ params: { id } }, res) => {
+  if (!isUUID(id, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+
   const response = await AnimalDB.readOne(id);
   const { result, error } = response;
 
@@ -117,7 +99,9 @@ const readOne = async ({ params: { id } }, res) => {
     id,
     entryDate: result[0].entry_date,
     name: result[0].name,
+    birthdate: result[0].birthdate,
     age: result[0].age,
+    birthday: result[0].birthday,
     sex: result[0].sex,
     description: result[0].description,
     race: result[0].race,
@@ -134,12 +118,15 @@ const readOne = async ({ params: { id } }, res) => {
 
 
 const updateDetails = async (req, res) => {
-  const { name, age, sex, description, race, status, species, id } = req.body;
+  const { name, birthdate, sex, description, race, status, species, id } = req.body;
 
-  const areStrings = areStringsFilled([name, sex, description, race, status, species])
+  if (!isUUID(id, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+  if (!isDate(birthdate, DATE.OPTIONS)) return res.status(400).json({ error: "Invalid date format" });
+
+  const areStrings = areStringsFilled([name, birthdate, sex, description, race, status, species])
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
-  const response = await AnimalDB.updateDetails(name, age, sex, description, race, status, species, id);
+  const response = await AnimalDB.updateDetails(name, birthdate, sex, description, race, status, species, id);
 
   const error = response.error;
   const updatedAnimal = response.result.result;
@@ -160,11 +147,13 @@ const updateExitDate = async ({ body: { exitDate, id } }, res) => {
 }
 
 const deleteOne = async ({ params: { id } }, res) => {
-  const reponse = await AnimalDB.deleteOne(id);
+  if (!isUUID(id, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
 
-  const { imgPathResult, error } = reponse;
+  const response = await AnimalDB.deleteOne(id);
 
-  const err = await deleteImg(imgPathResult);
+  const { imgPathResult, error } = response;
+
+  const err = await deleteImg(imgPathResult[0].picture_url);
   if (err) return res.status(403).json({ message: err });
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Animal with id: ${id} has been successfully deleted` });

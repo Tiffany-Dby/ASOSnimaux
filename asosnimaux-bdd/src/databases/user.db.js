@@ -125,7 +125,7 @@ const readUsersTestimonies = async (userID) => {
 
 const readUsersFollow = async (userID) => {
   const sql = `
-    SELECT users.id AS user_id, animals.id AS animal_id, animals.entry_date, animals.name, animals.age, animals.sex, animals.race, animals.status, animals.exit_date, animals.species, animals.picture_url, animals.picture_caption,
+    SELECT users.id AS user_id, animals.id AS animal_id, animals.entry_date, animals.name, animals.birthdate, animals.sex, animals.race, animals.status, animals.exit_date, animals.species, animals.picture_url, animals.picture_caption,
     CASE 
         WHEN LENGTH(animals.description) > 150 
         THEN CONCAT(SUBSTRING(animals.description, 1, 150), '...') 

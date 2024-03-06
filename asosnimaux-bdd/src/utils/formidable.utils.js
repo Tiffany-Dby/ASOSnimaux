@@ -12,10 +12,10 @@ export const setDeleteImgUrl = oldFilePath => {
   return `./public/${oldFilePath}`;
 }
 
-export const deleteImg = async (imgPathResult) => {
+export const deleteImg = async (imgPath) => {
   let error = null;
   try {
-    const PicturePath = setDeleteImgUrl(imgPathResult[0].picture_url)
+    const PicturePath = setDeleteImgUrl(imgPath)
     const r = await unlink(PicturePath);
     console.log(`${PicturePath} was successfully deleted`);
   }
