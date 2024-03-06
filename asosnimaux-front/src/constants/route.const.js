@@ -1,16 +1,20 @@
 export const APP_ROUTES = {
   API_URL: "http://localhost:9000/",
   HOME: "/",
-  SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
+  SIGN_IN: "/sign-in",
+  ACCOUNT: "/account",
   ADOPTION: "/adoption",
   ANIMAL: "/adoption/:id",
-  ARTICLE: "/articles/:id",
   ARTICLES: "/articles",
-  ACCOUNT: "/account",
-  ADMIN: "/admin",
+  ARTICLE: "/articles/:id",
   ASSOCIATION: "/association",
-  TESTIMONIES: "testimonies",
+  TESTIMONIES: "/testimonies",
   DONATION: "/donation",
-  FAVORITES: "/favoris"
+  FAVORITES: "/favorites",
+  ADMIN: "/admin",
+  ADMIN_ARTICLES: "articles",
+  ADMIN_ANIMALS: "animals",
+  ADMIN_TESTIMONIES: "testimonies",
+  ADMIN_USERS: "users"
 }

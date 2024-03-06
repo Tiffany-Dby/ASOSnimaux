@@ -3,10 +3,8 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPortal } from "react-dom";
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
-import { resetFormNewArticle, setSelectedArticle } from "../../redux/reducers/article.reducer";
-import { resetFormNewAnimal, setSelectedAnimal } from "../../redux/reducers/animal.reducer";
-import { resetFormNewTestimony, setSelectedTestimony } from "../../redux/reducers/testimony.reducer";
-import { setSelectedUser, setUpdatedAvatar } from "../../redux/reducers/user.reducer";
+import { resetFormNewTestimony } from "../../redux/reducers/testimony.reducer";
+import { setUpdatedAvatar } from "../../redux/reducers/user.reducer";
 import { resetAdminForms, resetAdminSelects } from "../../utils/reset.utils";
 
 const Dialog = ({ children }) => {
@@ -21,14 +19,10 @@ const Dialog = ({ children }) => {
   const handleEscapeKey = e => {
     if (e.key === "Escape") {
       dispatch(closeDialog());
-      // dispatch(resetFormNewArticle());
-      // dispatch(resetFormNewAnimal());
+      // Utils -> reset.utils.js -> reset forms : New article & New animal
       resetAdminForms(dispatch);
       dispatch(resetFormNewTestimony());
-      // dispatch(setSelectedArticle({ id: "", name: "", location: "", description: "" }));
-      // dispatch(setSelectedAnimal({ id: "", age: "", name: "", sex: "", description: "", race: "", status: "", species: "", exit_date: "" }));
-      // dispatch(setSelectedTestimony({ id: "", user_id: "", content: "" }));
-      // dispatch(setSelectedUser({ id: "", username: "", role: "" }));
+      // Utils -> reset.utils.js -> reset selected (update/delete) : Article, Animal, Testimony, User
       resetAdminSelects(dispatch);
       dispatch(setUpdatedAvatar(""));
     }
@@ -40,14 +34,10 @@ const Dialog = ({ children }) => {
 
     if (e.clientX < dialogDimensions.left || e.clientX > dialogDimensions.right || e.clientY < dialogDimensions.top || e.clientY > dialogDimensions.bottom) {
       dispatch(closeDialog());
-      // dispatch(resetFormNewArticle());
-      // dispatch(resetFormNewAnimal());
+      // Utils -> reset.utils.js -> reset forms : New article & New animal
       resetAdminForms(dispatch);
       dispatch(resetFormNewTestimony());
-      // dispatch(setSelectedArticle({ id: "", name: "", location: "", description: "" }));
-      // dispatch(setSelectedAnimal({ id: "", age: "", name: "", sex: "", description: "", race: "", status: "", species: "", exit_date: "" }));
-      // dispatch(setSelectedTestimony({ id: "", user_id: "", content: "" }));
-      // dispatch(setSelectedUser({ id: "", username: "", role: "" }));
+      // Utils -> reset.utils.js -> reset selected (update/delete) : Article, Animal, Testimony, User
       resetAdminSelects(dispatch);
       dispatch(setUpdatedAvatar(""));
     }

@@ -4,6 +4,7 @@ import Dialog from "../Dialog/Dialog";
 import Button from "../Button/Button";
 import Filters from "../Filters/Filters";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import Loading from "../Loading/Loading";
 import { FaAngleRight, FaSliders } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -192,10 +193,7 @@ const Adoption = () => {
             <p className="text-error">{allAnimalsError}</p>
           }
           {allAnimalsLoading ?
-            <div className="loading">
-              <span className="loading__paws"></span>
-              <p className="loading__text">Chargement en cours...</p>
-            </div>
+            <Loading text={"Chargement"} loadingStyle={"paws"} />
             :
             <div className="animals__wrapper">
               {filteredAnimals.map(animal => (

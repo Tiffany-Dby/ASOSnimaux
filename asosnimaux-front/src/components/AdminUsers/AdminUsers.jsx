@@ -1,4 +1,5 @@
 import "./adminUsers.scss";
+import Loading from "../Loading/Loading";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsDeleteUserBySuperAdminForm, setIsUpdateUserRoleBySuperAdminForm } from "../../redux/reducers/dialog.reducer";
@@ -40,10 +41,7 @@ const AdminUsers = () => {
           <div className="admin__header">
             <h2>Tous les utilisateurs ({allUsers.length})</h2>
             {allUsersLoading &&
-              <div className="loading">
-                <span className="loading__spin"></span>
-                <p className="loading__text">Chargement des utilisateurs en cours...</p>
-              </div>
+              <Loading text={"Chargement des utilisateurs"} loadingStyle={"spin"} />
             }
           </div>
 
@@ -59,10 +57,7 @@ const AdminUsers = () => {
                   <p className="admin__user__role">{user.role}</p>
                 </div>
                 {deleteUserLoading || selectedUserLoading ?
-                  <div className="loading">
-                    <span className="loading__spin"></span>
-                    <p className="loading__text">{deleteUserLoading && "Suppression"}{selectedUserLoading && "Mise à jour"} de l'utilisateur en cours...</p>
-                  </div>
+                  <Loading text={(deleteUserLoading && "Suppression de l'utilisateur") || (selectedUserLoading && "Mise à jour de l'utilisateur")} loadingStyle={"spin"} />
                   :
                   <span className="icons-wrapper">
                     <FaPencil className="manage-icons admin__user__icon" color="var(--dark-brown)" onClick={() => handleUpdateForm(user)} role="button" aria-label="Bouton de modification de l'utilisateur" />

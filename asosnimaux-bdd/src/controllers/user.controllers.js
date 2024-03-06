@@ -5,12 +5,16 @@ import { hashPass, compareHash } from "../utils/crypto.utils.js";
 import { jwtSign } from "../utils/jwt.utils.js";
 import isUUID from "validator/lib/isUUID.js";
 import UUID from "../constants/uuid.const.js";
+import isAlphanumeric from "validator/lib/isAlphanumeric.js";
+import { AVATAR } from "../../../asosnimaux-front/src/constants/avatar.const.js";
+import { getRandomIndex } from "../utils/randomIndex.utils.js";
+import { ALPHANUMERIC } from "../constants/alphanumeric.const.js";
 
 const create = async ({ body: { username, email, password } }, res) => {
   const areStrings = areStringsFilled([username, email, password]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
-  if (username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters` });
+  if (!isAlphanumeric.default(username, ALPHANUMERIC.LOCALE, ALPHANUMERIC.OPTIONS) || username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters, also accents and "-" are allowed` });
 
   if (!isEmail(email)) return res.status(403).json({ message: `Invalid Email format` });
 
@@ -21,7 +25,9 @@ const create = async ({ body: { username, email, password } }, res) => {
 
   if (hashPwError) return res.status(500).json({ message: hashPwError });
 
-  const response = await UserDB.create(username, email, hashPwResponse.hashed);
+  const randomAvatar = getRandomIndex(AVATAR.URL);
+
+  const response = await UserDB.create(username, email, hashPwResponse.hashed, randomAvatar);
   const error = response.error;
 
   return res.status(error ? 500 : 201).json({ message: error ? error : `New user successfully created` });
@@ -126,7 +132,7 @@ const updateUsername = async ({ body: { username, userID } }, res) => {
 
   if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
 
-  if (username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters` });
+  if (!isAlphanumeric.default(username, ALPHANUMERIC.LOCALE, ALPHANUMERIC.OPTIONS) || username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters, also accents and "-" are allowed` });
 
   const response = await UserDB.updateUsername(username, userID);
   const error = response.error;

@@ -4,7 +4,7 @@ import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Dialog from "../Dialog/Dialog";
 import Button from "../Button/Button";
 import NotAuth from "../NotAuth/NotAuth";
-import Toast from "../Toast/Toast";
+import Loading from "../Loading/Loading";
 import { FaXmark } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +20,7 @@ const HomeTestimonies = () => {
   const testimoniesRef = useRef(null);
 
   // Testimony Reducer
-  const { testimonies, newTestimonySuccess, newTestimonyLoading, newTestimonyError } = useSelector(state => state.testimonyReducer);
+  const { testimonies, overviewTestimonyLoading, newTestimonyLoading, newTestimonyError } = useSelector(state => state.testimonyReducer);
   const { overview, one, newTestimony } = testimonies;
 
   // Dialog Reducer
@@ -28,9 +28,6 @@ const HomeTestimonies = () => {
 
   // User Reducer
   const { isAuth } = useSelector(state => state.userReducer);
-
-  // Toast Reducer
-  const { isToastOpen } = useSelector(state => state.toastReducer);
 
   // Overview -> Index of current testimony displayed
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -130,58 +127,59 @@ const HomeTestimonies = () => {
         <div className="title-wrapper">
           <h2>Témoignages</h2>
         </div>
-        {isToastOpen &&
-          <Toast message={newTestimonySuccess} />
+        {newTestimonyError &&
+          <p className="text-error">{newTestimonyError}</p>
         }
         <article className="testimonies-overview__wrapper">
           <div className="testimonies-overview__header">
             <h3>Les derniers témoignages</h3>
             {newTestimonyLoading ?
-              <div className="loading">
-                <span className="loading__spin"></span>
-                <p className="loading__text">Envoi du témoignage en cours...</p>
-              </div>
+              <Loading text={"Envoi du témoignage"} loadingStyle={"spin"} />
               :
               <Button btnStyle={" btn--post-testimonies"} text="Poster un témoignage" btnClick={handleNewTestimonyForm} />
             }
           </div>
-          <div className="testimonies-overview__slider">
-            <ul className="testimonies-overview__slides" ref={testimoniesRef}>
-              {overview.map((testimony, index) => (
-                <li key={testimony.id} id={`testimonies-overview__slide--${index + 1}`} className="testimonies-overview__slide">
-                  <TestimonyCard
-                    author={testimony.username}
-                    imgUrl={`${APP_ROUTES.API_URL}${testimony.avatar_url}`}
-                    date={setToLocalDate(testimony.date)}
-                    content={testimony.truncated_content}
-                    btnText={'Lire la suite'}
-                    btnClick={() => handleReadMore(testimony)}
-                  />
-                  <a
-                    onClick={handlePrevious}
-                    className="testimonies-overview__link testimonies-overview--previous"
-                    href={index === 0 ? `#testimonies-overview__slide--${overview.length}` : `#testimonies-overview__slide--${index}`}
-                    aria-label="Slide précédent"></a>
-                  <a
-                    onClick={handleNext}
-                    className="testimonies-overview__link testimonies-overview--next"
-                    href={overview.length === index + 1 ? `#testimonies-overview__slide--1` : `#testimonies-overview__slide--${index + 2}`}
-                    aria-label="Slide suivant"></a>
-                </li>
-              ))}
-            </ul>
-            <Breadcrumbs>
-              {overview.map((testimony, index) => (
-                <li key={index}>
-                  <a
-                    onClick={(e) => handleNavigate(e, index)}
-                    className={index === currentIndex ? "active" : ""}
-                    href={`#testimonies-overview__slide--${index + 1}`}
-                    aria-label={`Aller au slide ${index + 1}`}></a>
-                </li>
-              ))}
-            </Breadcrumbs>
-          </div>
+          {overviewTestimonyLoading ?
+            <Loading text={"Chargement des témoignages"} loadingStyle={"spin"} />
+            :
+            <div className="testimonies-overview__slider">
+              <ul className="testimonies-overview__slides" ref={testimoniesRef}>
+                {overview.map((testimony, index) => (
+                  <li key={testimony.id} id={`testimonies-overview__slide--${index + 1}`} className="testimonies-overview__slide">
+                    <TestimonyCard
+                      author={testimony.username}
+                      imgUrl={`${APP_ROUTES.API_URL}${testimony.avatar_url}`}
+                      date={setToLocalDate(testimony.date)}
+                      content={testimony.truncated_content}
+                      btnText={'Lire la suite'}
+                      btnClick={() => handleReadMore(testimony)}
+                    />
+                    <a
+                      onClick={handlePrevious}
+                      className="testimonies-overview__link testimonies-overview--previous"
+                      href={index === 0 ? `#testimonies-overview__slide--${overview.length}` : `#testimonies-overview__slide--${index}`}
+                      aria-label="Slide précédent"></a>
+                    <a
+                      onClick={handleNext}
+                      className="testimonies-overview__link testimonies-overview--next"
+                      href={overview.length === index + 1 ? `#testimonies-overview__slide--1` : `#testimonies-overview__slide--${index + 2}`}
+                      aria-label="Slide suivant"></a>
+                  </li>
+                ))}
+              </ul>
+              <Breadcrumbs>
+                {overview.map((testimony, index) => (
+                  <li key={index}>
+                    <a
+                      onClick={(e) => handleNavigate(e, index)}
+                      className={index === currentIndex ? "active" : ""}
+                      href={`#testimonies-overview__slide--${index + 1}`}
+                      aria-label={`Aller au slide ${index + 1}`}></a>
+                  </li>
+                ))}
+              </Breadcrumbs>
+            </div>
+          }
         </article>
         <div className="btn-wrapper">
           <Link className="btn btn--read-more-testimonies" to={APP_ROUTES.TESTIMONIES}>Voir plus de témoignages</Link>

@@ -3,7 +3,6 @@ import Button from "../Button/Button";
 import Input from "../Input/Input";
 import InputFile from "../InputFile/InputFile";
 import Dialog from "../Dialog/Dialog";
-import Toast from '../Toast/Toast.jsx';
 import InputSelect from "../InputSelect/InputSelect.jsx";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs.jsx";
 import { FaAngleRight } from "react-icons/fa6";
@@ -11,11 +10,11 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticleThunk } from "../../api/article.api";
-import { resetFormNewArticle, setSelectedArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
+import { setSelectedArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
 import { APP_ROUTES } from "../../constants/route.const";
 import { deleteAnimalThunk, getAllAnimalsThunk, postNewAnimalThunk, updateAnimalExitDateThunk, updateAnimalThunk } from "../../api/animal.api.js";
-import { resetFormNewAnimal, setNewAnimalError, setSelectedAnimal, updateFormNewAnimal, updateFormSelectedAnimal } from "../../redux/reducers/animal.reducer.js";
+import { setNewAnimalError, setSelectedAnimal, updateFormNewAnimal, updateFormSelectedAnimal } from "../../redux/reducers/animal.reducer.js";
 import { deleteUserThunk, getAllUsersThunk, updateUserRoleThunk } from "../../api/user.api.js";
 import { setSelectedUser, updateFormSelectedUser } from "../../redux/reducers/user.reducer.js";
 import { deleteTestimonyThunk, getAllTestimoniesThunk } from "../../api/testimony.api.js";
@@ -26,24 +25,21 @@ import { setMinMaxDate } from "../../utils/date.utils.js";
 const Admin = () => {
   const dispatch = useDispatch();
 
-  // Toast Reducer
-  const { isToastOpen } = useSelector(state => state.toastReducer);
-
   // User Reducer
-  const { user, selectedUser, selectedUserSuccess, deleteUserSuccess } = useSelector(state => state.userReducer);
+  const { user, selectedUser } = useSelector(state => state.userReducer);
 
   // Dialog Reducer
   const { isNewArticleForm, isDeleteArticleForm, isUpdateArticleForm, isNewAnimalForm, isUpdateAnimalForm, isUpdateExitAnimalForm, isDeleteAnimalForm, isDeleteUserBySuperAdminForm, isUpdateUserRoleBySuperAdminForm, isDeleteTestimonyByAdmin } = useSelector(state => state.dialogReducer);
 
   // Article Reducer
-  const { articles, newArticleSuccess, selectedSuccess, deleteSuccess } = useSelector(state => state.articleReducer);
+  const { articles } = useSelector(state => state.articleReducer);
   const { newArticle, selectedArticle } = articles;
 
   // Animal Reducer
-  const { animals, newAnimalError, newAnimalSuccess, selectedAnimalError, selectedAnimalSuccess, deleteAnimalSuccess } = useSelector(state => state.animalReducer);
+  const { animals, newAnimalError, selectedAnimalError } = useSelector(state => state.animalReducer);
 
   // Testimony Reducer
-  const { testimonies, deleteTestimonySuccess } = useSelector(state => state.testimonyReducer);
+  const { testimonies } = useSelector(state => state.testimonyReducer);
 
   // Files -> Articles and Animals
   const inputFileRef = useRef(null);
@@ -219,6 +215,7 @@ const Admin = () => {
     if (isDeleteUserBySuperAdminForm) {
       handleConfirmedUserDeletion();
     }
+    // Dialog delete Testimony
     if (isDeleteTestimonyByAdmin) {
       handleConfirmedTestimonyDeletion();
     }
@@ -227,13 +224,9 @@ const Admin = () => {
   // Cancel
   const handleCancel = () => {
     dispatch(setNewAnimalError({ error: null }));
-    // dispatch(resetFormNewArticle());
-    // dispatch(resetFormNewAnimal());
+    // Utils -> reset.utils.js -> reset forms : New article & New animal
     resetAdminForms(dispatch);
-    // dispatch(setSelectedArticle({ id: "", name: "", location: "", description: "" }));
-    // dispatch(setSelectedAnimal({ id: "", age: "", name: "", sex: "", description: "", race: "", status: "", species: "", exit_date: "" }));
-    // dispatch(setSelectedTestimony({ id: "", user_id: "", content: "" }));
-    // dispatch(setSelectedUser({ id: "", username: "", role: "" }));
+    // Utils -> reset.utils.js -> reset selected (update/delete) : Article, Animal, Testimony, User
     resetAdminSelects(dispatch);
     dispatch(closeDialog());
   }
@@ -241,9 +234,6 @@ const Admin = () => {
   return (
     <>
       <div className="admin">
-        {isToastOpen &&
-          <Toast message={newArticleSuccess || selectedSuccess || deleteSuccess || newAnimalSuccess || selectedAnimalSuccess || deleteAnimalSuccess || selectedUserSuccess || deleteUserSuccess || deleteTestimonySuccess} />
-        }
         <div className="title-wrapper">
           <h1>Administrateur</h1>
         </div>

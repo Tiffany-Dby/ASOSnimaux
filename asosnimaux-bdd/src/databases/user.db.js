@@ -1,10 +1,10 @@
 import query from "./init.db.js";
 import { v4 as uuidv4 } from "uuid";
 
-const create = async (username, email, password) => {
+const create = async (username, email, password, avatarUrl) => {
   const sql = `
-    INSERT INTO users (id, username, email, password)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO users (id, username, email, password, avatar_url)
+    VALUES (?, ?, ?, ?, ?)
   `;
 
   let result = [];
@@ -12,7 +12,7 @@ const create = async (username, email, password) => {
   try {
     const id = uuidv4();
 
-    result = await query(sql, [id, username, email, password]);
+    result = await query(sql, [id, username, email, password, avatarUrl]);
   }
   catch (err) {
     error = err.message;

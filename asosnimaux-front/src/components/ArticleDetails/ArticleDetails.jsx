@@ -1,5 +1,6 @@
 import "./articleDetails.scss";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import Loading from "../Loading/Loading";
 import { FaAngleRight } from "react-icons/fa6";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,10 +58,7 @@ const ArticleDetails = () => {
             <p className="text-error">{oneError}</p>
           }
           {oneLoading ?
-            <div className="loading">
-              <p className="loading__text">Chargement...</p>
-              <span className="loading__paws"></span>
-            </div>
+            <Loading text={"Chargement"} loadingStyle={"paws"} />
             :
             <article>
               <div className="article-page__title__wrapper">

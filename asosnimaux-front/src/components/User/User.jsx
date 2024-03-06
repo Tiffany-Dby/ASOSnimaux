@@ -2,8 +2,8 @@ import "./user.scss";
 import Button from "../Button/Button";
 import Dialog from "../Dialog/Dialog";
 import Input from "../Input/Input";
-import Toast from "../Toast/Toast";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import Loading from "../Loading/Loading";
 import { FaAngleRight, FaPencil, FaTrashCan } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,14 +20,11 @@ import { setSelectedTestimony, updateFormSelectedTestimony } from "../../redux/r
 const User = () => {
   const dispatch = useDispatch();
 
-  // Toast Reducer
-  const { isToastOpen } = useSelector(state => state.toastReducer);
-
   // User Reducer
-  const { user, selectedUser, dialogForms, updatedAvatar, updateAvatarSuccess, updateUsernameSuccess, signInSuccess } = useSelector(state => state.userReducer);
+  const { user, selectedUser, dialogForms, updatedAvatar } = useSelector(state => state.userReducer);
 
   // Testimonies Reducer
-  const { testimonies, allByOneUserLoading, allByOneUserError, selectedTestimonyLoading, selectedTestimonySuccess, selectedTestimonyError, deleteTestimonyLoading, deleteTestimonySuccess, deleteTestimonyError } = useSelector(state => state.testimonyReducer);
+  const { testimonies, allByOneUserLoading, allByOneUserError, selectedTestimonyLoading, selectedTestimonyError, deleteTestimonyLoading, deleteTestimonyError } = useSelector(state => state.testimonyReducer);
   const { allByOneUser, selectedTestimony } = testimonies;
 
   // Dialog Reducer
@@ -151,9 +148,6 @@ const User = () => {
   return (
     <>
       <div className="user">
-        {isToastOpen &&
-          <Toast message={updateAvatarSuccess || updateUsernameSuccess || signInSuccess || selectedTestimonySuccess || deleteTestimonySuccess} />
-        }
         <div className="title-wrapper">
           <h1>Dashboard</h1>
         </div>
@@ -225,11 +219,11 @@ const User = () => {
           {allByOneUserError &&
             <p className="text-error">{allByOneUserError}</p>
           }
+          {selectedTestimonyError &&
+            <p className="text-error">{selectedTestimonyError}</p>
+          }
           {allByOneUserLoading &&
-            <div className="loading">
-              <p className="loading__text">Chargement...</p>
-              <span className="loading__paws"></span>
-            </div>
+            <Loading text={"Chargement"} loadingStyle={"paws"} />
           }
           <div className="user__testimonies__wrapper">
             {!allByOneUserLoading && allByOneUser.length < 1 &&
@@ -248,10 +242,7 @@ const User = () => {
                       </div>
                     </div>
                     {selectedTestimonyLoading || deleteTestimonyLoading ?
-                      <div className="loading">
-                        <span className="loading__spin"></span>
-                        <p className="loading__text">{selectedTestimonyLoading && "Mise à jour"}{deleteTestimonyLoading && "Suppression"} en cours...</p>
-                      </div>
+                      <Loading text={(selectedTestimonyLoading && "Mise à jour") || (deleteTestimonyLoading && "Suppression")} loadingStyle={"spin"} />
                       :
                       <div className="icons-wrapper">
                         <FaPencil className="manage-icons" onClick={() => handleTestimonyDialog(testimony)} role="button" aria-label="Bouton de modification du témoignage" />
@@ -263,7 +254,6 @@ const User = () => {
               </>
             }
           </div>
-
 
         </section>
 

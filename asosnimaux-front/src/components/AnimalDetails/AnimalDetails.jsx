@@ -1,6 +1,7 @@
 import "./animalDetails.scss";
 import Button from "../Button/Button";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import Loading from "../Loading/Loading";
 import { FaAngleRight, FaCakeCandles, FaHeart } from "react-icons/fa6";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,10 +21,10 @@ const AnimalDetails = () => {
   const { id } = useParams();
 
   // User Reducer
-  const { isAuth, followIDs, selectedAnimalFollow, oneAnimalLoading } = useSelector(state => state.userReducer);
+  const { isAuth, followIDs, selectedAnimalFollow } = useSelector(state => state.userReducer);
 
   // Animal Reducer
-  const { animals } = useSelector(state => state.animalReducer);
+  const { animals, oneAnimalLoading } = useSelector(state => state.animalReducer);
   const { one, all } = animals;
 
   // Fetching -> One animal using id from params
@@ -109,10 +110,7 @@ const AnimalDetails = () => {
           </li>
         </Breadcrumbs>
         {oneAnimalLoading ?
-          <div className="loading">
-            <p className="loading__text">Chargement...</p>
-            <span className="loading__paws"></span>
-          </div>
+          <Loading text={"Chargement"} loadingStyle={"paws"} />
           :
           <article className="animal-page__profile">
             <div className="animal-page__profile__wrapper">

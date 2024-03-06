@@ -87,6 +87,7 @@ const animalSlice = createSlice({
             time_spent
           }
         },
+        oneAnimalError: null,
         oneAnimalLoading: false
       }
     },

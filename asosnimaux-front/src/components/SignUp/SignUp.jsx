@@ -1,6 +1,7 @@
 import "./signUp.scss";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
+import Loading from "../Loading/Loading.jsx";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -42,10 +43,7 @@ const SignUp = () => {
         }
         <form onSubmit={handleSubmit}>
           {signUpLoading ?
-            <div className="loading">
-              <p className="loading__text">Chargement...</p>
-              <span className="loading__paws"></span>
-            </div>
+            <Loading text={"Chargement"} loadingStyle={"paws"} />
             :
             <>
               <Input label="Pseudo" id="username" required={true} value={signUpForm.username} onChange={value => updateForm("username", value)} />

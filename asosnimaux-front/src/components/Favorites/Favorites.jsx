@@ -1,6 +1,7 @@
 import "./favorites.scss";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import FavoriteCard from "../FavoriteCard/FavoriteCard";
+import Loading from "../Loading/Loading";
 import { FaAngleRight, FaCircleInfo } from "react-icons/fa6";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -96,10 +97,7 @@ const Favorites = () => {
               <p className="text-error">{followedAnimalsError}</p>
             }
             {followedAnimalsLoading ?
-              <div className="loading">
-                <span className="loading__paws"></span>
-                <p className="loading__text">Chargement en cours...</p>
-              </div>
+              <Loading text={"Chargement"} loadingStyle={"paws"} />
               :
               (followedAnimals.length > 0 ?
                 <p>Vous suivez actuellement {followedAnimals.length} {followedAnimals.length === 1 && "animal"}{followedAnimals.length > 1 && "animaux"} !</p>

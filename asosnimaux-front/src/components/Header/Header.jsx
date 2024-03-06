@@ -79,7 +79,7 @@ const Header = () => {
         <div className="header__wrapper">
           <div className="header__img">
             <Link to={APP_ROUTES.HOME}>
-              <img src={width < 900 ? "/logo-lm-mobile.svg" : "/logo-lm.svg"} alt="Logo ASOS'nimaux" />
+              <img src={width < 900 ? "./src/assets/imgs/logo-lm-mobile.svg" : "./src/assets/imgs/logo-lm.svg"} alt="Logo ASOS'nimaux" />
             </Link>
           </div>
           <div className="header__icons">

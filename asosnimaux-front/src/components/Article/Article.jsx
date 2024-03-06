@@ -17,7 +17,7 @@ const Article = ({ artclStyle, imgUrl, imgAlt, title, date, text }) => {
             <p>{date}</p>
           </span>
           <div className="article__text">
-            {paragraphs.map((paragraph, index) => (
+            {paragraphs?.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
           </div>

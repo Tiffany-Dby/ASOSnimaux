@@ -1,25 +1,25 @@
 import "./testimonies.scss";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import TestimonyCard from "../TestimonyCard/TestimonyCard";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { APP_ROUTES } from "../../constants/route.const";
-import { FaAngleRight } from "react-icons/fa6";
-import { useEffect } from "react";
-import { getAllTestimoniesThunk, postTestimonyThunk } from "../../api/testimony.api";
-import { setToLocalDate } from "../../utils/date.utils";
-import Button from "../Button/Button";
-import { resetFormNewTestimony, updateFormNewTestimony } from "../../redux/reducers/testimony.reducer";
-import { closeDialog, setIsNewTestimonyForm } from "../../redux/reducers/dialog.reducer";
 import Dialog from "../Dialog/Dialog";
 import NotAuth from "../NotAuth/NotAuth";
-import Toast from "../Toast/Toast";
+import Button from "../Button/Button";
+import Loading from "../Loading/Loading";
+import { FaAngleRight } from "react-icons/fa6";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { APP_ROUTES } from "../../constants/route.const";
+import { getAllTestimoniesThunk, postTestimonyThunk } from "../../api/testimony.api";
+import { setToLocalDate } from "../../utils/date.utils";
+import { resetFormNewTestimony, updateFormNewTestimony } from "../../redux/reducers/testimony.reducer";
+import { closeDialog, setIsNewTestimonyForm } from "../../redux/reducers/dialog.reducer";
 
 const Testimonies = () => {
   const dispatch = useDispatch();
 
   // Testimony Reducer
-  const { testimonies, allTestimoniesLoading, allTestimoniesError, newTestimonySuccess, newTestimonyLoading, newTestimonyError } = useSelector(state => state.testimonyReducer);
+  const { testimonies, allTestimoniesLoading, allTestimoniesError, newTestimonyLoading, newTestimonyError } = useSelector(state => state.testimonyReducer);
   const { all, newTestimony } = testimonies;
 
   // Dialog Reducer
@@ -27,9 +27,6 @@ const Testimonies = () => {
 
   // User Reducer
   const { isAuth } = useSelector(state => state.userReducer);
-
-  // Toast Reducer
-  const { isToastOpen } = useSelector(state => state.toastReducer);
 
   // Fetching -> all testimonies
   useEffect(() => {
@@ -66,9 +63,6 @@ const Testimonies = () => {
         <div className="title-wrapper">
           <h1>Témoignages</h1>
         </div>
-        {isToastOpen &&
-          <Toast message={newTestimonySuccess} />
-        }
         <Breadcrumbs>
           <li className="breadcrumbs__link">
             <Link to={APP_ROUTES.HOME} >
@@ -92,18 +86,12 @@ const Testimonies = () => {
             <p className="text-error">{newTestimonyError}</p>
           }
           {newTestimonyLoading ?
-            <div className="loading">
-              <span className="loading__spin"></span>
-              <p className="loading__text">Envoi du témoignage en cours...</p>
-            </div>
+            <Loading text={"Envoi du témoignage"} loadingStyle={"spin"} />
             :
             <Button btnStyle={" btn--post-testimonies"} text="Poster un témoignage" btnClick={handleNewTestimonyForm} />
           }
           {allTestimoniesLoading ?
-            <div className="loading">
-              <span className="loading__paws"></span>
-              <p className="loading__text">Chargement en cours...</p>
-            </div>
+            <Loading text={"Chargement"} loadingStyle={"paws"} />
             :
             <ul className="testimonies__wrapper">
               {all.map(testimony => (

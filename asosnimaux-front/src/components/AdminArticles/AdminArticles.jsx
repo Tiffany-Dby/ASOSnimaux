@@ -1,5 +1,6 @@
 import "./adminArticles.scss";
 import Button from "../Button/Button";
+import Loading from "../Loading/Loading";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { setToLocalDate } from "../../utils/date.utils";
@@ -51,10 +52,7 @@ const AdminArticles = () => {
           <div className="admin__header">
             <h2>Tous les articles ({all.length})</h2>
             {newArticleLoading || allLoading ?
-              <div className="loading">
-                <span className="loading__spin"></span>
-                <p className="loading__text">{newArticleLoading && "Création de l'article"}{allLoading && "Chargement des articles"} en cours...</p>
-              </div>
+              <Loading text={(newArticleLoading && "Création de l'article") || (allLoading && "Chargement des articles")} loadingStyle={"spin"} />
               :
               <Button btnStyle={""} text={"Ajouter un article"} btnClick={handleNewForm} />
             }
@@ -70,10 +68,7 @@ const AdminArticles = () => {
                   </span>
                 </div>
                 {selectedLoading || deleteLoading ?
-                  <div className="loading">
-                    <span className="loading__spin"></span>
-                    <p className="loading__text">{selectedLoading && "Mise à jour"}{deleteLoading && "Suppression"} en cours...</p>
-                  </div>
+                  <Loading text={(selectedLoading && "Mise à jour de l'article") || (deleteLoading && "Suppression de l'article")} loadingStyle={"spin"} />
                   :
                   <div className="icons-wrapper">
                     <FaPencil className="manage-icons" onClick={() => handleUpdateForm(a)} role="button" aria-label="Bouton de modification de l'article" />

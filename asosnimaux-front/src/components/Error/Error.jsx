@@ -11,7 +11,6 @@ const Error = () => {
         </div>
         <div className="error__wrapper">
           <div className="error__text">
-
             <p className="text-error"><strong>Erreur 404</strong></p>
             <p>Il semblerait que cette page n'existe pas..</p>
             <p>Revenez parmis nous !</p>
@@ -30,7 +29,7 @@ const Error = () => {
               </ul>
             </nav>
           </div>
-          <img src="/bateau.png" alt="Sticker d'un chat, les yeux équarquillés, dans un bateau qui avance vite" />
+          <img src="./src/assets/imgs/cat-boat.png" alt="Sticker d'un chat, les yeux équarquillés, dans un bateau qui avance vite" />
         </div>
       </section>
     </>

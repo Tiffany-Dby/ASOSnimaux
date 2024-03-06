@@ -1,5 +1,6 @@
 import "./adminAnimals.scss";
 import Button from "../Button/Button";
+import Loading from "../Loading/Loading";
 import { FaMars, FaPencil, FaTrashCan, FaVenus } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { setToLocalDate, setToYYYYMMDD } from "../../utils/date.utils";
@@ -56,10 +57,7 @@ const AdminAnimals = () => {
           <div className="admin__header">
             <h2>Tous les animaux ({animals.all.length})</h2>
             {newAnimalLoading || allAnimalsLoading ?
-              <div className="loading">
-                <span className="loading__spin"></span>
-                <p className="loading__text">{newAnimalLoading && "Ajout de l'animal"}{allAnimalsLoading && "Chargement des animaux"} en cours...</p>
-              </div>
+              <Loading text={(newAnimalLoading && "Ajout de l'animal") || (allAnimalsLoading && "Chargement des animaux")} loadingStyle={"spin"} />
               :
               <Button btnStyle={""} text={"Ajouter un animal"} btnClick={handleNewAnimalForm} />
             }
@@ -91,10 +89,7 @@ const AdminAnimals = () => {
                   </div>
                 </div>
                 {selectedAnimalLoading || deleteAnimalLoading ?
-                  <div className="loading">
-                    <span className="loading__spin"></span>
-                    <p className="loading__text">{selectedAnimalLoading && "Mise à jour"}{deleteAnimalLoading && "Suppression"} en cours...</p>
-                  </div>
+                  <Loading text={(selectedAnimalLoading && "Mise à jour de l'animal") || (deleteAnimalLoading && "Suppression de l'animal")} loadingStyle={"spin"} />
                   :
                   <div className="icons-wrapper">
                     <FaPencil className="manage-icons" onClick={() => handleUpdateAnimalForm(animal)} role="button" aria-label="Bouton de modification de l'animal" />

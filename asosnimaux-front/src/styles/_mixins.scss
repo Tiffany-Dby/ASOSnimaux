@@ -71,7 +71,7 @@
   justify-content: center;
 
   &::after {
-    content: url(../../assets/Paw.svg);
+    content: url(../../assets/imgs/Paw.svg);
     grid-area: 1/1;
     justify-self: end;
     align-self: center;
@@ -105,7 +105,6 @@
 
 @mixin btnStylish {
   display: grid;
-  // position: relative;
   justify-content: center;
 
   .btn {

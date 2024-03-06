@@ -1,6 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
 import "./adminTestimonies.scss";
+import Loading from "../Loading/Loading";
 import { FaTrashCan } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
 import { setToLocalDate } from "../../utils/date.utils";
 import { setIsDeleteTestimonyByAdmin } from "../../redux/reducers/dialog.reducer";
 import { setSelectedTestimony } from "../../redux/reducers/testimony.reducer";
@@ -30,10 +31,7 @@ const AdminTestimonies = () => {
           <div className="admin__header">
             <h2>Tous les témoignages ({all.length})</h2>
             {allTestimoniesLoading &&
-              <div className="loading">
-                <span className="loading__spin"></span>
-                <p className="loading__text">Chargement des témoignages en cours...</p>
-              </div>
+              <Loading text={"Chargement des témoignages"} loadingStyle={"spin"} />
             }
           </div>
           <ul className="admin__all-testimonies__wrapper">

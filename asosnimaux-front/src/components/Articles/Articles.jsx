@@ -1,6 +1,7 @@
 import "./articles.scss";
 import Article from "../Article/Article";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
+import Loading from "../Loading/Loading";
 import { FaAngleRight } from "react-icons/fa6";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,10 +53,7 @@ const Articles = () => {
             <p className="text-error">{allError}</p>
           }
           {allLoading ?
-            <div className="loading">
-              <span className="loading__paws"></span>
-              <p className="loading__text">Chargement en cours...</p>
-            </div>
+            <Loading text={"Chargement"} loadingStyle={"paws"} />
             :
             <div className="articles__wrapper">
               {all.map((article) => (
