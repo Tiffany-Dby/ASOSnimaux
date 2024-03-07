@@ -8,7 +8,7 @@ const Banner = () => {
       <section className="banner" role="banner">
         <div className="banner__header">
           <div className="banner__logo">
-            <img src="./src/assets/imgs/logo-lm.svg" alt="Logo ASOS'nimaux" />
+            <img src="/imgs/logo-lm.svg" alt="Logo ASOS'nimaux" />
           </div>
           <h1>Refuge pour animaux en Gironde</h1>
         </div>

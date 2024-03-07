@@ -17,7 +17,7 @@ const Footer = () => {
       <footer className="footer">
         <div className="footer__img">
           <a href="#" onClick={handleScrollToTopPage}>
-            <img src="./src/assets/imgs/logo-dm.svg" alt="Logo ASOS'nimaux" />
+            <img src="/imgs/logo-dm.svg" alt="Logo ASOS'nimaux" />
           </a>
         </div>
 
