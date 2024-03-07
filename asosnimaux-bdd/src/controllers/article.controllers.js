@@ -1,47 +1,51 @@
 import { ArticleDB } from "../databases/article.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
 import formidable from "formidable";
-import { deleteImg, setImgUrl } from "../utils/formidable.utils.js";
+import { deleteImg, deleteImgs, getFormidableForm, setImgUrl } from "../utils/formidable.utils.js";
 import isUUID from "validator/lib/isUUID.js";
 import UUID from "../constants/uuid.const.js";
+import { resizeAndFormatImg } from "../utils/sharp.utils.js";
 
 const create = async (req, res) => {
-  const form = formidable({
-    uploadDir: "./public/articles",
-    keepExtensions: true,
-    createDirsFromUploads: true,
-    maxFileSize: 5 * 1024 * 1024, // 5MB
-    filter: opts => {
-      const { mimetype } = opts;
-      return mimetype === "image/png" || mimetype === "image/jpg" || mimetype === "image/jpeg" || mimetype === "image/webp";
-    }
-  });
+  const errors = {};
+  const form = await getFormidableForm("articles", 5, req);
+  const { files, fields } = form;
 
-  let fields = null;
-  let files = null;
+  const formErr = form.error;
+  if (formErr) errors.formError = formErr;
 
-  try {
-    [fields, files] = await form.parse(req);
-  }
-  catch (err) {
-    console.log("err =>", err.message);
-    return res.status(500).json({ message: "Error parsing form" });
-  }
-
-  console.log("fields", fields);
-  console.log("files", files);
-
-  if (!files.newArticleImg) return res.status(415).json({ message: "Something went wrong, check files mimetype" });
+  if (!files.newArticleImg) return res.status(415).json({ message: "Something went wrong with the image" });
 
   const { userID } = req.body;
-  const filePath = files.newArticleImg[0].filepath;
-  const picture_url = setImgUrl(filePath, "articles");
+  const { filepath } = files.newArticleImg[0];
+
+  const processedImg = await resizeAndFormatImg(filepath, "webp", 1300, null);
+
+  const processedImgErr = processedImg.error;
+  if (processedImgErr) errors.processedImgError = processedImgErr;
+
+  const picture_url = processedImg.result;
   const { name, location, description, picture_caption } = fields;
 
-  if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+  const areStrings = areStringsFilled([userID, name[0], location[0], description[0], picture_url, picture_caption[0]]);
+  if (!areStrings) errors.areStringsError = "Missing data";
 
-  const areStrings = areStringsFilled([name[0], location[0], description[0], picture_url, picture_caption[0]]);
-  if (!areStrings) return res.status(403).json({ message: `Missing data` });
+  if (!isUUID(userID, UUID.VERSION)) errors.UUIDError = "Invalid UUID format";
+
+  const { formError, processedImgError, areStringsError, UUIDError } = errors;
+
+  if (formError || processedImgError || areStringsError || UUIDError) {
+    if (processedImgError) {
+      const e = await deleteImg(setImgUrl(filepath, "articles"));
+      if (e) return res.status(403).json({ message: e });
+    }
+    if (!processedImgError) {
+      const e = await deleteImgs(picture_url, filepath, "articles");
+      if (e.newErr || e.oldErr) return res.status(403).json({ message: e });
+    }
+
+    return res.status(500).json({ message: errors });
+  }
 
   const article = {
     name: name[0],
@@ -52,19 +56,23 @@ const create = async (req, res) => {
   }
 
   const response = await ArticleDB.create(article, userID);
-
-  const { error, insertedId } = response;
+  const { result, error, insertedId } = response;
+  if (error) errors.error = error;
 
   const createdArticle = await ArticleDB.readOne(insertedId);
+  const rslt = createdArticle.result;
   const err = createdArticle.error;
-  const result = createdArticle.result;
+  if (err) errors.err = err;
 
-  if (error || err) {
-    const e = deleteImg(picture_url);
+  if (error || result.affectedRows !== 1) {
+    const e = await deleteImg(picture_url)
     if (e) return res.status(403).json({ message: e });
   }
 
-  return res.status(error ? 500 : 200).json({ message: error ? error : `New article successfully created`, article: result });
+  const e = await deleteImg(setImgUrl(filepath, "articles"));
+  if (e) return res.status(403).json({ message: e });
+
+  return res.status(!!Object.keys(errors).length ? 500 : 200).json({ message: !!Object.keys(errors).length ? errors : `New article successfully created`, article: rslt });
 }
 
 const readAll = async (req, res) => {
