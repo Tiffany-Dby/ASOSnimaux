@@ -71,9 +71,7 @@ const Admin = () => {
   ]
 
   // Add class 'active' on the current Admin tab
-  const checkActiveLink = ({ isActive }) => {
-    return isActive ? 'active' : '';
-  }
+  const checkActiveLink = ({ isActive }) => isActive ? 'active' : '';
 
   // Fetching all Aritcles, Animals, Testimonies and Users
   useEffect(() => {
@@ -220,21 +218,16 @@ const Admin = () => {
   // Delete accordingly -> set on click
   const handleConfirmedDeleteClick = () => {
     // Dialog delete Article
-    if (isDeleteArticleForm) {
-      handleConfirmedArticleDeletion();
-    }
+    if (isDeleteArticleForm) handleConfirmedArticleDeletion();
+
     // Dialog delete Animal
-    if (isDeleteAnimalForm) {
-      handleConfirmedAnimalDeletion();
-    }
+    if (isDeleteAnimalForm) handleConfirmedAnimalDeletion();
+
     // Dialog delete User
-    if (isDeleteUserBySuperAdminForm) {
-      handleConfirmedUserDeletion();
-    }
+    if (isDeleteUserBySuperAdminForm) handleConfirmedUserDeletion();
+
     // Dialog delete Testimony
-    if (isDeleteTestimonyByAdmin) {
-      handleConfirmedTestimonyDeletion();
-    }
+    if (isDeleteTestimonyByAdmin) handleConfirmedTestimonyDeletion();
   }
 
   // Cancel
@@ -292,10 +285,15 @@ const Admin = () => {
                   <h2>Mettre à jour le rôle</h2>
                 </div>
                 <form onSubmit={handleUpdateRoleSubmit}>
-                  <InputSelect id="role" label="Choisissez un nouveau rôle" options={userOptions} value={selectedUser.role} onChange={(value) => updateFormUserSelected("role", value)} />
+                  <InputSelect
+                    id="role"
+                    label="Choisissez un nouveau rôle"
+                    options={userOptions}
+                    value={selectedUser.role}
+                    onChange={(value) => updateFormUserSelected("role", value)} />
                   <div className="btns-wrapper">
-                    <Button btnStyle={""} text="Confirmer" type="submit" />
-                    <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                    <Button text="Confirmer" type="submit" />
+                    <Button text="Annuler" btnClick={handleCancel} />
                   </div>
                 </form>
               </div>
@@ -326,21 +324,21 @@ const Admin = () => {
                 <InputSelect
                   id="sex"
                   label="Sexe de l'animal"
-                  inputStyle={newAnimalError && !animals.newAnimal.sex ? "input--error" : ""}
+                  inputStyle={newAnimalError && !animals.newAnimal.sex ? " input--error" : ""}
                   options={animalOptions.sex}
                   value={animals.newAnimal.sex}
                   onChange={(value) => updateNewAnimalFrom("sex", value)} />
                 <InputSelect
                   id="status"
                   label="Etat de l'adoption"
-                  inputStyle={newAnimalError && !animals.newAnimal.status ? "input--error" : ""}
+                  inputStyle={newAnimalError && !animals.newAnimal.status ? " input--error" : ""}
                   options={animalOptions.status}
                   value={animals.newAnimal.status}
                   onChange={(value) => updateNewAnimalFrom("status", value)} />
                 <InputSelect
                   id="species"
                   label="Espèce"
-                  inputStyle={newAnimalError && !animals.newAnimal.species ? "input--error" : ""}
+                  inputStyle={newAnimalError && !animals.newAnimal.species ? " input--error" : ""}
                   options={animalOptions.species}
                   value={animals.newAnimal.species}
                   onChange={(value) => updateNewAnimalFrom("species", value)} />
@@ -356,7 +354,7 @@ const Admin = () => {
                   required={true}
                   value={animals.newAnimal.picture_url}
                   onChange={file => setFile(file)}
-                  inputStyle={newAnimalError && (getSizeInMb(file) > 5) ? "input--error" : ""}
+                  inputStyle={newAnimalError && (file && getSizeInMb(file) > 5) ? " input--error" : ""}
                   inputFileRef={inputFileRef} />
                 <Input
                   label="Description de l'image"
@@ -375,8 +373,8 @@ const Admin = () => {
                     onChange={e => updateNewAnimalFrom("description", e.target.value)}></textarea>
                 </div>
                 <div className="btns-wrapper">
-                  <Button btnStyle={""} text="Valider" type="submit" />
-                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                  <Button text="Valider" type="submit" />
+                  <Button text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>
             </div>
@@ -406,21 +404,21 @@ const Admin = () => {
                 <InputSelect
                   id="sex"
                   label="Sexe de l'animal"
-                  inputStyle={selectedAnimalError && !animals.selectedAnimal.sex ? "input--error" : ""}
+                  inputStyle={selectedAnimalError && !animals.selectedAnimal.sex ? " input--error" : ""}
                   options={animalOptions.sex}
                   value={animals.selectedAnimal.sex}
                   onChange={(value) => updateSelectedAnimalForm("sex", value)} />
                 <InputSelect
                   id="status"
                   label="Etat de l'adoption"
-                  inputStyle={selectedAnimalError && !animals.selectedAnimal.status ? "input--error" : ""}
+                  inputStyle={selectedAnimalError && !animals.selectedAnimal.status ? " input--error" : ""}
                   options={animalOptions.status}
                   value={animals.selectedAnimal.status}
                   onChange={(value) => updateSelectedAnimalForm("status", value)} />
                 <InputSelect
                   id="species"
                   label="Espèce"
-                  inputStyle={selectedAnimalError && !animals.selectedAnimal.species ? "input--error" : ""}
+                  inputStyle={selectedAnimalError && !animals.selectedAnimal.species ? " input--error" : ""}
                   options={animalOptions.species}
                   value={animals.selectedAnimal.species}
                   onChange={(value) => updateSelectedAnimalForm("species", value)} />
@@ -441,8 +439,8 @@ const Admin = () => {
                     onChange={e => updateSelectedAnimalForm("description", e.target.value)}></textarea>
                 </div>
                 <div className="btns-wrapper">
-                  <Button btnStyle={""} text="Valider" type="submit" />
-                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                  <Button text="Valider" type="submit" />
+                  <Button text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>
             </div>
@@ -463,8 +461,8 @@ const Admin = () => {
                   value={animals.selectedAnimal.exit_date}
                   onChange={value => updateSelectedAnimalForm("exit_date", value)} />
                 <div className="btns-wrapper">
-                  <Button btnStyle={""} text="Valider" type="submit" />
-                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                  <Button text="Valider" type="submit" />
+                  <Button text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>
             </div>
@@ -496,7 +494,7 @@ const Admin = () => {
                   required={true}
                   value={newArticle.picture_url}
                   onChange={file => setFile(file)}
-                  inputStyle={newArticleError && (getSizeInMb(file) > 5) ? "input--error" : ""}
+                  inputStyle={newArticleError && (file && getSizeInMb(file) > 5) ? " input--error" : ""}
                   inputFileRef={inputFileRef} />
                 <Input
                   label="Description de l'image"
@@ -515,8 +513,8 @@ const Admin = () => {
                     onChange={e => updateFormNew("description", e.target.value)}></textarea>
                 </div>
                 <div className="btns-wrapper">
-                  <Button btnStyle={""} text="Valider" type="submit" />
-                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                  <Button text="Valider" type="submit" />
+                  <Button text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>
             </div>
@@ -528,8 +526,8 @@ const Admin = () => {
               </div>
               <p>Supprimer {isDeleteArticleForm && "l'article"}{isDeleteAnimalForm && "l'animal"}{isDeleteUserBySuperAdminForm && "l'utilisateur"}{isDeleteTestimonyByAdmin && "le témoignage"} ?</p>
               <div className="btns-wrapper">
-                <Button btnStyle={""} text="Confirmer" btnClick={handleConfirmedDeleteClick} />
-                <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                <Button text="Confirmer" btnClick={handleConfirmedDeleteClick} />
+                <Button text="Annuler" btnClick={handleCancel} />
               </div>
             </div>
           }
@@ -560,8 +558,8 @@ const Admin = () => {
                     onChange={e => updateFormSelected("description", e.target.value)}></textarea>
                 </div>
                 <div className="btns-wrapper">
-                  <Button btnStyle={""} text="Valider" type="submit" />
-                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                  <Button text="Valider" type="submit" />
+                  <Button text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>
             </div>
