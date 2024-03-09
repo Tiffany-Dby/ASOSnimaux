@@ -59,7 +59,7 @@ const AdminAnimals = () => {
             {newAnimalLoading || allAnimalsLoading ?
               <Loading text={(newAnimalLoading && "Ajout de l'animal") || (allAnimalsLoading && "Chargement des animaux")} loadingStyle={"spin"} />
               :
-              <Button btnStyle={""} text={"Ajouter un animal"} btnClick={handleNewAnimalForm} />
+              <Button text={"Ajouter un animal"} btnClick={handleNewAnimalForm} />
             }
           </div>
           <div className="admin__all-animals__wrapper">

@@ -54,7 +54,7 @@ const AdminArticles = () => {
             {newArticleLoading || allLoading ?
               <Loading text={(newArticleLoading && "Création de l'article") || (allLoading && "Chargement des articles")} loadingStyle={"spin"} />
               :
-              <Button btnStyle={""} text={"Ajouter un article"} btnClick={handleNewForm} />
+              <Button text={"Ajouter un article"} btnClick={handleNewForm} />
             }
           </div>
 

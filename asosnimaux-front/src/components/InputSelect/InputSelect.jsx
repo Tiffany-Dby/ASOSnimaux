@@ -13,7 +13,7 @@ const InputSelect = ({ id, label, inputStyle, options, value, onChange }) => {
     <>
       <div className="input__wrapper">
         <label className="input__label" htmlFor={id} >{label}</label>
-        <select className={`input ${inputStyle}`} name={id} id={id} value={value || ""} onChange={e => handleChange(e.target.value)}>
+        <select className={`input${inputStyle || ""}`} name={id} id={id} value={value || ""} onChange={e => handleChange(e.target.value)}>
           {!isUpdateUserRoleBySuperAdminForm &&
             <option value="">Choisir une option</option>
           }

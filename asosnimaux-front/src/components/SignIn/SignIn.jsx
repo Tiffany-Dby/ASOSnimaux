@@ -27,16 +27,12 @@ const SignIn = () => {
 
   // Redirect after Sign In -> Dashboard
   const handleRedirect = () => {
-    if (isAuth) {
-      navigate(APP_ROUTES.ACCOUNT, { replace: true });
-    }
+    if (isAuth) navigate(APP_ROUTES.ACCOUNT, { replace: true });
   }
 
   // Redirect if User is already Authenticated -> Dashboard
   useEffect(() => {
-    if (isAuth) {
-      navigate(APP_ROUTES.ACCOUNT, { replace: true });
-    }
+    if (isAuth) navigate(APP_ROUTES.ACCOUNT, { replace: true });
   }, [isAuth]);
 
   return (
@@ -46,7 +42,7 @@ const SignIn = () => {
           <h1>Se connecter</h1>
         </div>
         {signInError &&
-          <span className="text-error">{signInError}</span>
+          <span className="text-error">{signInError.includes('Authentication') ? "Email, pseudo ou mot de passe incorrect." : signInError}</span>
         }
         <form onSubmit={handleSubmit}>
           {signInLoading ?
@@ -55,7 +51,7 @@ const SignIn = () => {
             <>
               <Input label="Email ou Pseudo" id="login" required={true} value={signInForm.login} onChange={value => updateForm("login", value)} />
               <Input label="Mot de passe" id="password" type="password" required={true} value={signInForm.password} onChange={value => updateForm("password", value)} />
-              <Button btnStyle="" text="Connexion" type="submit" btnClick={handleRedirect} />
+              <Button text="Connexion" type="submit" btnClick={handleRedirect} />
             </>
           }
         </form>

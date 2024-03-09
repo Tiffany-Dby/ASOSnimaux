@@ -216,8 +216,8 @@ const HomeTestimonies = () => {
                     onChange={e => updateNewTestimonyFrom("content", e.target.value)}></textarea>
                 </div>
                 <div className="btns-wrapper">
-                  <Button btnStyle={""} text="Poster" type="submit" />
-                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                  <Button text="Poster" type="submit" />
+                  <Button text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>
             </div>

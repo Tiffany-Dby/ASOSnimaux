@@ -136,12 +136,10 @@ const User = () => {
   // Delete confirmed
   const handleConfirmedDeleteClick = () => {
     // Dialog delete User
-    if (isDeleteAccountForm) {
-      handleConfirmedUserDeletion();
-    }
-    if (isDeleteTestimony) {
-      handleConfirmedTestimonyDeletion();
-    }
+    if (isDeleteAccountForm) handleConfirmedUserDeletion();
+
+    // Dialog delete Testimony
+    if (isDeleteTestimony) handleConfirmedTestimonyDeletion();
   }
   // *************** End Submit ***************
 
@@ -206,7 +204,7 @@ const User = () => {
               </div>
             </article>
           </div>
-          <Button btnStyle={""} text="Supprimer le compte" btnClick={handleDeleteUser} />
+          <Button text="Supprimer le compte" btnClick={handleDeleteUser} />
         </section>
 
         <section>
@@ -273,8 +271,8 @@ const User = () => {
                   }
                 </div>
                 <div className="btns-wrapper">
-                  <Button btnStyle="" text="Valider" btnClick={handleUpdateAvatar} />
-                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                  <Button text="Valider" btnClick={handleUpdateAvatar} />
+                  <Button text="Annuler" btnClick={handleCancel} />
                 </div>
               </section>
             </div>
@@ -293,8 +291,8 @@ const User = () => {
                   <p className="text-error">Après modification, vous devrez vous reconnecter</p>
                 }
                 <div className="btns-wrapper">
-                  <Button btnStyle="" text="Valider" type="submit" />
-                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                  <Button text="Valider" type="submit" />
+                  <Button text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>
             </div>
@@ -307,8 +305,8 @@ const User = () => {
               <p>Êtes vous certain(e) de vouloir <strong>supprimer votre {isDeleteAccountForm && "compte"}{isDeleteTestimony && "témoignage"}</strong> ?</p>
               <p className="text-error">Attention : Cette action est irréversible !</p>
               <div className="btns-wrapper">
-                <Button btnStyle={""} text="Confirmer" btnClick={handleConfirmedDeleteClick} />
-                <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                <Button text="Confirmer" btnClick={handleConfirmedDeleteClick} />
+                <Button text="Annuler" btnClick={handleCancel} />
               </div>
             </div>
           }
@@ -328,8 +326,8 @@ const User = () => {
                     onChange={e => updateTestimonyForm("content", e.target.value)}></textarea>
                 </div>
                 <div className="btns-wrapper">
-                  <Button btnStyle={""} text="Valider" type="submit" />
-                  <Button btnStyle={""} text="Annuler" btnClick={handleCancel} />
+                  <Button text="Valider" type="submit" />
+                  <Button text="Annuler" btnClick={handleCancel} />
                 </div>
               </form>
             </div>

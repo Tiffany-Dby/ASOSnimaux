@@ -8,7 +8,8 @@ const YoutubeVideo = ({ YTVideoID }) => {
     // Check -> YouTube API script is already loaded
     if (window.YT) {
       createYTPlayer();
-    } else {
+    }
+    else {
       // Load -> YouTube API script
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";

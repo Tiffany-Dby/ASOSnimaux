@@ -47,9 +47,7 @@ const Adoption = () => {
 
   // Fetching -> Animals IDs followed by user if authenticated
   useEffect(() => {
-    if (isAuth) {
-      dispatch(getUsersFollowIDsThunk());
-    }
+    if (isAuth) dispatch(getUsersFollowIDsThunk());
   }, [isAuth]);
 
   // Fetching -> All animals & add/removeEventlistener on "scroll"
@@ -182,7 +180,6 @@ const Adoption = () => {
             <p>Vous trouverez ici tous les animaux en attente d'une famille pour les accueillir ! Ils n'attendent que vous pour aimer et être aimé.</p>
           </div>
           <Button
-            btnStyle={""}
             text={
               <>
                 <FaSliders className="manage-icons" />

@@ -10,7 +10,7 @@ const InputFile = ({ id, label, inputStyle, required, onChange, inputFileRef }) 
     <>
       <div className="input__wrapper">
         <label className="input__label" htmlFor={id} >{label}</label>
-        <input className={`input input-file ${inputStyle}`} id={id} required={required} name={id} type="file" onChange={handleChange} ref={inputFileRef} />
+        <input className={`input input-file${inputStyle || ""}`} id={id} required={required} name={id} type="file" onChange={handleChange} ref={inputFileRef} />
       </div>
     </>
   );

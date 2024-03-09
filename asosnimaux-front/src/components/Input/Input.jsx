@@ -2,7 +2,7 @@ import { useState } from "react";
 import InputHelp from "../InputHelp/InputHelp";
 import "./input.scss";
 
-const Input = ({ id, label, helps, name, type, min, max, value, required, onChange }) => {
+const Input = ({ id, label, helps, inputStyle, name, type, min, max, value, required, onChange }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = () => {
@@ -29,7 +29,7 @@ const Input = ({ id, label, helps, name, type, min, max, value, required, onChan
           </div>
         }
         <input
-          className="input"
+          className={`input${inputStyle || ""}`}
           id={id}
           name={name || id}
           type={type || "text"}

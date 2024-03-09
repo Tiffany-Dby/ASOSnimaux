@@ -48,9 +48,7 @@ const App = () => {
   // Fetching User infos if Local storage has a token set (in case user reloads)
   useEffect(() => {
     const token = getFromStorage("token");
-    if (token) {
-      dispatch(getOneUserThunk());
-    }
+    if (token) dispatch(getOneUserThunk());
   }, []);
 
   return (

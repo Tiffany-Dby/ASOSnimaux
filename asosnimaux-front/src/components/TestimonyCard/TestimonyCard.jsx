@@ -15,7 +15,7 @@ const TestimonyCard = ({ imgUrl, date, content, author, btnText, btnClick, displ
           ))}
         </div>
         {display &&
-          <Button btnStyle={""} text={btnText} btnClick={btnClick} />
+          <Button text={btnText} btnClick={btnClick} />
         }
         <cite className="testimony__cite">
           <div className="testimony__img">

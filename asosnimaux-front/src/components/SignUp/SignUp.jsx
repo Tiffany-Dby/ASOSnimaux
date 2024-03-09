@@ -8,7 +8,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { signUpThunk } from "../../api/user.api";
 import { setSignUpError, updateSignUpForm } from "../../redux/reducers/user.reducer";
 import { APP_ROUTES } from "../../constants/route.const.js";
-import { hasLowercase, hasMinLength, hasNumber, hasSymbol, hasUppercase, isAlphanumeric, isEmailValid, isUsernameValid } from "../../utils/input.utils.js";
+import { hasLowercase, hasMinLength, hasNumber, hasSymbol, hasUppercase, isEmailValid, isUsernameValid } from "../../utils/input.utils.js";
+import { getDuplicateErrorMessage } from "../../utils/error.utils.js";
+import { DUPLICATES } from "../../constants/errors.const.js";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -89,9 +91,7 @@ const SignUp = () => {
 
   // Redirect after Sign up -> Sign In
   useEffect(() => {
-    if (signUpSuccess) {
-      navigate(APP_ROUTES.SIGN_IN, { replace: true });
-    }
+    if (signUpSuccess) navigate(APP_ROUTES.SIGN_IN, { replace: true });
   }, [signUpSuccess]);
 
   return (
@@ -101,8 +101,21 @@ const SignUp = () => {
           <h1>S'inscrire</h1>
         </div>
         {signUpError &&
-          <span className="text-error">{signUpError}</span>
+          <span className="text-error">{getDuplicateErrorMessage(signUpError, DUPLICATES)}</span>
         }
+        {/* {signUpError &&
+          <>
+            {signUpError.includes("Duplicate") && signUpError.includes("email") &&
+              <span className="text-error">L' <strong>adresse email</strong> est déjà utilisée.</span>
+            }
+            {signUpError.includes("Duplicate") && signUpError.includes("username") &&
+              <span className="text-error">Le <strong>pseudo</strong> est déjà utilisé.</span>
+            }
+            {!signUpError.includes("Duplicate") &&
+              <span className="text-error">{signUpError}</span>
+            }
+          </>
+        } */}
         <form onSubmit={handleSubmit}>
           {signUpLoading ?
             <Loading text={"Chargement"} loadingStyle={"paws"} />
@@ -112,6 +125,7 @@ const SignUp = () => {
                 label="Pseudo"
                 id="username"
                 required={true}
+                inputStyle={signUpError?.includes("username") ? " input--error" : ""}
                 helps={[
                   {
                     success: usernameLengthSuccess,
@@ -131,6 +145,7 @@ const SignUp = () => {
                 id="email"
                 type="email"
                 required={true}
+                inputStyle={signUpError?.includes("email") ? " input--error" : ""}
                 helps={[
                   {
                     success: emailSuccess,
@@ -188,7 +203,7 @@ const SignUp = () => {
                 ]}
                 value={confirmPw}
                 onChange={value => setConfirmPw(value)} />
-              <Button btnStyle="" text="Inscription" type="submit" />
+              <Button text="Inscription" type="submit" />
             </>
           }
         </form>
