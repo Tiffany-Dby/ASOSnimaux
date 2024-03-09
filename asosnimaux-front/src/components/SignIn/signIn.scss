@@ -8,7 +8,7 @@
   form {
     @include mxn.container("400px");
     @include mxn.flex("column", "nowrap");
-    gap: 2.25rem;
+    gap: 3.5rem;
   }
 
   .btn-wrapper {

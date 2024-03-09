@@ -1,7 +1,7 @@
 import sharp from "sharp";
 import { setImgUrl } from "./formidable.utils.js";
 
-export const resizeAndFormatImg = async (filePath, format, width, height) => {
+export const resizeAndFormatImg = async (filePath, folderName, format, width, height) => {
   let error = null;
   let result = [];
 
@@ -12,7 +12,7 @@ export const resizeAndFormatImg = async (filePath, format, width, height) => {
 
     sharp.cache(false);
 
-    result = setImgUrl(newFilePath, "articles");
+    result = setImgUrl(newFilePath, folderName);
   }
   catch (err) {
     console.error("Error processing image:", err);

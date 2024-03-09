@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticleThunk } from "../../api/article.api";
-import { setSelectedArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
+import { setNewArticleError, setSelectedArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
 import { APP_ROUTES } from "../../constants/route.const";
 import { deleteAnimalThunk, getAllAnimalsThunk, postNewAnimalThunk, updateAnimalExitDateThunk, updateAnimalThunk } from "../../api/animal.api.js";
@@ -21,6 +21,7 @@ import { deleteTestimonyThunk, getAllTestimoniesThunk } from "../../api/testimon
 import { setSelectedTestimony } from "../../redux/reducers/testimony.reducer.js";
 import { resetAdminForms, resetAdminSelects } from "../../utils/reset.utils.js";
 import { setMinMaxDate } from "../../utils/date.utils.js";
+import { getSizeInMb } from "../../utils/formidable.utils.js";
 
 const Admin = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const Admin = () => {
   const { isNewArticleForm, isDeleteArticleForm, isUpdateArticleForm, isNewAnimalForm, isUpdateAnimalForm, isUpdateExitAnimalForm, isDeleteAnimalForm, isDeleteUserBySuperAdminForm, isUpdateUserRoleBySuperAdminForm, isDeleteTestimonyByAdmin } = useSelector(state => state.dialogReducer);
 
   // Article Reducer
-  const { articles } = useSelector(state => state.articleReducer);
+  const { articles, newArticleError } = useSelector(state => state.articleReducer);
   const { newArticle, selectedArticle } = articles;
 
   // Animal Reducer
@@ -87,6 +88,14 @@ const Admin = () => {
   // New Article
   const handleSubmitNew = e => {
     e.preventDefault();
+
+    // Check if file size is greater than 5Mb
+    const fileSize = getSizeInMb(file);
+    if (fileSize > 5) {
+      dispatch(setNewArticleError({ error: "Le fichier est trop lourd, il doit être inférieur à 5Mb" }));
+      return;
+    }
+
     dispatch(postArticleThunk(file));
     setFile(null);
     if (inputFileRef.current) inputFileRef.current.value = null;
@@ -117,6 +126,13 @@ const Admin = () => {
     // Check if options are filled
     if (!animals.newAnimal.sex || !animals.newAnimal.status || !animals.newAnimal.species) {
       dispatch(setNewAnimalError({ error: "Veuillez choisir toutes les options" }))
+      return;
+    }
+
+    // Check if file size is greater than 5Mb
+    const fileSize = getSizeInMb(file);
+    if (fileSize > 5) {
+      dispatch(setNewAnimalError({ error: "Le fichier est trop lourd, il doit être inférieur à 5Mb" }));
       return;
     }
 
@@ -224,6 +240,7 @@ const Admin = () => {
   // Cancel
   const handleCancel = () => {
     dispatch(setNewAnimalError({ error: null }));
+    dispatch(setNewArticleError({ error: null }));
     // Utils -> reset.utils.js -> reset forms : New article & New animal
     resetAdminForms(dispatch);
     // Utils -> reset.utils.js -> reset selected (update/delete) : Article, Animal, Testimony, User
@@ -289,6 +306,9 @@ const Admin = () => {
               <div className="title-wrapper">
                 <h2>Ajouter un animal</h2>
               </div>
+              {newAnimalError &&
+                <p className="text-error">{newAnimalError}</p>
+              }
               <form onSubmit={handleSubmitNewAnimal}>
                 <Input
                   label="Nom"
@@ -303,9 +323,6 @@ const Admin = () => {
                   required={true}
                   value={animals.newAnimal.birthdate}
                   onChange={value => updateNewAnimalFrom("birthdate", value)} />
-                {newAnimalError &&
-                  <p className="text-error">{newAnimalError}</p>
-                }
                 <InputSelect
                   id="sex"
                   label="Sexe de l'animal"
@@ -339,6 +356,7 @@ const Admin = () => {
                   required={true}
                   value={animals.newAnimal.picture_url}
                   onChange={file => setFile(file)}
+                  inputStyle={newAnimalError && (getSizeInMb(file) > 5) ? "input--error" : ""}
                   inputFileRef={inputFileRef} />
                 <Input
                   label="Description de l'image"
@@ -456,6 +474,9 @@ const Admin = () => {
               <div className="title-wrapper">
                 <h2>Nouvel article</h2>
               </div>
+              {newArticleError &&
+                <p className="text-error">{newArticleError}</p>
+              }
               <form onSubmit={handleSubmitNew}>
                 <Input
                   label="Titre"
@@ -475,6 +496,7 @@ const Admin = () => {
                   required={true}
                   value={newArticle.picture_url}
                   onChange={file => setFile(file)}
+                  inputStyle={newArticleError && (getSizeInMb(file) > 5) ? "input--error" : ""}
                   inputFileRef={inputFileRef} />
                 <Input
                   label="Description de l'image"

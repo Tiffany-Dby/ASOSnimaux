@@ -16,3 +16,9 @@ export const formatArticle = (article) => {
 
   return formattedArticle;
 }
+
+export const getSizeInMb = (file) => {
+  const sizeInMb = file.size / (1024 * 1024);
+
+  return sizeInMb;
+}

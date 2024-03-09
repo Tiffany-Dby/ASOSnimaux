@@ -29,13 +29,6 @@ export const getFormidableForm = async (folderName, maxMb, req) => {
   }
 }
 
-export const deleteImgs = async (newFilePath, oldFilePath, folderName) => {
-  const newErr = await deleteImg(newFilePath);
-  const oldErr = await deleteImg(setImgUrl(oldFilePath, folderName));
-
-  return { newErr, oldErr };
-};
-
 export const setImgUrl = (filePath, folderName) => {
   const formatPath = filePath.replace(/\\/g, '/');
   const indexOfFolderName = formatPath.indexOf(folderName);
@@ -62,4 +55,11 @@ export const deleteImg = async (imgPath) => {
   finally {
     return error;
   }
+}
+
+export const deleteImgs = async (newFilePath, oldFilePath, folderName) => {
+  const newErr = await deleteImg(newFilePath);
+  const oldErr = await deleteImg(setImgUrl(oldFilePath, folderName));
+
+  return { newErr, oldErr };
 }

@@ -99,6 +99,7 @@ const userSlice = createSlice({
       return {
         ...state,
         allUsers: action.payload.allUsers,
+        allUsersError: null,
         allUsersLoading: false
       }
     },
@@ -232,10 +233,16 @@ const userSlice = createSlice({
       }
     },
     startDialogLoading: (state, action) => {
-      return { ...state, dialogLoading: true }
+      return {
+        ...state,
+        dialogLoading: true
+      }
     },
     stopDialogLoading: (state, action) => {
-      return { ...state, dialogLoading: false }
+      return {
+        ...state,
+        dialogLoading: false
+      }
     },
     setDialogError: (state, action) => {
       return {
@@ -251,10 +258,16 @@ const userSlice = createSlice({
       }
     },
     startUpdatedAvatarLoading: (state, action) => {
-      return { ...state, updatedAvatarLoading: true }
+      return {
+        ...state,
+        updatedAvatarLoading: true
+      }
     },
     stopUpdatedAvatarLoading: (state, action) => {
-      return { ...state, updatedAvatarLoading: false }
+      return {
+        ...state,
+        updatedAvatarLoading: false
+      }
     },
     setUpdatedAvatarError: (state, action) => {
       return {
@@ -264,10 +277,16 @@ const userSlice = createSlice({
       }
     },
     startGetUserLoading: (state, action) => {
-      return { ...state, getUserLoading: true }
+      return {
+        ...state,
+        getUserLoading: true
+      }
     },
     stopGetUserLoading: (state, action) => {
-      return { ...state, getUserLoading: false }
+      return {
+        ...state,
+        getUserLoading: false
+      }
     },
     setGetUserError: (state, action) => {
       return {
@@ -279,15 +298,22 @@ const userSlice = createSlice({
     setDeleteUser: (state, action) => {
       return {
         ...state,
+        deleteUserError: null,
         deleteUserLoading: false,
         deleteUserSuccess: "Compte correctement supprimé"
       }
     },
     startDeleteUserLoading: (state, action) => {
-      return { ...state, deleteUserLoading: true }
+      return {
+        ...state,
+        deleteUserLoading: true
+      }
     },
     stopDeleteUserLoading: (state, action) => {
-      return { ...state, deleteUserLoading: false }
+      return {
+        ...state,
+        deleteUserLoading: false
+      }
     },
     setDeleteUserError: (state, action) => {
       return {
@@ -301,6 +327,7 @@ const userSlice = createSlice({
       return {
         ...state,
         allUsers: state.allUsers.filter(user => user.id !== id),
+        deleteUserError: null,
         deleteLoading: false,
         deleteUserSuccess: "Utilisateur supprimé !"
       }
@@ -350,6 +377,7 @@ const userSlice = createSlice({
         ...state,
         allUsers: state.allUsers.map((u) => u.id === user.id ? { ...user } : { ...u }),
         selectedUser: { ...user },
+        selectedUserError: null,
         selectedUserLoading: false,
         selectedUserSuccess: "Rôle mis à jour !"
       }
@@ -384,7 +412,9 @@ const userSlice = createSlice({
       const { animals } = action.payload;
       return {
         ...state,
-        followIDs: animals.map(animal => animal.id)
+        followIDs: animals.map(animal => animal.id),
+        getfollowError: null,
+        getfollowLoading: false,
       }
     },
     resetFollowIDs: (state, action) => {
@@ -397,8 +427,7 @@ const userSlice = createSlice({
       const { animals } = action.payload;
       return {
         ...state,
-        followedAnimals: animals?.filter(animal => state.followIDs.includes(animal.id)),
-        followedAnimalsLoading: false,
+        followedAnimals: animals?.filter(animal => state.followIDs.includes(animal.id))
       }
     },
     setFollowedAnimals: (state, action) => {
@@ -406,6 +435,7 @@ const userSlice = createSlice({
       return {
         ...state,
         followedAnimals: animals?.map((animal) => ({ id: animal.animal_id, entry_date: animal.entry_date, name: animal.name, age: animal.age, sex: animal.sex, truncated_description: animal.truncated_description, race: animal.race, status: animal.status, exit_date: animal.exit_date, species: animal.species, picture_url: animal.picture_url, picture_caption: animal.picture_caption })),
+        followedAnimalsError: null,
         followedAnimalsLoading: false,
       }
     },
@@ -461,6 +491,7 @@ const userSlice = createSlice({
       return {
         ...state,
         followIDs: [...state.followIDs, animalID],
+        postFollowError: null,
         postFollowLoading: false
       }
     },
@@ -489,6 +520,7 @@ const userSlice = createSlice({
         ...state,
         followIDs: state.followIDs.filter(id => id !== animalID),
         followedAnimals: state.followedAnimals.filter(animal => animal.id !== animalID),
+        unfollowError: null,
         unfollowLoading: false
       }
     },

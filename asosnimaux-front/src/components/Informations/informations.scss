@@ -17,10 +17,10 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       grid-template-areas:
-        "map map map map"
-        "map map map map"
-        "add con sch sch"
-        "soc soc sch sch";
+        "map map map"
+        "map map map"
+        "add con sch"
+        "soc soc sch";
       gap: 2rem;
     }
 

@@ -24,10 +24,11 @@ const ANIMAL_STATE = {
     newAnimal: {
       name: "",
       birthdate: "",
+      age: "",
       sex: "",
       description: "",
       status: "",
-      race: null,
+      race: "",
       species: "",
       picture_caption: ""
     },
@@ -164,7 +165,7 @@ const animalSlice = createSlice({
             sex: "",
             description: "",
             status: "",
-            race: null,
+            race: "",
             species: "",
             picture_caption: ""
           }
@@ -172,19 +173,19 @@ const animalSlice = createSlice({
       }
     },
     setNewAnimal: (state, action) => {
-      const { id, entry_date, exit_date, name, birthdate, sex, description, status, race, species, picture_url, picture_caption } = action.payload;
+      const { id, entry_date, exit_date, name, birthdate, age, sex, description, status, race, species, picture_url, picture_caption } = action.payload;
       return {
         ...state,
         animals: {
           ...state.animals,
           all: [
-            ...state.animals.all,
             {
               id,
               entry_date,
               exit_date,
               name,
               birthdate,
+              age,
               sex,
               description,
               status,
@@ -192,7 +193,8 @@ const animalSlice = createSlice({
               species,
               picture_url,
               picture_caption
-            }
+            },
+            ...state.animals.all
           ]
         },
         newAnimalError: null,
@@ -268,6 +270,7 @@ const animalSlice = createSlice({
           ...state.animals,
           all: state.animals.all.map((a) => a.id === animal.id ? { ...animal } : { ...a })
         },
+        selectedAnimalError: null,
         selectedAnimalLoading: false,
         selectedAnimalSuccess: `${animal.name} mis à jour !`
       }
@@ -299,6 +302,7 @@ const animalSlice = createSlice({
           ...state.animals,
           all: state.animals.all.map((a) => a.id === animal.id ? { ...a, exit_date: animal.exit_date } : { ...a })
         },
+        selectedAnimalError: null,
         selectedAnimalLoading: false,
         selectedAnimalSuccess: `${animal.name} mis à jour !`
       }
@@ -311,6 +315,7 @@ const animalSlice = createSlice({
           ...state.animals,
           all: state.animals.all.filter(animal => animal.id !== id)
         },
+        deleteAnimalError: null,
         deleteAnimalLoading: false,
         deleteAnimalSuccess: "Animal supprimé !"
       }

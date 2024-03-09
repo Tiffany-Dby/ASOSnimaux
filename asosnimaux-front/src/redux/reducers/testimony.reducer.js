@@ -261,8 +261,8 @@ const testimonySlice = createSlice({
           ...state.testimonies,
           allByOneUser: [...testimonies]
         },
-        allByOneUserLoading: false,
-        allByOneUserError: null
+        allByOneUserError: null,
+        allByOneUserLoading: false
       }
     },
     startAllByOneUserLoading: (state, action) => {
@@ -292,6 +292,7 @@ const testimonySlice = createSlice({
           ...state.testimonies,
           allByOneUser: state.testimonies.allByOneUser.filter(testimony => testimony.id !== id)
         },
+        deleteTestimonyError: null,
         deleteTestimonyLoading: false,
         deleteTestimonySuccess: "Témoignage supprimé !"
       }
@@ -304,6 +305,7 @@ const testimonySlice = createSlice({
           ...state.testimonies,
           all: state.testimonies.all.filter(testimony => testimony.id !== id)
         },
+        deleteTestimonyError: null,
         deleteTestimonyLoading: false,
         deleteTestimonySuccess: "Témoignage supprimé !"
       }
@@ -335,8 +337,8 @@ const testimonySlice = createSlice({
           ...state.testimonies,
           all: [...testimonies]
         },
-        allTestimoniesLoading: false,
-        allTestimoniesError: null
+        allTestimoniesError: null,
+        allTestimoniesLoading: false
       }
     },
     startAllTestimoniesLoading: (state, action) => {

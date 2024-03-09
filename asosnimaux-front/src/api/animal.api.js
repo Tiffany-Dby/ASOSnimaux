@@ -63,18 +63,19 @@ export const postNewAnimalThunk = (file) => async (dispatch, getState) => {
   if (!result?.message || status >= 400 || !!error) return dispatch(setNewAnimalError({ error: `Something went wrong : ${error}` }));
 
   dispatch(setNewAnimal({
-    id: result.result[0].id,
-    entry_date: result.result[0].entry_date,
-    exit_date: result.result[0].exit_date,
-    name: result.result[0].name,
-    birthdate: result.result[0].birthdate,
-    sex: result.result[0].sex,
-    description: result.result[0].description,
-    status: result.result[0].status,
-    race: result.result[0].race,
-    species: result.result[0].species,
-    picture_url: result.result[0].picture_url,
-    picture_caption: result.result[0].picture_caption,
+    id: result.animal[0].id,
+    entry_date: result.animal[0].entry_date,
+    exit_date: result.animal[0].exit_date,
+    name: result.animal[0].name,
+    birthdate: result.animal[0].birthdate,
+    age: result.animal[0].age,
+    sex: result.animal[0].sex,
+    description: result.animal[0].description,
+    status: result.animal[0].status,
+    race: result.animal[0].race,
+    species: result.animal[0].species,
+    picture_url: result.animal[0].picture_url,
+    picture_caption: result.animal[0].picture_caption,
   }));
 
   showToast(dispatch);

@@ -1,62 +1,68 @@
 import { AnimalDB } from "../databases/animal.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
-import formidable from "formidable";
-import { deleteImg, setImgUrl } from "../utils/formidable.utils.js";
+import { deleteImg, deleteImgs, getFormidableForm, setImgUrl } from "../utils/formidable.utils.js";
 import isDate from "validator/lib/isDate.js";
 import isUUID from "validator/lib/isUUID.js";
 import DATE from "../constants/date.const.js";
 import UUID from "../constants/uuid.const.js";
+import { resizeAndFormatImg } from "../utils/sharp.utils.js";
 
 const create = async (req, res) => {
-  const form = formidable({
-    uploadDir: "./public/animals",
-    keepExtensions: true,
-    createDirsFromUploads: true,
-    maxFileSize: 5 * 1024 * 1024, // 5MB
-    filter: opts => {
-      const { mimetype } = opts;
-      return mimetype === "image/png" || mimetype === "image/jpg" || mimetype === "image/jpeg" || mimetype === "image/webp";
-    }
-  });
+  const errors = {};
+  const form = await getFormidableForm("animals", 5, req);
+  const { files, fields } = form;
 
-  let fields = null;
-  let files = null;
+  const formErr = form.error;
+  if (formErr) errors.formError = formErr;
 
-  try {
-    [fields, files] = await form.parse(req);
-  }
-  catch (err) {
-    console.log("err =>", err.message);
-    return res.status(500).json({ message: "Error parsing form" });
-  }
+  if (!files.newAnimalImg) return res.status(415).json({ message: "Something went wrong with the image" });
 
-  console.log("fields", fields);
-  console.log("files", files);
+  const { filepath } = files.newAnimalImg[0];
 
-  if (!files.newAnimalImg) return res.status(415).json({ message: "Something went wrong, check files mimetype" });
+  const processedImg = await resizeAndFormatImg(filepath, "animals", "webp", 650, null);
 
-  const filePath = files.newAnimalImg[0].filepath;
-  const picture_url = setImgUrl(filePath, "animals");
+  const processedImgErr = processedImg.error;
+  if (processedImgErr) errors.processedImgError = processedImgErr;
+
+  const picture_url = processedImg.result;
   const { name, birthdate, sex, description, race, status, species, picture_caption } = fields;
 
   const areStrings = areStringsFilled([name[0], birthdate[0], sex[0], description[0], race[0], status[0], species[0], picture_url, picture_caption[0]]);
-  if (!areStrings) return res.status(403).json({ message: `Missing data` });
-  if (!isDate(birthdate[0], DATE.OPTIONS)) return res.status(400).json({ error: "Invalid date format" });
+  if (!areStrings) errors.areStringsError = "Missing data";
+
+  const { formError, processedImgError, areStringsError, UUIDError } = errors;
+
+  if (formError || processedImgError || areStringsError || UUIDError) {
+    if (processedImgError) {
+      const e = await deleteImg(setImgUrl(filepath, "animals"));
+      if (e) return res.status(403).json({ message: e });
+    }
+    else {
+      const e = await deleteImgs(picture_url, filepath, "animals");
+      if (e.newErr || e.oldErr) return res.status(403).json({ message: e });
+    }
+
+    return res.status(500).json({ message: errors });
+  }
 
   const response = await AnimalDB.create(name, birthdate, sex, description, race, status, species, picture_url, picture_caption);
+  const { result, error, insertedId } = response;
+  if (error) errors.error = error;
 
-  const { error, insertedId } = response;
-
-  const createdAnimal = await AnimalDB.readOne(insertedId);
-  const err = createdAnimal.error;
-  const result = createdAnimal.result;
-
-  if (error || err) {
-    const e = deleteImg(picture_url);
+  if (error || result.affectedRows !== 1) {
+    const e = await deleteImg(picture_url)
     if (e) return res.status(403).json({ message: e });
   }
 
-  return res.status(error ? 500 : 200).json({ message: error ? error : `New animal successfully added`, result });
+  const createdAnimal = await AnimalDB.readOne(insertedId);
+  const err = createdAnimal.error;
+  const rslt = createdAnimal.result;
+  if (err) errors.err = err;
+
+  const e = await deleteImg(setImgUrl(filepath, "animals"));
+  if (e) return res.status(403).json({ message: e });
+
+  return res.status(!!Object.keys(errors).length ? 500 : 200).json({ message: !!Object.keys(errors).length ? errors : `New animal successfully added`, animal: rslt });
 }
 
 const readAllForAdoption = async (req, res) => {
@@ -115,7 +121,6 @@ const readOne = async ({ params: { id } }, res) => {
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request for animal with id: ${id} successful`, animal });
 }
-
 
 const updateDetails = async (req, res) => {
   const { name, birthdate, sex, description, race, status, species, id } = req.body;

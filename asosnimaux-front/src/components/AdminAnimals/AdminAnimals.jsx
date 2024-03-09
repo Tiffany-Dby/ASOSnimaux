@@ -65,7 +65,7 @@ const AdminAnimals = () => {
           <div className="admin__all-animals__wrapper">
             {animals.all.map((animal) => (
               <article key={animal.id} className="admin__animal">
-                <h3 className="admin__animal__title">{animal.name}, {animal.age < 1 && "moins d'1 an"}{(animal.age >= 1 && animal.age < 2) && `${animal.age} an`}{animal.age >= 2 && `${animal.age} ans`}<span>{animal.sex === "mâle" && <FaMars className="manage-icons" />}{animal.sex === "femelle" && <FaVenus className="manage-icons" />}</span></h3>
+                <h3 className="admin__animal__title">{animal.name}, {(animal.age < 1) && "moins d'1 an"}{(animal.age >= 1 && animal.age < 2) && `${animal.age} an`}{animal.age >= 2 && `${animal.age} ans`}<span>{animal.sex === "mâle" && <FaMars className="manage-icons" />}{animal.sex === "femelle" && <FaVenus className="manage-icons" />}</span></h3>
                 <div className="admin__animal__content">
                   <div className="admin__animal__details">
                     <div className="admin__animal__details__entry">

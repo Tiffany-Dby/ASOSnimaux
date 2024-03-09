@@ -85,7 +85,6 @@ const articleSlice = createSlice({
         articles: {
           ...state.articles,
           all: [
-            ...state.articles.all,
             {
               id,
               name,
@@ -94,7 +93,8 @@ const articleSlice = createSlice({
               description,
               picture_url,
               picture_caption
-            }
+            },
+            ...state.articles.all
           ]
         },
         newArticleError: null,
@@ -186,6 +186,7 @@ const articleSlice = createSlice({
           ...state.articles,
           all: state.articles.all.filter(article => article.id !== id)
         },
+        deleteError: null,
         deleteLoading: false,
         deleteSuccess: "Article supprimé !",
       }
@@ -245,6 +246,7 @@ const articleSlice = createSlice({
           ...state.articles,
           all: state.articles.all.map((a) => a.id === article.id ? { ...article } : { ...a })
         },
+        selectedError: null,
         selectedLoading: false,
         selectedSuccess: "Article mis à jour !"
       }
@@ -292,6 +294,7 @@ const articleSlice = createSlice({
             picture_caption
           }
         },
+        oneError: null,
         oneLoading: false
       }
     }
@@ -314,8 +317,7 @@ const articleSlice = createSlice({
         oneError: action.payload.error,
         oneLoading: false
       }
-    },
-
+    }
   }
 });
 

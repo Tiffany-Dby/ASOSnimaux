@@ -1,6 +1,5 @@
 import { ArticleDB } from "../databases/article.db.js";
 import { areStringsFilled } from "../utils/string.utils.js";
-import formidable from "formidable";
 import { deleteImg, deleteImgs, getFormidableForm, setImgUrl } from "../utils/formidable.utils.js";
 import isUUID from "validator/lib/isUUID.js";
 import UUID from "../constants/uuid.const.js";
@@ -19,7 +18,7 @@ const create = async (req, res) => {
   const { userID } = req.body;
   const { filepath } = files.newArticleImg[0];
 
-  const processedImg = await resizeAndFormatImg(filepath, "webp", 1300, null);
+  const processedImg = await resizeAndFormatImg(filepath, "articles", "webp", 1300, null);
 
   const processedImgErr = processedImg.error;
   if (processedImgErr) errors.processedImgError = processedImgErr;
@@ -39,7 +38,7 @@ const create = async (req, res) => {
       const e = await deleteImg(setImgUrl(filepath, "articles"));
       if (e) return res.status(403).json({ message: e });
     }
-    if (!processedImgError) {
+    else {
       const e = await deleteImgs(picture_url, filepath, "articles");
       if (e.newErr || e.oldErr) return res.status(403).json({ message: e });
     }
@@ -59,15 +58,15 @@ const create = async (req, res) => {
   const { result, error, insertedId } = response;
   if (error) errors.error = error;
 
-  const createdArticle = await ArticleDB.readOne(insertedId);
-  const rslt = createdArticle.result;
-  const err = createdArticle.error;
-  if (err) errors.err = err;
-
   if (error || result.affectedRows !== 1) {
     const e = await deleteImg(picture_url)
     if (e) return res.status(403).json({ message: e });
   }
+
+  const createdArticle = await ArticleDB.readOne(insertedId);
+  const rslt = createdArticle.result;
+  const err = createdArticle.error;
+  if (err) errors.err = err;
 
   const e = await deleteImg(setImgUrl(filepath, "articles"));
   if (e) return res.status(403).json({ message: e });

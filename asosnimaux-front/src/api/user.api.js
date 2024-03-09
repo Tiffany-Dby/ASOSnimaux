@@ -34,6 +34,7 @@ export const signUpThunk = () => async (dispatch, getState) => {
   if (!result?.message || status >= 400 || !!error) return dispatch(setSignUpError({ error: `Something went wrong : ${error}` }));
 
   dispatch(stopSignUpLoading());
+  dispatch(setSignUpError({ error: null }));
   dispatch(resetSignUpForm());
   dispatch(setSignUpSuccess());
   showToast(dispatch);

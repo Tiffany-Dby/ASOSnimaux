@@ -22,7 +22,7 @@
     position: relative;
     transition: all .3s ease;
 
-    &:focus-within {
+    &:focus-within label {
       color: var(--accent);
     }
   }
@@ -32,6 +32,8 @@
     top: -2rem;
     left: 2%;
     font-size: var(--font-label);
+    transition: all .3s ease;
+    font-weight: var(--fw-semi-bold);
   }
 
   &--error {

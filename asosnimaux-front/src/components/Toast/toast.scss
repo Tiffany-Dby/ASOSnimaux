@@ -25,7 +25,7 @@
   &__icon {
     height: 1.5rem;
     width: 1.5rem;
-    color: rgb(18, 175, 39);
+    color: var(--success);
   }
 
   &.toast-open {
