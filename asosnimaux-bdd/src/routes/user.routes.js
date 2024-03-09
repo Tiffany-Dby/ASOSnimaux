@@ -1,5 +1,8 @@
+// Express
 import express from "express";
+// Controllers
 import { UserController } from "../controllers/user.controllers.js";
+// Middlewares
 import jwtMddlwr from "../middlewares/jwt.mddlwrs.js";
 import isAdminOrOwner from "../middlewares/isAdminOrOwner.mddlwrs.js";
 import isSuperAdmin from "../middlewares/isSuperAdmin.mddlwrs.js";

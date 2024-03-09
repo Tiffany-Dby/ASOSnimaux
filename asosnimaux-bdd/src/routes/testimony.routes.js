@@ -1,5 +1,8 @@
+// Express
 import express from "express";
+// Controllers
 import { TestimonyController } from "../controllers/testimony.controllers.js";
+// Middlewares
 import jwtMddlwr from "../middlewares/jwt.mddlwrs.js";
 import isAdminOrAuthor from "../middlewares/isAdminOrAuthor.mddlwrs.js";
 

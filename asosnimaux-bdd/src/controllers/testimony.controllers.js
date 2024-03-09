@@ -1,9 +1,12 @@
 import { TestimonyDB } from "../databases/testimony.db.js";
+// Utils
 import { areStringsFilled } from "../utils/string.utils.js";
-import isUUID from "validator/lib/isUUID.js";
-import UUID from "../constants/uuid.const.js";
-import blacklist from "validator/lib/blacklist.js";
+// Constants
+import { UUID } from "../constants/uuid.const.js";
 import { BLACKLIST } from "../constants/blacklist.const.js";
+// Validator
+import validator from "validator";
+const { blacklist, isUUID } = validator;
 
 const create = async ({ body: { content, userID } }, res) => {
   const areStrings = areStringsFilled([content, userID]);

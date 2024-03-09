@@ -1,5 +1,3 @@
-const UUID = {
+export const UUID = {
   VERSION: '4'
 }
-
-export default UUID;

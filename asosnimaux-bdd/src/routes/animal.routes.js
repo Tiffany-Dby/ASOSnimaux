@@ -1,5 +1,8 @@
+// Express
 import express from "express";
+// Controllers
 import { AnimalController } from "../controllers/animal.controllers.js";
+// Middlewares
 import jwtMddlwr from "../middlewares/jwt.mddlwrs.js";
 import isAdmin from "../middlewares/isAdmin.mddlwrs.js";
 

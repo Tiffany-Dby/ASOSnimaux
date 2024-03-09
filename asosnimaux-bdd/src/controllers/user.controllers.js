@@ -1,24 +1,26 @@
 import { UserDB } from "../databases/user.db.js";
-import isEmail from "validator/lib/isEmail.js";
-import { areStringsFilled } from "../utils/string.utils.js";
-import { hashPass, compareHash } from "../utils/crypto.utils.js";
+// Utils
 import { jwtSign } from "../utils/jwt.utils.js";
-import isUUID from "validator/lib/isUUID.js";
-import UUID from "../constants/uuid.const.js";
-import isAlphanumeric from "validator/lib/isAlphanumeric.js";
-import { AVATAR } from "../../../asosnimaux-front/src/constants/avatar.const.js";
+import { hashPass, compareHash } from "../utils/crypto.utils.js";
+import { areStringsFilled } from "../utils/string.utils.js";
 import { getRandomIndex } from "../utils/randomIndex.utils.js";
+// Constants
+import { UUID } from "../constants/uuid.const.js";
+import { AVATAR } from "../../../asosnimaux-front/src/constants/avatar.const.js";
 import { ALPHANUMERIC } from "../constants/alphanumeric.const.js";
+// Validator
+import validator from "validator";
+const { isStrongPassword, isEmail, isAlphanumeric, isUUID } = validator;
 
 const create = async ({ body: { username, email, password } }, res) => {
   const areStrings = areStringsFilled([username, email, password]);
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
 
-  if (!isAlphanumeric.default(username, ALPHANUMERIC.LOCALE, ALPHANUMERIC.OPTIONS) || username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters, also accents and "-" are allowed` });
+  if (!isAlphanumeric(username, ALPHANUMERIC.LOCALE, ALPHANUMERIC.OPTIONS) || username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters, also accents and "-" are allowed` });
 
   if (!isEmail(email)) return res.status(403).json({ message: `Invalid Email format` });
 
-  if (password.length < 8) return res.status(403).json({ message: `Invalid Password format : must contain atleast 8 characters` })
+  if (!isStrongPassword(password)) return res.status(403).json({ message: `Invalid Password format : must contain atleast 8 characters, 1 symbol, 1 uppercase, 1 lowercase, and 1 digit` });
 
   const hashPwResponse = await hashPass(password);
   const hashPwError = hashPwResponse.error;
@@ -132,7 +134,7 @@ const updateUsername = async ({ body: { username, userID } }, res) => {
 
   if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
 
-  if (!isAlphanumeric.default(username, ALPHANUMERIC.LOCALE, ALPHANUMERIC.OPTIONS) || username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters, also accents and "-" are allowed` });
+  if (!isAlphanumeric(username, ALPHANUMERIC.LOCALE, ALPHANUMERIC.OPTIONS) || username.length < 4 || username.length > 12) return res.status(403).json({ message: `Invalid Username format : must be between 4 and 12 characters, also accents and "-" are allowed` });
 
   const response = await UserDB.updateUsername(username, userID);
   const error = response.error;
@@ -146,7 +148,7 @@ const updatePassword = async ({ body: { oldPassword, newPassword, userID } }, re
 
   if (!isUUID(userID, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
 
-  if (newPassword.length < 8) return res.status(403).json({ message: `Invalid Password format : must contain atleast 8 characters` })
+  if (!isStrongPassword(newPassword)) return res.status(403).json({ message: `Invalid Password format : must contain atleast 8 characters, 1 symbol, 1 uppercase, 1 lowercase, and 1 digit` })
 
   const userResponse = await UserDB.readOne(userID);
   const userOldPwDB = userResponse.result[0].password;

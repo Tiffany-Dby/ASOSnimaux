@@ -1,37 +1,45 @@
 import { AnimalDB } from "../databases/animal.db.js";
-import { areStringsFilled } from "../utils/string.utils.js";
-import { deleteImg, deleteImgs, getFormidableForm, setImgUrl } from "../utils/formidable.utils.js";
-import isDate from "validator/lib/isDate.js";
-import isUUID from "validator/lib/isUUID.js";
-import DATE from "../constants/date.const.js";
-import UUID from "../constants/uuid.const.js";
+// Utils
+import { getFormidableForm, setImgUrl, deleteImg, deleteImgs } from "../utils/formidable.utils.js";
 import { resizeAndFormatImg } from "../utils/sharp.utils.js";
+import { areStringsFilled } from "../utils/string.utils.js";
+// Contants
+import { UUID } from "../constants/uuid.const.js";
+import { DATE } from "../constants/date.const.js";
+// Validator
+import validator from "validator";
+const { isUUID, isDate } = validator;
 
+// ******************** POST ********************
 const create = async (req, res) => {
   const errors = {};
+
+  // Utils -> formidables.utils.js -> params (foldername, max size in Mb, pass req)
   const form = await getFormidableForm("animals", 5, req);
   const { files, fields } = form;
-
   const formErr = form.error;
   if (formErr) errors.formError = formErr;
 
   if (!files.newAnimalImg) return res.status(415).json({ message: "Something went wrong with the image" });
-
   const { filepath } = files.newAnimalImg[0];
 
+  // Resizing image and changing format to webp before storing it
+  // Utils -> sharp.utils.js -> params (filepath, foldername, mimetype, width, height) 
   const processedImg = await resizeAndFormatImg(filepath, "animals", "webp", 650, null);
-
   const processedImgErr = processedImg.error;
   if (processedImgErr) errors.processedImgError = processedImgErr;
 
   const picture_url = processedImg.result;
   const { name, birthdate, sex, description, race, status, species, picture_caption } = fields;
 
+  // *** Verifications
   const areStrings = areStringsFilled([name[0], birthdate[0], sex[0], description[0], race[0], status[0], species[0], picture_url, picture_caption[0]]);
   if (!areStrings) errors.areStringsError = "Missing data";
+  // *** End Verifications
 
   const { formError, processedImgError, areStringsError, UUIDError } = errors;
 
+  // Delete image(s) if any errors before reaching create func
   if (formError || processedImgError || areStringsError || UUIDError) {
     if (processedImgError) {
       const e = await deleteImg(setImgUrl(filepath, "animals"));
@@ -49,6 +57,7 @@ const create = async (req, res) => {
   const { result, error, insertedId } = response;
   if (error) errors.error = error;
 
+  // Delete processed image if error during create
   if (error || result.affectedRows !== 1) {
     const e = await deleteImg(picture_url)
     if (e) return res.status(403).json({ message: e });
@@ -59,12 +68,15 @@ const create = async (req, res) => {
   const rslt = createdAnimal.result;
   if (err) errors.err = err;
 
+  // Delete originale image
   const e = await deleteImg(setImgUrl(filepath, "animals"));
   if (e) return res.status(403).json({ message: e });
 
   return res.status(!!Object.keys(errors).length ? 500 : 200).json({ message: !!Object.keys(errors).length ? errors : `New animal successfully added`, animal: rslt });
 }
+// ******************** END POST ********************
 
+// ******************** GET ********************
 const readAllForAdoption = async (req, res) => {
   const response = await AnimalDB.readAllForAdoption();
   const { result, error } = response;
@@ -96,7 +108,9 @@ const readAllBySpecies = async ({ params: { species } }, res) => {
 }
 
 const readOne = async ({ params: { id } }, res) => {
+  // *** Verifications
   if (!isUUID(id, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+  // *** End Verifications
 
   const response = await AnimalDB.readOne(id);
   const { result, error } = response;
@@ -121,15 +135,19 @@ const readOne = async ({ params: { id } }, res) => {
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request for animal with id: ${id} successful`, animal });
 }
+// ******************** END GET ********************
 
+// ******************** PUT ********************
 const updateDetails = async (req, res) => {
   const { name, birthdate, sex, description, race, status, species, id } = req.body;
 
+  // *** Verifications
   if (!isUUID(id, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
   if (!isDate(birthdate, DATE.OPTIONS)) return res.status(400).json({ error: "Invalid date format" });
 
   const areStrings = areStringsFilled([name, birthdate, sex, description, race, status, species])
   if (!areStrings) return res.status(403).json({ message: `Missing data` });
+  // *** End Verifications
 
   const response = await AnimalDB.updateDetails(name, birthdate, sex, description, race, status, species, id);
 
@@ -140,8 +158,10 @@ const updateDetails = async (req, res) => {
 }
 
 const updateExitDate = async ({ body: { exitDate, id } }, res) => {
+  // *** Verifications
   if (!isDate(exitDate, DATE.OPTIONS)) return res.status(400).json({ error: "Invalid date format" });
   if (!isUUID(id, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+  // *** End Verifications
 
   const response = await AnimalDB.updateExitDate(exitDate, id);
 
@@ -150,19 +170,27 @@ const updateExitDate = async ({ body: { exitDate, id } }, res) => {
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Animal's exit_date with id: ${id} has been updated`, updatedExitDate });
 }
+// ******************** END PUT ********************
 
+// ******************** DELETE ********************
 const deleteOne = async ({ params: { id } }, res) => {
+  // *** Verifications
   if (!isUUID(id, UUID.VERSION)) return res.status(400).json({ error: "Invalid UUID format" });
+  // *** End Verifications
 
   const response = await AnimalDB.deleteOne(id);
 
   const { imgPathResult, error } = response;
 
-  const err = await deleteImg(imgPathResult[0].picture_url);
-  if (err) return res.status(403).json({ message: err });
+  // Delete associated image if the deletion was successful
+  if (!error) {
+    const err = await deleteImg(imgPathResult[0].picture_url);
+    if (err) return res.status(403).json({ message: err });
+  }
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Animal with id: ${id} has been successfully deleted` });
 }
+// ******************** END DELETE ********************
 
 export const AnimalController = {
   readAllForAdoption,

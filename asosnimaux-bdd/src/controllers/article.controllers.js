@@ -1,9 +1,13 @@
 import { ArticleDB } from "../databases/article.db.js";
-import { areStringsFilled } from "../utils/string.utils.js";
-import { deleteImg, deleteImgs, getFormidableForm, setImgUrl } from "../utils/formidable.utils.js";
-import isUUID from "validator/lib/isUUID.js";
-import UUID from "../constants/uuid.const.js";
+// Utils
+import { getFormidableForm, setImgUrl, deleteImg, deleteImgs } from "../utils/formidable.utils.js";
 import { resizeAndFormatImg } from "../utils/sharp.utils.js";
+import { areStringsFilled } from "../utils/string.utils.js";
+// Constants
+import { UUID } from "../constants/uuid.const.js";
+// Validator
+import validator from "validator";
+const { isUUID } = validator;
 
 const create = async (req, res) => {
   const errors = {};

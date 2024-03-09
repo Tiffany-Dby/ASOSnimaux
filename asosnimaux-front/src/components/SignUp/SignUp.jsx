@@ -23,6 +23,7 @@ const SignUp = () => {
   // Username
   const [usernameLengthSuccess, setUsernameLengthSuccess] = useState(false);
   const [usernameValidSuccess, setUsernameValidSuccess] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
 
   useEffect(() => {
     signUpForm.username.length >= 4 && signUpForm.username.length <= 12 ? setUsernameLengthSuccess(true) : setUsernameLengthSuccess(false);
@@ -33,6 +34,7 @@ const SignUp = () => {
 
   // Email
   const [emailSuccess, setEmailSuccess] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
   useEffect(() => {
     const checkEmail = isEmailValid(signUpForm.email);
@@ -45,6 +47,7 @@ const SignUp = () => {
   const [pwHasLower, setPwHasLower] = useState(false);
   const [pwHasNumber, setPwHasNumber] = useState(false);
   const [pwHasMinLength, setPwHasMinLength] = useState(false);
+  const [pwError, setPwError] = useState(false);
 
   useEffect(() => {
     const checkSymbol = hasSymbol(signUpForm.password);
@@ -66,20 +69,49 @@ const SignUp = () => {
   // Confirm Password
   const [confirmPw, setConfirmPw] = useState("");
   const [arePwSame, setArePwSame] = useState(false);
+  const [arePwSameError, setArePwSameError] = useState(false)
 
   useEffect(() => {
     if (!!signUpForm.password.length && !!confirmPw.length) {
       signUpForm.password === confirmPw ? setArePwSame(true) : setArePwSame(false);
     }
   }, [confirmPw, signUpForm.password]);
+
+  // Reset Sign up inputs errors
+  const handleResetErrors = () => {
+    setUsernameError(false);
+    setEmailError(false);
+    setPwError(false);
+    setArePwSameError(false);
+  }
   // *************** End UX - Helps ***************
 
   // Sumbit Sign Up Form
   const handleSubmit = e => {
     e.preventDefault();
 
+    // Reset all visual errors on click
+    handleResetErrors();
+
+    // Check inputs validations -> set errors (to display) if required and cancel submission
     if (!usernameLengthSuccess || !usernameValidSuccess || !emailSuccess || !pwHasSymbol || !pwHasUpper || !pwHasLower || !pwHasNumber || !pwHasMinLength || !arePwSame) {
-      dispatch(setSignUpError({ error: "Miaoups, il semblerait que tout ne soit pas en règle, veuillez revérifier" }));
+      // Error message
+      dispatch(setSignUpError({ error: "Miaoups, il semblerait que tout ne soit pas en règle, veuillez revérifier." }));
+
+      // ***** Set error *****
+      // Username
+      if (!usernameLengthSuccess || !usernameValidSuccess) setUsernameError(true);
+
+      // Email
+      if (!emailSuccess) setEmailError(true);
+
+      // Password
+      if (!pwHasSymbol || !pwHasUpper || !pwHasLower || !pwHasNumber || !pwHasMinLength) setPwError(true);
+
+      // Confirm password
+      if (!arePwSame) setArePwSameError(true);
+      // ***** End Set error *****
+
       return;
     }
 
@@ -103,19 +135,6 @@ const SignUp = () => {
         {signUpError &&
           <span className="text-error">{getDuplicateErrorMessage(signUpError, DUPLICATES)}</span>
         }
-        {/* {signUpError &&
-          <>
-            {signUpError.includes("Duplicate") && signUpError.includes("email") &&
-              <span className="text-error">L' <strong>adresse email</strong> est déjà utilisée.</span>
-            }
-            {signUpError.includes("Duplicate") && signUpError.includes("username") &&
-              <span className="text-error">Le <strong>pseudo</strong> est déjà utilisé.</span>
-            }
-            {!signUpError.includes("Duplicate") &&
-              <span className="text-error">{signUpError}</span>
-            }
-          </>
-        } */}
         <form onSubmit={handleSubmit}>
           {signUpLoading ?
             <Loading text={"Chargement"} loadingStyle={"paws"} />
@@ -125,7 +144,7 @@ const SignUp = () => {
                 label="Pseudo"
                 id="username"
                 required={true}
-                inputStyle={signUpError?.includes("username") ? " input--error" : ""}
+                inputStyle={signUpError?.includes("username") || usernameError ? " input--error" : ""}
                 helps={[
                   {
                     success: usernameLengthSuccess,
@@ -145,7 +164,7 @@ const SignUp = () => {
                 id="email"
                 type="email"
                 required={true}
-                inputStyle={signUpError?.includes("email") ? " input--error" : ""}
+                inputStyle={signUpError?.includes("email") || emailError ? " input--error" : ""}
                 helps={[
                   {
                     success: emailSuccess,
@@ -160,6 +179,7 @@ const SignUp = () => {
                 id="password"
                 type="password"
                 required={true}
+                inputStyle={signUpError?.includes("password") || pwError ? " input--error" : ""}
                 helps={[
                   {
                     success: pwHasSymbol,
@@ -194,6 +214,7 @@ const SignUp = () => {
                 id="confirm_pass"
                 type="password"
                 required={true}
+                inputStyle={arePwSameError ? " input--error" : ""}
                 helps={[
                   {
                     success: arePwSame,

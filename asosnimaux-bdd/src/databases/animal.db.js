@@ -1,6 +1,8 @@
 import query from "./init.db.js";
+// UUID
 import { v4 as uuidv4 } from "uuid";
 
+// ******************** POST ********************
 const create = async (name, birthdate, sex, description, race, status, species, picture_url, picture_caption) => {
   const sql = `
     INSERT INTO animals (id, name, birthdate, sex, description, race, status, species, picture_url, picture_caption)
@@ -22,6 +24,67 @@ const create = async (name, birthdate, sex, description, race, status, species, 
   }
   finally {
     return { result, error, insertedId };
+  }
+}
+// ******************** END POST ********************
+
+// ******************** GET ********************
+const readAll = async () => {
+  const sql = `
+    SELECT id, entry_date, name, birthdate, sex, description, race, status, exit_date, species, picture_url, picture_caption,
+    CASE 
+        WHEN LENGTH(description) > 150 
+        THEN CONCAT(SUBSTRING(description, 1, 150), '...') 
+        ELSE description 
+    END AS truncated_description,
+    TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age
+    FROM animals
+    ORDER BY entry_date DESC
+  `;
+
+  let result = [];
+  let error = null;
+  try {
+    result = await query(sql);
+  }
+  catch (err) {
+    error = err.message;
+  }
+  finally {
+    return { result, error };
+  }
+}
+
+const readOne = async (id) => {
+  // AS birthday -> calculates birthday based on birthdate, returns current years birthday : if already passed this year add +1 year
+  // Ex: birthdate -> 01/01/2000  current date -> 01/05/2020 
+  // based on birthdate days that passed in the current year  
+  // for birthdate 01/01 -> 0 day  for current date 01/05 -> 126 days
+  // 126 >= 0 ? 2020 +1 : 2020 -> (next) birthday 01/01/2021
+  const sql = `
+    SELECT id, entry_date, name, birthdate, sex, description, race, status, exit_date, species, picture_url, picture_caption, DATEDIFF(NOW(), entry_date) as time_spent,
+    TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age,
+    DATE_FORMAT(
+      DATE_ADD(
+        birthdate, 
+        INTERVAL
+          IF(DATE_FORMAT(CURDATE(), '%m%d') >= DATE_FORMAT(birthdate, '%m%d'), YEAR(CURDATE()) - YEAR(birthdate) + 1, YEAR(CURDATE()) - YEAR(birthdate)) YEAR),
+        '%Y-%m-%d'
+      ) AS birthday
+    FROM animals
+    WHERE id = ?
+  `;
+
+  let result = [];
+  let error = null;
+  try {
+    result = await query(sql, [id]);
+  }
+  catch (err) {
+    error = err.message;
+  }
+  finally {
+    return { error, result };
   }
 }
 
@@ -65,32 +128,6 @@ const readAllBySpeciesForAdoption = async (species) => {
   }
 }
 
-const readAll = async () => {
-  const sql = `
-    SELECT id, entry_date, name, birthdate, sex, description, race, status, exit_date, species, picture_url, picture_caption,
-    CASE 
-        WHEN LENGTH(description) > 150 
-        THEN CONCAT(SUBSTRING(description, 1, 150), '...') 
-        ELSE description 
-    END AS truncated_description,
-    TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age
-    FROM animals
-    ORDER BY entry_date DESC
-  `;
-
-  let result = [];
-  let error = null;
-  try {
-    result = await query(sql);
-  }
-  catch (err) {
-    error = err.message;
-  }
-  finally {
-    return { result, error };
-  }
-}
-
 const readAllBySpecies = async (species) => {
   const sql = `
     SELECT id, entry_date, name, birthdate, sex, description, race, status, exit_date, species, picture_url, picture_caption
@@ -110,35 +147,9 @@ const readAllBySpecies = async (species) => {
     return { result, error };
   }
 }
+// ******************** END GET ********************
 
-const readOne = async (id) => {
-  const sql = `
-    SELECT id, entry_date, name, birthdate, sex, description, race, status, exit_date, species, picture_url, picture_caption, DATEDIFF(NOW(), entry_date) as time_spent,
-    TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age,
-    DATE_FORMAT(
-      DATE_ADD(
-        birthdate, 
-        INTERVAL
-          IF(DATE_FORMAT(CURDATE(), '%m%d') >= DATE_FORMAT(birthdate, '%m%d'), YEAR(CURDATE()) - YEAR(birthdate) + 1, YEAR(CURDATE()) - YEAR(birthdate)) YEAR),
-        '%Y-%m-%d'
-      ) AS birthday
-    FROM animals
-    WHERE id = ?
-  `;
-
-  let result = [];
-  let error = null;
-  try {
-    result = await query(sql, [id]);
-  }
-  catch (err) {
-    error = err.message;
-  }
-  finally {
-    return { error, result };
-  }
-}
-
+// ******************** PUT ********************
 const updateDetails = async (name, birthdate, sex, description, race, status, species, id) => {
   const sql = `
     UPDATE animals
@@ -182,7 +193,9 @@ const updateExitDate = async (exitDate, id) => {
     return { result, error };
   }
 }
+// ******************** END PUT ********************
 
+// ******************** DELETE ********************
 const deleteOne = async (id) => {
   const imgPathSql = `
     SELECT picture_url
@@ -216,6 +229,7 @@ const deleteOne = async (id) => {
     return { imgPathResult, result, error };
   }
 }
+// ******************** END DELETE ********************
 
 export const AnimalDB = {
   create,
