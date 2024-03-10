@@ -1,11 +1,40 @@
-import { APP_ROUTES } from "../constants/route.const";
+// Api
+import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
+// Reducers
 import { resetFormNewAnimal, setAllAnimals, setAllAnimalsError, setDeleteAnimal, setDeleteAnimalError, setNewAnimal, setNewAnimalError, setOneAnimal, setOneAnimalError, setSelectedwAnimalError, setUpdateExitDate, setUpdateSelectedAnimal, startAllAnimalsLoading, startDeleteAnimalLoading, startNewAnimalLoading, startOneAnimalLoading, startSelectedAnimalLoading } from "../redux/reducers/animal.reducer";
+// Constants
+import { APP_ROUTES } from "../constants/route.const";
+// Utils
 import { setFormData } from "../utils/formidable.utils";
 import { getFromStorage } from "../utils/storage.utils";
 import { showToast } from "../utils/toast.utils";
-import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 
+// ******************** POST ********************
+export const postNewAnimalThunk = (file) => async (dispatch, getState) => {
+  const { animals, newAnimalLoading } = getState().animalReducer;
+  const { newAnimal } = animals;
+  // Utils -> storage.utils.js
+  const token = getFromStorage("token");
+  if (newAnimalLoading) return;
 
+  // Utils -> formidable.utils.js
+  const fd = setFormData({
+    ...newAnimal,
+    newAnimalImg: file
+  });
+
+  dispatch(startNewAnimalLoading());
+
+  const { result, error, status } = await postRequest("animals", fd, token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setNewAnimalError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setNewAnimal({ animal: result.animal[0] }));
+  showToast(dispatch);
+  dispatch(resetFormNewAnimal());
+}
+// ******************** END POST ********************
+
+// ******************** GET ********************
 export const getAllAnimalsThunk = () => async (dispatch, getState) => {
   const { allAnimalsLoading } = getState().animalReducer;
   if (allAnimalsLoading) return;
@@ -45,46 +74,13 @@ export const getOneAnimalThunk = (id) => async (dispatch, getState) => {
     time_spent: result.animal.timeSpent
   }));
 }
+// ******************** END GET ********************
 
-export const postNewAnimalThunk = (file) => async (dispatch, getState) => {
-  const { animals, newAnimalLoading } = getState().animalReducer;
-  const { newAnimal, all } = animals;
-  const token = getFromStorage("token");
-  if (newAnimalLoading) return;
-
-  const fd = setFormData({
-    ...newAnimal,
-    newAnimalImg: file
-  });
-
-  dispatch(startNewAnimalLoading());
-
-  const { result, error, status } = await postRequest("animals", fd, token);
-  if (!result?.message || status >= 400 || !!error) return dispatch(setNewAnimalError({ error: `Something went wrong : ${error}` }));
-
-  dispatch(setNewAnimal({
-    id: result.animal[0].id,
-    entry_date: result.animal[0].entry_date,
-    exit_date: result.animal[0].exit_date,
-    name: result.animal[0].name,
-    birthdate: result.animal[0].birthdate,
-    age: result.animal[0].age,
-    sex: result.animal[0].sex,
-    description: result.animal[0].description,
-    status: result.animal[0].status,
-    race: result.animal[0].race,
-    species: result.animal[0].species,
-    picture_url: result.animal[0].picture_url,
-    picture_caption: result.animal[0].picture_caption,
-  }));
-
-  showToast(dispatch);
-  dispatch(resetFormNewAnimal());
-}
-
+// ******************** PUT ********************
 export const updateAnimalThunk = () => async (dispatch, getState) => {
   const { animals, selectedAnimalLoading } = getState().animalReducer;
   const { selectedAnimal } = animals;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (selectedAnimalLoading) return;
 
@@ -93,30 +89,14 @@ export const updateAnimalThunk = () => async (dispatch, getState) => {
   const { result, error, status } = await putRequest("animals", selectedAnimal, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setSelectedwAnimalError({ error: `Something went wrong : ${error}` }));
 
-  dispatch(setUpdateSelectedAnimal({
-    animal: {
-      id: result.updatedAnimal[0].id,
-      entry_date: result.updatedAnimal[0].entry_date,
-      name: result.updatedAnimal[0].name,
-      birthdate: result.updatedAnimal[0].birthdate,
-      age: result.updatedAnimal[0].age,
-      sex: result.updatedAnimal[0].sex,
-      description: result.updatedAnimal[0].description,
-      race: result.updatedAnimal[0].race,
-      status: result.updatedAnimal[0].status,
-      exit_date: result.updatedAnimal[0].exit_date,
-      species: result.updatedAnimal[0].species,
-      picture_url: result.updatedAnimal[0].picture_url,
-      picture_caption: result.updatedAnimal[0].picture_caption
-    }
-  }));
-
+  dispatch(setUpdateSelectedAnimal({ animal: result.updatedAnimal[0] }));
   showToast(dispatch);
 }
 
 export const updateAnimalExitDateThunk = () => async (dispatch, getState) => {
   const { animals, selectedAnimalLoading } = getState().animalReducer;
   const { selectedAnimal } = animals;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (selectedAnimalLoading) return;
 
@@ -133,10 +113,13 @@ export const updateAnimalExitDateThunk = () => async (dispatch, getState) => {
   dispatch(setUpdateExitDate({ animal: result.updatedExitDate[0] }));
   showToast(dispatch);
 }
+// ******************** END PUT ********************
 
+// ******************** DELETE ********************
 export const deleteAnimalThunk = () => async (dispatch, getState) => {
   const { deleteAnimalLoading, animals } = getState().animalReducer;
   const { selectedAnimal } = animals;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (deleteAnimalLoading) return;
 
@@ -148,3 +131,4 @@ export const deleteAnimalThunk = () => async (dispatch, getState) => {
   dispatch(setDeleteAnimal({ id: selectedAnimal.id }));
   showToast(dispatch);
 }
+// ******************** END DELETE ********************

@@ -10,7 +10,7 @@ export const hasUppercase = str => /[A-Z]/.test(str);
 
 export const hasLowercase = str => /[a-z]/.test(str);
 
-export const hasMinLength = (str, minLength) => str.length >= minLength;
+export const hasMinLength = (str, minLength) => str?.length >= minLength;
 
 export const isUsernameValid = (username) => {
   const isAlphanum = isAlphanumeric(username);

@@ -173,29 +173,12 @@ const animalSlice = createSlice({
       }
     },
     setNewAnimal: (state, action) => {
-      const { id, entry_date, exit_date, name, birthdate, age, sex, description, status, race, species, picture_url, picture_caption } = action.payload;
+      const { animal } = action.payload;
       return {
         ...state,
         animals: {
           ...state.animals,
-          all: [
-            {
-              id,
-              entry_date,
-              exit_date,
-              name,
-              birthdate,
-              age,
-              sex,
-              description,
-              status,
-              race,
-              species,
-              picture_url,
-              picture_caption
-            },
-            ...state.animals.all
-          ]
+          all: [{ ...animal }, ...state.animals.all]
         },
         newAnimalError: null,
         newAnimalLoading: false,

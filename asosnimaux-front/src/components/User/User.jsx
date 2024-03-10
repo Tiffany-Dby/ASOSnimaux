@@ -23,6 +23,7 @@ import { AVATAR } from "../../constants/avatar.const";
 import { APP_ROUTES } from "../../constants/route.const";
 // Utils
 import { setToLocalDate } from "../../utils/date.utils";
+import { hasLowercase, hasMinLength, hasNumber, hasSymbol, hasUppercase, isEmailValid, isUsernameValid } from "../../utils/input.utils";
 
 const User = () => {
   const dispatch = useDispatch();
@@ -68,6 +69,94 @@ const User = () => {
     dispatch(setIsUpdateAccountForm());
   }
 
+  // ***** UX - Helps *****
+  // Username
+  const [usernameLengthSuccess, setUsernameLengthSuccess] = useState(false);
+  const [usernameValidSuccess, setUsernameValidSuccess] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
+
+  useEffect(() => {
+    dialogForms.username?.length >= 4 && dialogForms.username?.length <= 12 ? setUsernameLengthSuccess(true) : setUsernameLengthSuccess(false);
+
+    const checkUsername = isUsernameValid(dialogForms.username);
+    checkUsername ? setUsernameValidSuccess(true) : setUsernameValidSuccess(false);
+  }, [dialogForms.username]);
+
+  // Email
+  const [emailSuccess, setEmailSuccess] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+
+  useEffect(() => {
+    const checkEmail = isEmailValid(dialogForms.email);
+    checkEmail ? setEmailSuccess(true) : setEmailSuccess(false);
+  }, [dialogForms.email]);
+
+  // Password
+  const [pwHasSymbol, setPwHasSymbol] = useState(false);
+  const [pwHasUpper, setPwHasUpper] = useState(false);
+  const [pwHasLower, setPwHasLower] = useState(false);
+  const [pwHasNumber, setPwHasNumber] = useState(false);
+  const [pwHasMinLength, setPwHasMinLength] = useState(false);
+  const [pwError, setPwError] = useState(false);
+
+  useEffect(() => {
+    const checkSymbol = hasSymbol(dialogForms.newPassword);
+    checkSymbol ? setPwHasSymbol(true) : setPwHasSymbol(false);
+
+    const checkUpper = hasUppercase(dialogForms.newPassword);
+    checkUpper ? setPwHasUpper(true) : setPwHasUpper(false);
+
+    const checkLower = hasLowercase(dialogForms.newPassword);
+    checkLower && dialogForms.newPassword !== undefined ? setPwHasLower(true) : setPwHasLower(false);
+
+    const checkNumber = hasNumber(dialogForms.newPassword);
+    checkNumber ? setPwHasNumber(true) : setPwHasNumber(false);
+
+    const checkLength = hasMinLength(dialogForms.newPassword, 8);
+    checkLength ? setPwHasMinLength(true) : setPwHasMinLength(false);
+  }, [dialogForms.newPassword]);
+
+  // Confirm password
+  const [confirmPw, setConfirmPw] = useState("");
+  const [arePwSame, setArePwSame] = useState(false);
+  const [arePwSameError, setArePwSameError] = useState(false);
+
+  useEffect(() => {
+    if (!!dialogForms.newPassword?.length && !!confirmPw.length) {
+      dialogForms.newPassword === confirmPw ? setArePwSame(true) : setArePwSame(false);
+    }
+  }, [confirmPw, dialogForms.newPassword]);
+
+  // Reset update inputs errors
+  const handleResetErrors = () => {
+    setUsernameError(false);
+    setEmailError(false);
+    setPwError(false);
+    setArePwSameError(false);
+  }
+  // Reset confirm password (passed to Dialog)
+  const resetConfirmPw = () => {
+    setConfirmPw("");
+  }
+
+  const helps = {
+    newPassword: [
+      { success: pwHasSymbol, fail: !pwHasSymbol, message: "Un symbole" },
+      { success: pwHasNumber, fail: !pwHasNumber, message: "Un chiffre" },
+      { success: pwHasUpper, fail: !pwHasUpper, message: "Une lettre majuscule" },
+      { success: pwHasLower, fail: !pwHasLower, message: "Une lettre minuscule" },
+      { success: pwHasMinLength, fail: !pwHasMinLength, message: "8 caractères minimum" },
+    ],
+    email: [
+      { success: emailSuccess, fail: !emailSuccess, message: "Exemple : votre@email.com" },
+    ],
+    username: [
+      { success: usernameLengthSuccess, fail: !usernameLengthSuccess, message: "Entre 4 et 12 caractères" },
+      { success: usernameValidSuccess, fail: !usernameValidSuccess, message: "Lettres et/ou chiffres (' - ' autorisé)" },
+    ]
+  }
+  // ***** End UX - Helps *****
+
   // Open Update Dialog for Testimony
   const handleTestimonyDialog = (testimony) => {
     dispatch(setIsUpdateTestimony());
@@ -97,6 +186,10 @@ const User = () => {
   // Close Dialog
   const handleCancel = () => {
     setAvatarIndex(null);
+    dispatch(resetDialogForm());
+    setConfirmPw("");
+    setArePwSame(false);
+    handleResetErrors();
     dispatch(setUpdatedAvatar(""));
     dispatch(setSelectedTestimony({ id: "", user_id: "", content: "" }));
     dispatch(closeDialog());
@@ -107,13 +200,33 @@ const User = () => {
   // Update User's infos
   const handleSubmit = e => {
     e.preventDefault();
+
+    // Reset all visual errors on click
+    handleResetErrors();
+
     if (input.id === "username") {
+      if (!usernameLengthSuccess || !usernameValidSuccess) {
+        setUsernameError(true);
+        return;
+      }
       dispatch(updateUsernameThunk());
     }
     else if (input.id === "email") {
+      if (!emailSuccess) {
+        setEmailError(true);
+        return;
+      }
       dispatch(updateUsernameThunk());
     }
     else if (input.id === "newPassword") {
+      if (!pwHasSymbol || !pwHasUpper || !pwHasLower || !pwHasNumber || !pwHasMinLength) {
+        setPwError(true);
+        return;
+      }
+      if (!arePwSame) {
+        setArePwSameError(true);
+        return;
+      }
       dispatch(updatePasswordThunk());
     }
     dispatch(closeDialog());
@@ -262,7 +375,7 @@ const User = () => {
 
         </section>
 
-        <Dialog>
+        <Dialog resetConfirmPw={resetConfirmPw}>
           {isUpdateAccountAvatar &&
             <div className="dialog-wrapper">
               <div className="title-wrapper">
@@ -291,11 +404,42 @@ const User = () => {
               </div>
               <form className="user__update" onSubmit={handleSubmit}>
                 {input.id === "newPassword" &&
-                  <Input label={"Ancien mot de passe"} id={"oldPassword"} type={"password"} value={dialogForms.oldPassword} onChange={(value) => updateForm("oldPassword", value)} />
+                  <Input
+                    label={"Ancien mot de passe"}
+                    id={"oldPassword"}
+                    type={"password"}
+                    required={true}
+                    value={dialogForms.oldPassword}
+                    onChange={(value) => updateForm("oldPassword", value)} />
                 }
-                <Input label={input.label} id={input.id} type={input.type} value={dialogForms[input.id]} onChange={(value) => updateForm(input.id, value)} />
+                <Input
+                  label={input.label}
+                  id={input.id}
+                  type={input.type}
+                  required={true}
+                  inputStyle={usernameError || emailError || pwError ? " input--error" : ""}
+                  helps={helps[input.id]}
+                  value={dialogForms[input.id]}
+                  onChange={(value) => updateForm(input.id, value)} />
                 {input.id === "newPassword" &&
-                  <p className="text-error">Après modification, vous devrez vous reconnecter</p>
+                  <>
+                    <Input
+                      label={"Confirmation du nouveau mot de passe"}
+                      id={"confirm_pass"}
+                      type={"password"}
+                      required={true}
+                      inputStyle={arePwSameError ? " input--error" : ""}
+                      helps={[
+                        {
+                          success: arePwSame,
+                          fail: !arePwSame,
+                          message: "Mots de passe identiques"
+                        }
+                      ]}
+                      value={confirmPw}
+                      onChange={(value) => setConfirmPw(value)} />
+                    <p className="text-error">Après modification, vous devrez vous reconnecter</p>
+                  </>
                 }
                 <div className="btns-wrapper">
                   <Button text="Valider" type="submit" />
