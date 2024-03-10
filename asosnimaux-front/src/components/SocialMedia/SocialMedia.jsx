@@ -1,4 +1,6 @@
+// Styles
 import "./socialMedia.scss";
+// Components
 import SocialMediaLink from "../SocialMediaLinks/SocialMediaLinks";
 
 const SocialMedia = () => {

@@ -1,4 +1,6 @@
+// Styles
 import './App.scss';
+// Components
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Toast from '../Toast/Toast.jsx';
@@ -20,11 +22,15 @@ import AdminTestimonies from '../AdminTestimonies/AdminTestimonies.jsx';
 import Association from '../Association/Association.jsx';
 import PrivateRoute from '../PrivateRoute/PrivateRoute.jsx';
 import Error from '../Error/Error.jsx';
+// React
 import { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { APP_ROUTES } from "../../constants/route.const.js"
+// Thunks
 import { getOneUserThunk } from '../../api/user.api.js';
+// Constants
+import { APP_ROUTES } from "../../constants/route.const.js"
+// Utils
 import { getFromStorage } from '../../utils/storage.utils.js';
 
 const App = () => {

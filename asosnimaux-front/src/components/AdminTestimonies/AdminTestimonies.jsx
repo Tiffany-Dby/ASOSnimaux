@@ -1,10 +1,15 @@
+// Styles
 import "./adminTestimonies.scss";
+// Components
 import Loading from "../Loading/Loading";
 import { FaTrashCan } from "react-icons/fa6";
+// React
 import { useDispatch, useSelector } from "react-redux";
-import { setToLocalDate } from "../../utils/date.utils";
+// Reducers
 import { setIsDeleteTestimonyByAdmin } from "../../redux/reducers/dialog.reducer";
 import { setSelectedTestimony } from "../../redux/reducers/testimony.reducer";
+// Utils
+import { setToLocalDate } from "../../utils/date.utils";
 
 const AdminTestimonies = () => {
   const dispatch = useDispatch();

@@ -1,3 +1,4 @@
+// Styles
 import "./burger.scss";
 
 const Burger = ({ toggleClass, handleBurger }) => {

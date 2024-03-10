@@ -1,9 +1,14 @@
+// Styles
 import "./notAuth.scss";
+// Components
 import { FaCircleInfo, FaXmark } from "react-icons/fa6";
+// React
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { APP_ROUTES } from "../../constants/route.const";
+// Reducers
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
+// Constants
+import { APP_ROUTES } from "../../constants/route.const";
 
 const NotAuth = ({ actionText }) => {
   const dispatch = useDispatch();

@@ -1,3 +1,4 @@
+// Styles
 import "./schedules.scss";
 
 const Schedules = () => {

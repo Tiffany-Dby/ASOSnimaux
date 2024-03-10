@@ -1,4 +1,6 @@
+// Styles
 import "./article.scss";
+// Utils
 import { formatDescription } from "../../utils/description.utils";
 
 const Article = ({ artclStyle, imgUrl, imgAlt, title, date, text }) => {

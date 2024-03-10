@@ -1,3 +1,4 @@
+// Styles
 import "./inputCheckbox.scss";
 
 const InputCheckbox = ({ id, label, checked, onChange }) => {

@@ -1,16 +1,23 @@
+// Styles
 import "./signUp.scss";
+// Components
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import Loading from "../Loading/Loading.jsx";
+// React
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+// Thunks
 import { signUpThunk } from "../../api/user.api";
+// Reducers
 import { setSignUpError, updateSignUpForm } from "../../redux/reducers/user.reducer";
+// Constants
 import { APP_ROUTES } from "../../constants/route.const.js";
+import { DUPLICATES } from "../../constants/errors.const.js";
+// Utils
 import { hasLowercase, hasMinLength, hasNumber, hasSymbol, hasUppercase, isEmailValid, isUsernameValid } from "../../utils/input.utils.js";
 import { getDuplicateErrorMessage } from "../../utils/error.utils.js";
-import { DUPLICATES } from "../../constants/errors.const.js";
 
 const SignUp = () => {
   const dispatch = useDispatch();

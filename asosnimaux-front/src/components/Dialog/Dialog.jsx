@@ -1,10 +1,14 @@
+// Styles
 import "./dialog.scss";
+// React
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPortal } from "react-dom";
+// Reducers
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
 import { resetFormNewTestimony } from "../../redux/reducers/testimony.reducer";
 import { setUpdatedAvatar } from "../../redux/reducers/user.reducer";
+// Utils
 import { resetAdminForms, resetAdminSelects } from "../../utils/reset.utils";
 
 const Dialog = ({ children }) => {

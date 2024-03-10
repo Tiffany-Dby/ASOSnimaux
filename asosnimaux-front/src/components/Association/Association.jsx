@@ -1,9 +1,13 @@
+// Styles
 import "./association.scss";
+// Components
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
-import { FaAngleRight } from "react-icons/fa6";
-import { Link } from "react-router-dom";
-import { APP_ROUTES } from "../../constants/route.const";
 import YoutubeVideo from "../YoutubeVideo/YoutubeVideo";
+import { FaAngleRight } from "react-icons/fa6";
+// React
+import { Link } from "react-router-dom";
+// Constants
+import { APP_ROUTES } from "../../constants/route.const";
 
 const Association = () => {
   return (

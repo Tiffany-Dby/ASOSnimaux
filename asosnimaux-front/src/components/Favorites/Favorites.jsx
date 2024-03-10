@@ -1,15 +1,22 @@
+// Styles
 import "./favorites.scss";
+// Components
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import FavoriteCard from "../FavoriteCard/FavoriteCard";
 import Loading from "../Loading/Loading";
 import { FaAngleRight, FaCircleInfo } from "react-icons/fa6";
+// React
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+// Thunks
 import { getUsersFollowIDsThunk, getUsersFollowThunk, unfollowThunk } from "../../api/user.api";
-import { APP_ROUTES } from "../../constants/route.const";
 import { getOneAnimalThunk } from "../../api/animal.api";
+// Reducers
 import { setFollowedAnimalsNotAuth, setSelectedAnimalFollow, setUnfollow } from "../../redux/reducers/user.reducer";
+// Constants
+import { APP_ROUTES } from "../../constants/route.const";
+// Utils
 import { setToStorage } from "../../utils/storage.utils";
 
 const Favorites = () => {

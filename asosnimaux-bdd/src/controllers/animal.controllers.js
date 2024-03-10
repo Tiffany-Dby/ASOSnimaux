@@ -68,7 +68,7 @@ const create = async (req, res) => {
   const rslt = createdAnimal.result;
   if (err) errors.err = err;
 
-  // Delete originale image
+  // Delete original image
   const e = await deleteImg(setImgUrl(filepath, "animals"));
   if (e) return res.status(403).json({ message: e });
 
@@ -86,7 +86,6 @@ const readAllForAdoption = async (req, res) => {
 
 const readAllBySpeciesForAdoption = async ({ params: { species } }, res) => {
   const response = await AnimalDB.readAllBySpeciesForAdoption(species);
-
   const { result, error } = response;
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request for all ${species} on adoption successful`, result })
@@ -101,7 +100,6 @@ const readAll = async (req, res) => {
 
 const readAllBySpecies = async ({ params: { species } }, res) => {
   const response = await AnimalDB.readAllBySpecies(species);
-
   const { result, error } = response;
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request for all ${species} successful`, result });
@@ -150,9 +148,8 @@ const updateDetails = async (req, res) => {
   // *** End Verifications
 
   const response = await AnimalDB.updateDetails(name, birthdate, sex, description, race, status, species, id);
-
-  const error = response.error;
   const updatedAnimal = response.result.result;
+  const { error } = response;
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Animal's details with id: ${id} has been updated`, updatedAnimal });
 }
@@ -164,9 +161,8 @@ const updateExitDate = async ({ body: { exitDate, id } }, res) => {
   // *** End Verifications
 
   const response = await AnimalDB.updateExitDate(exitDate, id);
-
-  const error = response.error;
   const updatedExitDate = response.result.result;
+  const { error } = response;
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Animal's exit_date with id: ${id} has been updated`, updatedExitDate });
 }
@@ -179,7 +175,6 @@ const deleteOne = async ({ params: { id } }, res) => {
   // *** End Verifications
 
   const response = await AnimalDB.deleteOne(id);
-
   const { imgPathResult, error } = response;
 
   // Delete associated image if the deletion was successful

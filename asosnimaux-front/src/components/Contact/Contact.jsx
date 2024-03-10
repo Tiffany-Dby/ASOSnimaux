@@ -1,3 +1,4 @@
+// Styles
 import "./contact.scss";
 
 const Contact = () => {

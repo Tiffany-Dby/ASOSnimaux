@@ -33,9 +33,9 @@ const readAll = async () => {
   const sql = `
     SELECT id, entry_date, name, birthdate, sex, description, race, status, exit_date, species, picture_url, picture_caption,
     CASE 
-        WHEN LENGTH(description) > 150 
-        THEN CONCAT(SUBSTRING(description, 1, 150), '...') 
-        ELSE description 
+      WHEN LENGTH(description) > 150 
+      THEN CONCAT(SUBSTRING(description, 1, 150), '...') 
+      ELSE description 
     END AS truncated_description,
     TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age
     FROM animals
@@ -56,21 +56,23 @@ const readAll = async () => {
 }
 
 const readOne = async (id) => {
-  // AS birthday -> calculates birthday based on birthdate, returns current years birthday : if already passed this year add +1 year
-  // Ex: birthdate -> 01/01/2000  current date -> 01/05/2020 
-  // based on birthdate days that passed in the current year  
-  // for birthdate 01/01 -> 0 day  for current date 01/05 -> 126 days
-  // 126 >= 0 ? 2020 +1 : 2020 -> (next) birthday 01/01/2021
+  // AS birthday -> calculates birthday based on birthdate, returns next birthday : if already passed this year add +1 year to current year
+  // Ex: current date -> 2020-05-01 --- birthdate -> 2000-01-01
+  // extract month and day from current date and birthdate to compare them
+  // for current date 0501 --- for birthdate 0101  
+  // 0501 >= 0101 ? 2020 +1 : 2020 -> (next) birthday 2021-01-01
   const sql = `
-    SELECT id, entry_date, name, birthdate, sex, description, race, status, exit_date, species, picture_url, picture_caption, DATEDIFF(NOW(), entry_date) as time_spent,
+    SELECT id, entry_date, name, birthdate, sex, description, race, status, exit_date, species, picture_url, picture_caption, 
+    DATEDIFF(CURDATE(), entry_date) as time_spent,
     TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age,
     DATE_FORMAT(
-      DATE_ADD(
-        birthdate, 
-        INTERVAL
-          IF(DATE_FORMAT(CURDATE(), '%m%d') >= DATE_FORMAT(birthdate, '%m%d'), YEAR(CURDATE()) - YEAR(birthdate) + 1, YEAR(CURDATE()) - YEAR(birthdate)) YEAR),
-        '%Y-%m-%d'
-      ) AS birthday
+      IF(
+        DATE_FORMAT(CURDATE(), '%m%d') >= DATE_FORMAT(birthdate, '%m%d'),
+        CONCAT(YEAR(CURDATE()) + 1, '-', MONTH(birthdate), '-', DAY(birthdate)),
+        CONCAT(YEAR(CURDATE()), '-', MONTH(birthdate), '-', DAY(birthdate))
+      ),
+      '%Y-%m-%d'
+    ) AS birthday
     FROM animals
     WHERE id = ?
   `;

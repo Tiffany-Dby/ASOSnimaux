@@ -1,11 +1,16 @@
+// Styles
 import "./adminArticles.scss";
+// Components
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
+// React
 import { useDispatch, useSelector } from "react-redux";
-import { setToLocalDate } from "../../utils/date.utils";
+// Reducers
 import { setIsDeleteArticleForm, setIsNewArticleForm, setIsUpdateArticleForm } from "../../redux/reducers/dialog.reducer";
 import { setSelectedArticle } from "../../redux/reducers/article.reducer";
+// Utils
+import { setToLocalDate } from "../../utils/date.utils";
 
 const AdminArticles = () => {
   const dispatch = useDispatch();

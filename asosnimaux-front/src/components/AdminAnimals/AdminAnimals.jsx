@@ -1,11 +1,16 @@
+// Styles
 import "./adminAnimals.scss";
+// Components
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
 import { FaMars, FaPencil, FaTrashCan, FaVenus } from "react-icons/fa6";
+// React
 import { useDispatch, useSelector } from "react-redux";
-import { setToLocalDate, setToYYYYMMDD } from "../../utils/date.utils";
+// Reducers
 import { setIsDeleteAnimalForm, setIsNewAnimalForm, setIsUpdateAnimalForm, setIsUpdateExitAnimalForm } from "../../redux/reducers/dialog.reducer";
 import { setSelectedAnimal } from "../../redux/reducers/animal.reducer";
+// Utils
+import { setToLocalDate, setToYYYYMMDD } from "../../utils/date.utils";
 
 const AdminAnimals = () => {
   const dispatch = useDispatch();

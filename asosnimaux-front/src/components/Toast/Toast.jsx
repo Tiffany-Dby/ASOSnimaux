@@ -1,5 +1,8 @@
+// Styles
 import "./toast.scss";
+// Components
 import { FaCircleCheck } from "react-icons/fa6";
+// React
 import { useSelector } from "react-redux";
 
 const Toast = ({ message }) => {

@@ -1,4 +1,6 @@
+// Styles
 import "./socialMediaLinks.scss";
+// Components
 import { FaLinkedin, FaSquareFacebook, FaSquareInstagram, FaSquareXTwitter, FaSquareYoutube } from "react-icons/fa6";
 
 const SocialMediaLink = () => {

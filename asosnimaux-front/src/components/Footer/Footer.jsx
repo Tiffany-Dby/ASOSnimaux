@@ -1,7 +1,11 @@
+// Styles
 import "./footer.scss";
+// Components
 import SocialMediaLink from "../SocialMediaLinks/SocialMediaLinks";
+// React
 import { useRef } from "react";
 import { Link } from "react-router-dom";
+// Constants
 import { APP_ROUTES } from "../../constants/route.const";
 
 const Footer = () => {

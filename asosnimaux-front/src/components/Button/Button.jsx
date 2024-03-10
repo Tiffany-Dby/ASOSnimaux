@@ -1,3 +1,4 @@
+// Styles
 import "./button.scss";
 
 const Button = ({ type, disabled, btnStyle, btnClick, text }) => {

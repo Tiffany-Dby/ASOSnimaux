@@ -1,4 +1,6 @@
+// React
 import { Navigate, Outlet } from "react-router-dom"
+// Constants
 import { APP_ROUTES } from "../../constants/route.const"
 
 const PrivateRoute = ({ hasAccess, redirectPath, children }) => {

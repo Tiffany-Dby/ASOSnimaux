@@ -1,7 +1,10 @@
+// Styles
 import "./adminUsers.scss";
 import Loading from "../Loading/Loading";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
+// Components
 import { useDispatch, useSelector } from "react-redux";
+// Reducers
 import { setIsDeleteUserBySuperAdminForm, setIsUpdateUserRoleBySuperAdminForm } from "../../redux/reducers/dialog.reducer";
 import { setSelectedUser } from "../../redux/reducers/user.reducer";
 

@@ -1,3 +1,4 @@
+// Styles
 import "./loading.scss";
 
 const Loading = ({ text, loadingStyle }) => {

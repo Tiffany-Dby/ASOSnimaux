@@ -1,11 +1,17 @@
+// Styles
 import "./homeArticles.scss";
+// Components
 import Article from "../Article/Article";
+//React
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { APP_ROUTES } from "../../constants/route.const";
-import { setToLocalDateLong } from "../../utils/date.utils";
+// Thunks
 import { getOverviewThunk } from "../../api/article.api";
+// Constants
+import { APP_ROUTES } from "../../constants/route.const";
+// Utils
+import { setToLocalDateLong } from "../../utils/date.utils";
 
 const HomeArticles = () => {
   const dispatch = useDispatch();

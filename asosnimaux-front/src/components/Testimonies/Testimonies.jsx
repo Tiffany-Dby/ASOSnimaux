@@ -1,4 +1,6 @@
+// Styles
 import "./testimonies.scss";
+// Components
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import TestimonyCard from "../TestimonyCard/TestimonyCard";
 import Dialog from "../Dialog/Dialog";
@@ -6,14 +8,19 @@ import NotAuth from "../NotAuth/NotAuth";
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
 import { FaAngleRight } from "react-icons/fa6";
+// React
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { APP_ROUTES } from "../../constants/route.const";
+// Thunks
 import { getAllTestimoniesThunk, postTestimonyThunk } from "../../api/testimony.api";
-import { setToLocalDate } from "../../utils/date.utils";
+// Reducers
 import { resetFormNewTestimony, updateFormNewTestimony } from "../../redux/reducers/testimony.reducer";
 import { closeDialog, setIsNewTestimonyForm } from "../../redux/reducers/dialog.reducer";
+// Constants
+import { APP_ROUTES } from "../../constants/route.const";
+// Utils
+import { setToLocalDate } from "../../utils/date.utils";
 
 const Testimonies = () => {
   const dispatch = useDispatch();

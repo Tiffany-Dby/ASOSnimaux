@@ -1,8 +1,11 @@
+// Styles
 import "./filters.scss";
+// Components
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import InputCheckbox from "../InputCheckbox/InputCheckbox";
 import { FaXmark } from "react-icons/fa6";
+// React
 import { useState } from "react";
 
 const Filters = ({ onClick, searchValue, onSearchChange, onFiltersChange, resetClick, initialFilters, resetFilters }) => {

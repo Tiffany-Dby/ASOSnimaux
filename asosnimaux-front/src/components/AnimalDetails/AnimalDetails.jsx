@@ -1,16 +1,23 @@
+// Styles
 import "./animalDetails.scss";
+// Components
 import Button from "../Button/Button";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Loading from "../Loading/Loading";
 import { FaAngleRight, FaCakeCandles, FaHeart } from "react-icons/fa6";
+// React
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+// Thunks
 import { getOneAnimalThunk } from "../../api/animal.api";
-import { APP_ROUTES } from "../../constants/route.const";
-import { formatDescription } from "../../utils/description.utils";
 import { getUsersFollowIDsThunk, postUserFollowThunk, unfollowThunk } from "../../api/user.api";
+// Reducers
 import { setFollowIDsNotAuth, setFollowedAnimalsNotAuth, setSelectedAnimalFollow, setUnfollow } from "../../redux/reducers/user.reducer";
+// Constants
+import { APP_ROUTES } from "../../constants/route.const";
+// Utils
+import { formatDescription } from "../../utils/description.utils";
 import { setToStorage } from "../../utils/storage.utils";
 import { setToLocalDate } from "../../utils/date.utils";
 

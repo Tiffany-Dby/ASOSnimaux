@@ -1,5 +1,7 @@
-import { useSelector } from "react-redux";
+// Styles
 import "./inputSelect.scss";
+// React
+import { useSelector } from "react-redux";
 
 const InputSelect = ({ id, label, inputStyle, options, value, onChange }) => {
   // Dialog Reducer

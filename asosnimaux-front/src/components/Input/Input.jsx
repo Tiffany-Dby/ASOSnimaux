@@ -1,6 +1,9 @@
-import { useState } from "react";
-import InputHelp from "../InputHelp/InputHelp";
+// Styles
 import "./input.scss";
+// Components
+import InputHelp from "../InputHelp/InputHelp";
+// React
+import { useState } from "react";
 
 const Input = ({ id, label, helps, inputStyle, name, type, min, max, value, required, onChange }) => {
   const [isFocused, setIsFocused] = useState(false);

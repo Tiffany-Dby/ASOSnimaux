@@ -1,21 +1,28 @@
+// Styles
 import "./user.scss";
+// Components
 import Button from "../Button/Button";
 import Dialog from "../Dialog/Dialog";
 import Input from "../Input/Input";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Loading from "../Loading/Loading";
 import { FaAngleRight, FaPencil, FaTrashCan } from "react-icons/fa6";
+// React
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+// Thunks
+import { deleteUserThunk, updateAvatarThunk, updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
+import { deleteTestimonyThunk, getOneUserTestimoniesThunk, updateTestimonyThunk } from "../../api/testimony.api";
+// Reducers
 import { resetDialogForm, setSelectedUser, setUpdatedAvatar, updateDialogForm } from "../../redux/reducers/user.reducer";
 import { closeDialog, setInputFields, setIsDeleteAccountForm, setIsDeleteTestimony, setIsUpdateAccountAvatar, setIsUpdateAccountForm, setIsUpdateTestimony } from "../../redux/reducers/dialog.reducer";
-import { deleteUserThunk, updateAvatarThunk, updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
+import { setSelectedTestimony, updateFormSelectedTestimony } from "../../redux/reducers/testimony.reducer";
+// Constants
 import { AVATAR } from "../../constants/avatar.const";
 import { APP_ROUTES } from "../../constants/route.const";
-import { deleteTestimonyThunk, getOneUserTestimoniesThunk, updateTestimonyThunk } from "../../api/testimony.api";
+// Utils
 import { setToLocalDate } from "../../utils/date.utils";
-import { setSelectedTestimony, updateFormSelectedTestimony } from "../../redux/reducers/testimony.reducer";
 
 const User = () => {
   const dispatch = useDispatch();

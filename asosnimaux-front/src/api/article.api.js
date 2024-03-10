@@ -3,7 +3,6 @@ import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewErro
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 import { setFormData } from "../utils/formidable.utils.js"
 import { getFromStorage } from "../utils/storage.utils.js";
-import { triggerToast } from "../redux/reducers/toast.reducer.js";
 import { showToast } from "../utils/toast.utils.js";
 
 export const getAllArticlesThunk = () => async (dispatch, getState) => {

@@ -1,3 +1,4 @@
+// Styles
 import "./inputFile.scss";
 
 const InputFile = ({ id, label, inputStyle, required, onChange, inputFileRef }) => {

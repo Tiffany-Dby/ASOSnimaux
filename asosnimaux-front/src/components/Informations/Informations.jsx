@@ -1,11 +1,15 @@
+// Styles
 import "./informations.scss";
+// Components
 import Map from "../Map/Map";
 import Address from "../Address/Address";
 import Contact from "../Contact/Contact";
 import Schedules from "../Schedules/Schedules";
 import SocialMedia from "../SocialMedia/SocialMedia";
+// React
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+// Reducers
 import { updateWindowSize } from "../../redux/reducers/window.reducer";
 
 const Informations = () => {

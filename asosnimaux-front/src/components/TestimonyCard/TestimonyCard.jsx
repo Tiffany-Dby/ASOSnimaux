@@ -1,5 +1,8 @@
+// Styles
 import "./testimonyCard.scss";
+// Components
 import Button from "../Button/Button";
+// Utils
 import { formatDescription } from "../../utils/description.utils";
 
 const TestimonyCard = ({ imgUrl, date, content, author, btnText, btnClick, display = true }) => {

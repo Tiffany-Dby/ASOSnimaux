@@ -1,4 +1,6 @@
+// Styles
 import "./youtubeVideo.scss";
+// React
 import { useEffect, useRef } from "react";
 
 const YoutubeVideo = ({ YTVideoID }) => {

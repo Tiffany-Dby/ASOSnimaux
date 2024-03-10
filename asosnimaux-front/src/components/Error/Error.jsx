@@ -1,5 +1,8 @@
+// Styles
 import "./error.scss";
+// React
 import { Link } from "react-router-dom";
+// Constants
 import { APP_ROUTES } from "../../constants/route.const";
 
 const Error = () => {

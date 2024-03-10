@@ -1,5 +1,8 @@
+// Styles
 import "./animalCard.scss";
+// Components
 import { FaHeart, FaMars, FaVenus } from "react-icons/fa6";
+// React
 import { Link } from "react-router-dom";
 
 const AnimalCard = ({ imgUrl, imgAlt, animalName, status, animalSex, color, followClick, linkRedirect, linkClick }) => {

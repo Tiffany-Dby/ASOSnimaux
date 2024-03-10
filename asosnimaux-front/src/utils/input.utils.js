@@ -1,4 +1,4 @@
-export const isAlphanumeric = str => /^[a-zA-Z0-9À-ÿ-]+$/.test(str);
+export const isAlphanumeric = str => /^[a-zA-Z0-9À-ÿ-]+$/.test(str); // Allows accents
 
 export const isEmailValid = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 

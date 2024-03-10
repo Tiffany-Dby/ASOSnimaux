@@ -5,8 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 // ******************** POST ********************
 const create = async (username, email, password, avatarUrl) => {
   const sql = `
-  INSERT INTO users (id, username, email, password, avatar_url)
-  VALUES (?, ?, ?, ?, ?)
+    INSERT INTO users (id, username, email, password, avatar_url)
+    VALUES (?, ?, ?, ?, ?)
   `;
 
   let result = [];
@@ -28,8 +28,9 @@ const create = async (username, email, password, avatarUrl) => {
 // ******************** GET ********************
 const readAll = async () => {
   const sql = `
-  SELECT id, username, email, user_role
-  FROM users
+    SELECT id, username, email, user_role
+    FROM users
+    ORDER BY user_role ASC
   `;
 
   let result = [];
@@ -47,8 +48,8 @@ const readAll = async () => {
 
 const followAnimal = async (userID, animalID) => {
   const sql = `
-  INSERT INTO users_animals (user_id, animal_id)
-  VALUES (?, ?)
+    INSERT INTO users_animals (user_id, animal_id)
+    VALUES (?, ?)
   `;
 
   let result = [];
@@ -66,9 +67,9 @@ const followAnimal = async (userID, animalID) => {
 
 const readOne = async (id) => {
   const sql = `
-  SELECT id, username, email, password, avatar_url, user_role
-  FROM users
-  WHERE id = ?
+    SELECT id, username, email, password, avatar_url, user_role
+    FROM users
+    WHERE id = ?
   `;
 
   let result = [];
@@ -86,38 +87,17 @@ const readOne = async (id) => {
 
 const readByEmailOrUsername = async (emailOrUsername) => {
   const sql = `
-  SELECT id, username, email, password, avatar_url, user_role
-  FROM users
-  WHERE (
-    email = ? OR username = ?
+    SELECT id, username, email, password, avatar_url, user_role
+    FROM users
+    WHERE (
+      email = ? OR username = ?
     )
-    `;
+  `;
 
   let result = [];
   let error = null;
   try {
     result = await query(sql, [emailOrUsername, emailOrUsername]);
-  }
-  catch (err) {
-    error = err.message;
-  }
-  finally {
-    return { result, error };
-  }
-}
-
-const readUsersTestimonies = async (userID) => {
-  const sql = `
-    SELECT users.id, username, testimonies.id, content, date
-    FROM users
-    LEFT JOIN testimonies ON testimonies.user_id = users.id
-    WHERE users.id = ?
-    `;
-
-  let result = [];
-  let error = null;
-  try {
-    result = await query(sql, [userID]);
   }
   catch (err) {
     error = err.message;
@@ -139,7 +119,7 @@ const readUsersFollow = async (userID) => {
     JOIN users_animals ON users.id = users_animals.user_id
     JOIN animals ON animals.id = users_animals.animal_id
     WHERE users.id = ?
-    `;
+  `;
 
   let result = [];
   let error = null;
@@ -160,7 +140,7 @@ const readUsersFollowIDs = async (userID) => {
     FROM users_animals
     JOIN animals ON animals.id = users_animals.animal_id
     WHERE users_animals.user_id = ?
-    `;
+  `;
 
   let result = [];
   let error = null;
@@ -182,7 +162,7 @@ const updateUsername = async (username, id) => {
     UPDATE users
     SET username = ?
     WHERE id = ?
-    `;
+  `;
 
   let result = [];
   let error = null;
@@ -203,7 +183,7 @@ const updatePassword = async (newPassword, id) => {
     UPDATE users
     SET password = ?
     WHERE id = ?
-    `;
+  `;
 
   let result = [];
   let error = null;
@@ -221,7 +201,7 @@ const updateAvatar = async (avatarUrl, id) => {
     UPDATE users
     SET avatar_url = ?
     WHERE id = ?
-    `;
+  `;
 
   let result = [];
   let error = null;
@@ -239,7 +219,7 @@ const updateRole = async (newRole, id) => {
     UPDATE users
     SET user_role = ?
     WHERE id = ?
-    `;
+  `;
 
   let result = [];
   let error = null;
@@ -262,7 +242,7 @@ const unfollow = async (userID, animalID) => {
   const sql = `
     DELETE from users_animals
     WHERE user_id = ? AND animal_id = ?
-    `;
+  `;
 
   let result = [];
   let error = null;
@@ -282,17 +262,17 @@ const deleteOne = async (id) => {
   const testimoniesSql = `
     DELETE FROM testimonies
     WHERE user_id = ?
-    `;
+  `;
 
   const usersAnimalsSql = `
     DELETE FROM users_animals
     WHERE user_id = ?
-    `;
+  `;
 
   const sql = `
     DELETE FROM users
     WHERE id = ?
-    `;
+  `;
 
   let result = [];
   let error = null;
@@ -318,7 +298,6 @@ export const UserDB = {
   followAnimal,
   readOne,
   readByEmailOrUsername,
-  readUsersTestimonies,
   readUsersFollow,
   readUsersFollowIDs,
   updateUsername,

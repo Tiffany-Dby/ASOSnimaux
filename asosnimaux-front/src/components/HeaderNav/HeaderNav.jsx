@@ -1,8 +1,12 @@
+// Styles
 import "./headerNav.scss";
+// React
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from 'react-router-dom';
-import { APP_ROUTES } from "../../constants/route.const";
+// Reducers
 import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
+// Constants
+import { APP_ROUTES } from "../../constants/route.const";
 
 const HeaderNav = ({ toggleClass }) => {
   const dispatch = useDispatch();

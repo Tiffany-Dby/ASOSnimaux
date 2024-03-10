@@ -1,4 +1,6 @@
+// Styles
 import "./inputHelp.scss";
+// Components
 import { FaCircleCheck, FaCircleXmark } from "react-icons/fa6";
 
 const InputHelp = ({ success, fail, text }) => {

@@ -1,13 +1,19 @@
+// Styles
 import "./header.scss";
+// Components
 import Burger from "../Burger/Burger";
 import HeaderNav from "../HeaderNav/HeaderNav";
 import { FaCircleUser, FaHeart, FaPowerOff } from "react-icons/fa6";
+// React
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+// Reducers
 import { toggleMobileMenu } from "../../redux/reducers/header.reducer";
 import { updateScroll, updateWindowSize } from "../../redux/reducers/window.reducer";
+// Constants
 import { APP_ROUTES } from "../../constants/route.const";
+// Utils
 import { signOut } from "../../utils/user.utils";
 
 const Header = () => {

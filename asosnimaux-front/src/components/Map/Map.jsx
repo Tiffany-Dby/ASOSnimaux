@@ -1,3 +1,4 @@
+// Styles
 import "./map.scss";
 
 const Map = () => {

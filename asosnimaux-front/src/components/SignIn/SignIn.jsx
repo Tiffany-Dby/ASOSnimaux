@@ -1,12 +1,18 @@
+// Styles
 import "./signIn.scss";
+// Components
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import Loading from "../Loading/Loading.jsx";
+// React
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+// Thunks
 import { signInThunk } from "../../api/user.api";
+// Reducers
 import { updateSignInForm } from "../../redux/reducers/user.reducer";
+// Constants
 import { APP_ROUTES } from "../../constants/route.const.js"
 
 const SignIn = () => {

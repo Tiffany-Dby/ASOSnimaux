@@ -1,6 +1,9 @@
+// Styles
 import "./favoriteCard.scss";
+// Components
 import Button from "../Button/Button";
 import { FaHeartCircleXmark, FaMars, FaVenus } from "react-icons/fa6";
+// React
 import { Link } from "react-router-dom";
 
 const FavoriteCard = ({ status, imgUrl, imgAlt, animalName, animalSex, description, btnClick, linkRedirect, linkClick }) => {

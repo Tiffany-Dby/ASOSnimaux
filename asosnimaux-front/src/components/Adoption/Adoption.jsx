@@ -1,4 +1,6 @@
+// Styles
 import "./adoption.scss";
+// Components
 import AnimalCard from "../AnimalCard/AnimalCard";
 import Dialog from "../Dialog/Dialog";
 import Button from "../Button/Button";
@@ -6,16 +8,21 @@ import Filters from "../Filters/Filters";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Loading from "../Loading/Loading";
 import { FaAngleRight, FaSliders } from "react-icons/fa6";
+// React
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+// Thunks
 import { getAllAnimalsThunk, getOneAnimalThunk } from "../../api/animal.api";
-import { APP_ROUTES } from "../../constants/route.const";
-import { getAge } from "../../utils/animals.utils";
 import { getUsersFollowIDsThunk, postUserFollowThunk, unfollowThunk } from "../../api/user.api";
+// Reducers
 import { setFollowIDsNotAuth, setFollowedAnimalsNotAuth, setSelectedAnimalFollow, setUnfollow } from "../../redux/reducers/user.reducer";
-import { closeDialog, setIsFilters } from "../../redux/reducers/dialog.reducer";
 import { updateScroll } from "../../redux/reducers/window.reducer";
+import { closeDialog, setIsFilters } from "../../redux/reducers/dialog.reducer";
+// Constants
+import { APP_ROUTES } from "../../constants/route.const";
+// Utils
+import { getAge } from "../../utils/animals.utils";
 import { setToStorage } from "../../utils/storage.utils";
 
 const Adoption = () => {

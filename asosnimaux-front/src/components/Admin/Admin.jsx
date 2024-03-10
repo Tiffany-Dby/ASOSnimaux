@@ -1,4 +1,6 @@
+// Styles
 import "./admin.scss";
+// Components
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import InputFile from "../InputFile/InputFile";
@@ -6,19 +8,24 @@ import Dialog from "../Dialog/Dialog";
 import InputSelect from "../InputSelect/InputSelect.jsx";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs.jsx";
 import { FaAngleRight } from "react-icons/fa6";
+// React
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router-dom";
+// Thunks
 import { deleteArticleThunk, getAllArticlesThunk, postArticleThunk, updateArticleThunk } from "../../api/article.api";
+import { deleteAnimalThunk, getAllAnimalsThunk, postNewAnimalThunk, updateAnimalExitDateThunk, updateAnimalThunk } from "../../api/animal.api.js";
+import { deleteUserThunk, getAllUsersThunk, updateUserRoleThunk } from "../../api/user.api.js";
+import { deleteTestimonyThunk, getAllTestimoniesThunk } from "../../api/testimony.api.js";
+// Reducers
 import { setNewArticleError, setSelectedArticle, updateFormNewArticle, updateFormSelectedArticle } from "../../redux/reducers/article.reducer";
 import { closeDialog } from "../../redux/reducers/dialog.reducer";
-import { APP_ROUTES } from "../../constants/route.const";
-import { deleteAnimalThunk, getAllAnimalsThunk, postNewAnimalThunk, updateAnimalExitDateThunk, updateAnimalThunk } from "../../api/animal.api.js";
 import { setNewAnimalError, setSelectedAnimal, updateFormNewAnimal, updateFormSelectedAnimal } from "../../redux/reducers/animal.reducer.js";
-import { deleteUserThunk, getAllUsersThunk, updateUserRoleThunk } from "../../api/user.api.js";
 import { setSelectedUser, updateFormSelectedUser } from "../../redux/reducers/user.reducer.js";
-import { deleteTestimonyThunk, getAllTestimoniesThunk } from "../../api/testimony.api.js";
 import { setSelectedTestimony } from "../../redux/reducers/testimony.reducer.js";
+// Constants
+import { APP_ROUTES } from "../../constants/route.const";
+// Utils
 import { resetAdminForms, resetAdminSelects } from "../../utils/reset.utils.js";
 import { setMinMaxDate } from "../../utils/date.utils.js";
 import { getSizeInMb } from "../../utils/formidable.utils.js";

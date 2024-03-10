@@ -1,14 +1,20 @@
+// Styles
 import "./articleDetails.scss";
+// Components
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Loading from "../Loading/Loading";
 import { FaAngleRight } from "react-icons/fa6";
+//React
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from 'react-router-dom';
+// Thunks
+import { getOneArticleThunk } from "../../api/article.api";
+//  Constants
+import { APP_ROUTES } from "../../constants/route.const";
+// Utils
 import { setToLocalDateLong } from "../../utils/date.utils";
 import { formatDescription } from "../../utils/description.utils";
-import { getOneArticleThunk } from "../../api/article.api";
-import { APP_ROUTES } from "../../constants/route.const";
 
 const ArticleDetails = () => {
   const dispatch = useDispatch();

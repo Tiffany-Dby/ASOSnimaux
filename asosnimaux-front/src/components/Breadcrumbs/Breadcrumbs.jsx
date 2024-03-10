@@ -1,3 +1,4 @@
+// Styles
 import "./breadcrumbs.scss";
 
 const Breadcrumbs = ({ children }) => {
