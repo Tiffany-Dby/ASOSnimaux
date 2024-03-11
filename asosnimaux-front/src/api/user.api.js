@@ -1,10 +1,15 @@
-import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading, setUpdatePasswordSuccess, startSelectedUserLoading, setSelectedUserError, setUpdateSelectedUser, startGetFollowLoading, setGetFollowError, setFollowIDs, startPostFollowLoading, setPostFollowError, setPostFollow, startUnfollowLoading, setUnfollowError, setUnfollow, setSignInSuccess, startFollowedAnimalsLoading, setFollowedAnimals, setDeleteUser, setSignUpSuccess, resetFollowIDs } from "../redux/reducers/user.reducer";
+// Api
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
+// Reducers
+import { setUser, startSignInLoading, setSignInError, startSignUpLoading, setSignUpError, startDialogLoading, setDialogError, startGetUserLoading, setGetUserError, resetSignInForm, resetDialogForm, stopSignUpLoading, resetSignUpForm, setDeleteUserError, startDeleteUserLoading, stopDeleteUserLoading, startAllUsersLoading, setAllUsersError, setAllUsers, setDeleteBySuperAdmin, setUpdatedAvatarError, startUpdatedAvatarLoading, setUpdatePasswordSuccess, startSelectedUserLoading, setSelectedUserError, setUpdateSelectedUser, startGetFollowLoading, setGetFollowError, setFollowIDs, startPostFollowLoading, setPostFollowError, setPostFollow, startUnfollowLoading, setUnfollowError, setUnfollow, setSignInSuccess, startFollowedAnimalsLoading, setFollowedAnimals, setDeleteUser, setSignUpSuccess, resetFollowIDs } from "../redux/reducers/user.reducer";
+// Constants
+import { APP_ROUTES } from "../constants/route.const.js";
+// Utils
 import { getFromStorage, setToStorage } from "../utils/storage.utils.js";
 import { signOut } from "../utils/user.utils.js";
-import { APP_ROUTES } from "../constants/route.const.js";
 import { showToast } from "../utils/toast.utils.js";
 
+// ******************** POST ********************
 export const signInThunk = () => async (dispatch, getState) => {
   const { signInForm, signInLoading } = getState().userReducer;
   if (signInLoading) return;
@@ -15,9 +20,16 @@ export const signInThunk = () => async (dispatch, getState) => {
   if (!result?.message || status >= 400 || !!error) return dispatch(setSignInError({ error: `Something went wrong : ${error}` }));
 
   const { token } = result.user;
+  // Utils -> storage.utils.js
   setToStorage("token", token);
 
-  dispatch(setUser({ id: result.user.userID, username: result.user.username, email: result.user.email, avatar: `${APP_ROUTES.API_URL}${result.user.avatar}`, role: result.user.userRole }));
+  dispatch(setUser({
+    id: result.user.userID,
+    username: result.user.username,
+    email: result.user.email,
+    avatar: `${APP_ROUTES.API_URL}${result.user.avatar}`,
+    role: result.user.userRole
+  }));
   dispatch(setSignInSuccess({ username: result.user.username }));
   showToast(dispatch);
   dispatch(resetSignInForm());
@@ -40,8 +52,102 @@ export const signUpThunk = () => async (dispatch, getState) => {
   showToast(dispatch);
 }
 
+export const postUserFollowThunk = () => async (dispatch, getState) => {
+  const { postFollowLoading, selectedAnimalFollow } = getState().userReducer;
+  // Utils -> storage.utils.js
+  const token = getFromStorage("token");
+  if (postFollowLoading) return;
+
+  dispatch(startPostFollowLoading());
+
+  const formatExpectedOnRequest = {
+    animalID: selectedAnimalFollow
+  }
+
+  const { result, error, status } = await postRequest('users/follow', formatExpectedOnRequest, token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setPostFollowError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setPostFollow({ animalID: selectedAnimalFollow }));
+}
+// ******************** END POST ********************
+
+// ******************** GET ********************
+export const getOneUserThunk = () => async (dispatch, getState) => {
+  const { getUserLoading } = getState().userReducer;
+  // Utils -> storage.utils.js
+  const token = getFromStorage("token");
+  if (getUserLoading) return;
+
+  dispatch(startGetUserLoading());
+
+  const { result, error, status } = await getRequest("users/user", token);
+  if (!result?.message || status >= 400 || !!error) {
+    signOut(dispatch);
+    return dispatch(setGetUserError({ error: `Something went wrong: ${error}` }));
+  }
+
+  dispatch(setUser({
+    id: result.user.userID,
+    username: result.user.username,
+    email: result.user.email,
+    avatar: `${APP_ROUTES.API_URL}${result.user.avatar}`,
+    role: result.user.userRole
+  }));
+}
+
+export const getAllUsersThunk = () => async (dispatch, getState) => {
+  const { allUsersLoading } = getState().userReducer;
+  // Utils -> storage.utils.js
+  const token = getFromStorage("token");
+  if (allUsersLoading) return;
+
+  dispatch(startAllUsersLoading());
+
+  const { result, error, status } = await getRequest("users/all", token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setAllUsersError({ error: `Something went wrong : ${error}` }));
+
+  const users = result.result;
+
+  dispatch(setAllUsers({
+    allUsers: users.map(user => {
+      return { id: user.id, username: user.username, role: user.user_role }
+    })
+  }));
+}
+
+export const getUsersFollowIDsThunk = () => async (dispatch, getState) => {
+  const { getfollowLoading } = getState().userReducer;
+  // Utils -> storage.utils.js
+  const token = getFromStorage("token");
+  if (getfollowLoading) return;
+
+  dispatch(startGetFollowLoading());
+
+  const { result, error, status } = await getRequest("users/followIDs", token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setGetFollowError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setFollowIDs({ animals: result.result }));
+}
+
+export const getUsersFollowThunk = () => async (dispatch, getState) => {
+  const { followedAnimalsLoading } = getState().userReducer;
+  // Utils -> storage.utils.js
+  const token = getFromStorage("token");
+  if (followedAnimalsLoading) return;
+
+  dispatch(startFollowedAnimalsLoading());
+
+  const { result, error, status } = await getRequest("users/follow", token);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setGetFollowError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setFollowedAnimals({ animals: result.result }));
+}
+// ******************** END GET ********************
+
+// ******************** PUT ********************
 export const updateUsernameThunk = () => async (dispatch, getState) => {
   const { dialogForms, dialogLoading, user } = getState().userReducer;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (dialogLoading) return;
 
@@ -61,6 +167,7 @@ export const updateUsernameThunk = () => async (dispatch, getState) => {
 
 export const updatePasswordThunk = () => async (dispatch, getState) => {
   const { dialogForms, dialogLoading } = getState().userReducer;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (dialogLoading) return;
 
@@ -82,6 +189,7 @@ export const updatePasswordThunk = () => async (dispatch, getState) => {
 
 export const updateAvatarThunk = () => async (dispatch, getState) => {
   const { user, updatedAvatar, updatedAvatarLoading } = getState().userReducer;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (updatedAvatarLoading) return;
 
@@ -98,41 +206,9 @@ export const updateAvatarThunk = () => async (dispatch, getState) => {
   showToast(dispatch);
 }
 
-export const getOneUserThunk = () => async (dispatch, getState) => {
-  const token = getFromStorage("token");
-
-  dispatch(startGetUserLoading());
-
-  const { result, error, status } = await getRequest("users/user", token);
-  if (!result?.message || status >= 400 || !!error) {
-    signOut(dispatch);
-    return dispatch(setGetUserError({ error: `Something went wrong: ${error}` }));
-  }
-
-  dispatch(setUser({ id: result.user.userID, username: result.user.username, email: result.user.email, avatar: `${APP_ROUTES.API_URL}${result.user.avatar}`, role: result.user.userRole }))
-}
-
-export const getAllUsersThunk = () => async (dispatch, getState) => {
-  const { allUsersLoading } = getState().userReducer;
-  const token = getFromStorage("token");
-  if (allUsersLoading) return;
-
-  dispatch(startAllUsersLoading());
-
-  const { result, error, status } = await getRequest("users/all", token);
-  if (!result?.message || status >= 400 || !!error) return dispatch(setAllUsersError({ error: `Something went wrong : ${error}` }));
-
-  const users = result.result;
-
-  dispatch(setAllUsers({
-    allUsers: users.map(user => {
-      return { id: user.id, username: user.username, role: user.user_role }
-    })
-  }));
-}
-
 export const updateUserRoleThunk = () => async (dispatch, getState) => {
-  const { allUsers, selectedUser, selectedUserLoading } = getState().userReducer;
+  const { selectedUser, selectedUserLoading } = getState().userReducer;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (selectedUserLoading) return;
 
@@ -148,53 +224,12 @@ export const updateUserRoleThunk = () => async (dispatch, getState) => {
   dispatch(setUpdateSelectedUser({ user: { id: selectedUser.id, username: selectedUser.username, role: selectedUser.role } }));
   showToast(dispatch);
 }
+// ******************** END PUT ********************
 
-export const getUsersFollowIDsThunk = () => async (dispatch, getState) => {
-  const { getfollowLoading, follow } = getState().userReducer;
-  const token = getFromStorage("token");
-  if (getfollowLoading) return;
-
-  dispatch(startGetFollowLoading());
-
-  const { result, error, status } = await getRequest("users/followIDs", token);
-  if (!result?.message || status >= 400 || !!error) return dispatch(setGetFollowError({ error: `Something went wrong : ${error}` }));
-
-  dispatch(setFollowIDs({ animals: result.result }));
-}
-
-export const getUsersFollowThunk = () => async (dispatch, getState) => {
-  const { followedAnimalsLoading, follow } = getState().userReducer;
-  const token = getFromStorage("token");
-  if (followedAnimalsLoading) return;
-
-  dispatch(startFollowedAnimalsLoading());
-
-  const { result, error, status } = await getRequest("users/follow", token);
-  if (!result?.message || status >= 400 || !!error) return dispatch(setGetFollowError({ error: `Something went wrong : ${error}` }));
-
-  dispatch(setFollowedAnimals({ animals: result.result }));
-}
-
-export const postUserFollowThunk = () => async (dispatch, getState) => {
-  const { postFollowLoading, selectedAnimalFollow, follow } = getState().userReducer;
-  const token = getFromStorage("token");
-  if (postFollowLoading) return;
-
-  dispatch(startPostFollowLoading());
-
-  const formatExpectedOnRequest = {
-    animalID: selectedAnimalFollow
-  }
-
-  const { result, error, status } = await postRequest('users/follow', formatExpectedOnRequest, token);
-  if (!result?.message || status >= 400 || !!error) return dispatch(setPostFollowError({ error: `Something went wrong : ${error}` }));
-
-  dispatch(setPostFollow({ animalID: selectedAnimalFollow }));
-}
-
-
+// ******************** DELETE ********************
 export const unfollowThunk = () => async (dispatch, getState) => {
-  const { unfollowLoading, selectedAnimalFollow, follow } = getState().userReducer;
+  const { unfollowLoading, selectedAnimalFollow } = getState().userReducer;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (unfollowLoading) return;
 
@@ -207,8 +242,10 @@ export const unfollowThunk = () => async (dispatch, getState) => {
 }
 
 export const deleteUserThunk = () => async (dispatch, getState) => {
-  const { user, selectedUser } = getState().userReducer;
+  const { user, selectedUser, deleteUserLoading } = getState().userReducer;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
+  if (deleteUserLoading) return;
 
   dispatch(startDeleteUserLoading());
 
@@ -226,3 +263,4 @@ export const deleteUserThunk = () => async (dispatch, getState) => {
   dispatch(stopDeleteUserLoading());
   showToast(dispatch);
 }
+// ******************** END DELETE ********************

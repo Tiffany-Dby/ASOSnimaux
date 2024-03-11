@@ -1,5 +1,21 @@
+// Constants
 import { APP_ROUTES } from "../constants/route.const.js"
 
+// ******************** POST ********************
+const postRequest = async (url, body = {}, token) => {
+  const config = {
+    method: "POST",
+    body: body instanceof FormData ? body : JSON.stringify(body),
+    headers: body instanceof FormData ? {} : { "Content-type": "application/json; charset=UTF-8" }
+  }
+
+  if (token) config.headers.Authorization = token;
+
+  return await request(url, config);
+}
+// ******************** END POST ********************
+
+// ******************** GET ********************
 const getRequest = async (url, token) => {
   const config = {
     method: "GET",
@@ -12,19 +28,9 @@ const getRequest = async (url, token) => {
 
   return response;
 }
+// ******************** END GET ********************
 
-const postRequest = async (url, body = {}, token) => {
-  const config = {
-    method: "POST",
-    body: body instanceof FormData ? body : JSON.stringify(body),
-    headers: body instanceof FormData ? {} : { "Content-type": "application/json; charset=UTF-8" }
-  }
-
-  if (token) config.headers.Authorization = token;
-
-  return await request(url, config);
-}
-
+// ******************** PUT ********************
 const putRequest = async (url, body = {}, token) => {
   const config = {
     method: "PUT",
@@ -36,7 +42,9 @@ const putRequest = async (url, body = {}, token) => {
 
   return await request(url, config)
 }
+// ******************** END PUT ********************
 
+// ******************** DELETE ********************
 const deleteRequest = async (url, token) => {
   const config = {
     method: "DELETE",
@@ -47,7 +55,9 @@ const deleteRequest = async (url, token) => {
 
   return await request(url, config);
 }
+// ******************** END DELETE ********************
 
+// Base request
 const request = async (url, config) => {
   let result = [];
   let error = null;

@@ -1,61 +1,30 @@
-import { APP_ROUTES } from "../constants/route.const.js";
-import { setOverview, startOverviewLoading, stopOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, stopNewArticleLoading, setNewArticleError, startAllLoading, setAll, setAllError, setStartDeleteLoading, setDeleteError, setDelete, resetFormNewArticle, startSelectedLoading, setSelectedError, setSelectedArticle, setUpdateSelected, startOneLoading, setOneError, setOne } from "../redux/reducers/article.reducer"
+// Api
 import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
+// Reducers
+import { setOverview, startOverviewLoading, setOverviewError, setNewArticle, startNewArticleLoading, setNewArticleError, startAllLoading, setAll, setAllError, setStartDeleteLoading, setDeleteError, setDelete, resetFormNewArticle, startSelectedLoading, setSelectedError, setUpdateSelected, startOneLoading, setOneError, setOne } from "../redux/reducers/article.reducer"
+// Constants
+import { APP_ROUTES } from "../constants/route.const.js";
+// Utils
 import { setFormData } from "../utils/formidable.utils.js"
 import { getFromStorage } from "../utils/storage.utils.js";
 import { showToast } from "../utils/toast.utils.js";
 
-export const getAllArticlesThunk = () => async (dispatch, getState) => {
-  const { allLoading } = getState().articleReducer;
-  if (allLoading) return;
-
-  dispatch(startAllLoading());
-  const { result, error, status } = await getRequest("articles/all");
-  if (!result?.message || status >= 400 || !!error) return dispatch(setAllError({ error: `Something went wrong : ${error}` }));
-
-  dispatch(setAll({ all: result.result }));
-}
-
-export const getOneArticleThunk = (id) => async (dispatch, getState) => {
-  const { articles, oneLoading } = getState().articleReducer;
-  const { one } = articles;
-  if (oneLoading) return;
-
-  dispatch(startOneLoading());
-
-  const { result, error, status } = await getRequest(`articles/${id}`);
-  if (!result?.message || status >= 400 || !!error) return dispatch(setOneError({ error: `Something went wrong : ${error}` }));
-
-  dispatch(setOne({ id: result.article.articleID, date: result.article.date, name: result.article.name, location: result.article.location, description: result.article.description, picture_url: `${APP_ROUTES.API_URL}${result.article.pictureURL}`, picture_caption: result.article.pictureCaption }));
-}
-
-export const getOverviewThunk = () => async (dispatch, getState) => {
-  const { overviewLoading } = getState().articleReducer;
-  if (overviewLoading) return;
-
-  dispatch(startOverviewLoading());
-  const { result, error, status } = await getRequest("articles/overview");
-  if (!result?.message || status >= 400 || !!error) return dispatch(setOverviewError({ error: `Something went wrong : ${error}` }));
-
-  dispatch(setOverview({
-    overview: result.result.map(article => {
-      return { ...article, picture_url: `${APP_ROUTES.API_URL}${article.picture_url}` }
-    })
-  }));
-}
-
+// ******************** POST ********************
 export const postArticleThunk = (file) => async (dispatch, getState) => {
   const { articles, newArticleLoading } = getState().articleReducer;
   const { newArticle } = articles;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (newArticleLoading) return;
 
+  // Utils -> formidable.utils.js
   const fd = setFormData({
     ...newArticle,
     newArticleImg: file
   });
 
   dispatch(startNewArticleLoading());
+
   const { result, error, status } = await postRequest("articles/", fd, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setNewArticleError({ error: `Something went wrong : ${error}` }));
 
@@ -72,10 +41,63 @@ export const postArticleThunk = (file) => async (dispatch, getState) => {
   showToast(dispatch);
   dispatch(resetFormNewArticle());
 }
+// ******************** END POST ********************
 
+// ******************** GET ********************
+export const getAllArticlesThunk = () => async (dispatch, getState) => {
+  const { allLoading } = getState().articleReducer;
+  if (allLoading) return;
+
+  dispatch(startAllLoading());
+
+  const { result, error, status } = await getRequest("articles/all");
+  if (!result?.message || status >= 400 || !!error) return dispatch(setAllError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setAll({ all: result.result }));
+}
+
+export const getOneArticleThunk = (id) => async (dispatch, getState) => {
+  const { oneLoading } = getState().articleReducer;
+  if (oneLoading) return;
+
+  dispatch(startOneLoading());
+
+  const { result, error, status } = await getRequest(`articles/${id}`);
+  if (!result?.message || status >= 400 || !!error) return dispatch(setOneError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setOne({
+    id: result.article.articleID,
+    date: result.article.date,
+    name: result.article.name,
+    location: result.article.location,
+    description: result.article.description,
+    picture_url: `${APP_ROUTES.API_URL}${result.article.pictureURL}`,
+    picture_caption: result.article.pictureCaption
+  }));
+}
+
+export const getOverviewThunk = () => async (dispatch, getState) => {
+  const { overviewLoading } = getState().articleReducer;
+  if (overviewLoading) return;
+
+  dispatch(startOverviewLoading());
+
+  const { result, error, status } = await getRequest("articles/overview");
+  if (!result?.message || status >= 400 || !!error) return dispatch(setOverviewError({ error: `Something went wrong : ${error}` }));
+
+  dispatch(setOverview({
+    overview: result.result.map(article => {
+      return { ...article, picture_url: `${APP_ROUTES.API_URL}${article.picture_url}` }
+    })
+  }));
+}
+// ******************** END GET ********************
+
+// ******************** PUT ********************
 export const updateArticleThunk = () => async (dispatch, getState) => {
   const { articles, selectedLoading } = getState().articleReducer;
   const { selectedArticle } = articles;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (selectedLoading) return;
 
@@ -87,8 +109,8 @@ export const updateArticleThunk = () => async (dispatch, getState) => {
   }
 
   dispatch(startSelectedLoading());
-  const { result, error, status } = await putRequest("articles/", formatExpectedOnRequest, token);
 
+  const { result, error, status } = await putRequest("articles/", formatExpectedOnRequest, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setSelectedError({ error: `Something went wrong ${error}` }));
 
   dispatch(setUpdateSelected({
@@ -102,10 +124,13 @@ export const updateArticleThunk = () => async (dispatch, getState) => {
   }));
   showToast(dispatch);
 }
+// ******************** END PUT ********************
 
+// ******************** DELETE ********************
 export const deleteArticleThunk = () => async (dispatch, getState) => {
   const { articles, deleteLoading } = getState().articleReducer;
   const { selectedArticle } = articles;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (deleteLoading) return;
 
@@ -117,3 +142,4 @@ export const deleteArticleThunk = () => async (dispatch, getState) => {
   dispatch(setDelete({ id: selectedArticle.id }));
   showToast(dispatch);
 }
+// ******************** END DELETE ********************

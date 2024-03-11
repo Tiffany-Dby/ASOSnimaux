@@ -1,9 +1,12 @@
+// Api
+import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
+// Reducers
 import { resetFormNewTestimony, setAllByOneUser, setAllByOneUserError, setAllTestimonies, setAllTestimoniesError, setDeleteTestimony, setDeleteTestimonyByAdmin, setDeleteTestimonyError, setNewTestimony, setNewTestimonyError, setOverviewTestimonyError, setSelectedTestimonyError, setTestimonyOverview, setUpdateSelectedTestimony, startAllByOneUserLoading, startAllTestimoniesLoading, startDeleteTestimonyLoading, startNewTestimonyLoading, startOverviewTestimonyLoading, startSelectedTestimonyLoading } from "../redux/reducers/testimony.reducer";
+// Utils
 import { getFromStorage } from "../utils/storage.utils";
 import { showToast } from "../utils/toast.utils";
-import { deleteRequest, getRequest, postRequest, putRequest } from "./api";
 
-
+// ******************** GET ********************
 export const getTestimoniesOverviewThunk = () => async (dispatch, getState) => {
   const { overviewTestimonyLoading } = getState().testimonyReducer;
   if (overviewTestimonyLoading) return;
@@ -30,6 +33,7 @@ export const getAllTestimoniesThunk = () => async (dispatch, getState) => {
 
 export const getOneUserTestimoniesThunk = () => async (dispatch, getState) => {
   const { allByOneUserLoading } = getState().testimonyReducer;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (allByOneUserLoading) return;
 
@@ -40,10 +44,13 @@ export const getOneUserTestimoniesThunk = () => async (dispatch, getState) => {
 
   dispatch(setAllByOneUser({ testimonies: result.result }));
 }
+// ******************** END GET ********************
 
+// ******************** POST ********************
 export const postTestimonyThunk = () => async (dispatch, getState) => {
   const { newTestimonyLoading, testimonies } = getState().testimonyReducer;
   const { newTestimony } = testimonies;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (newTestimonyLoading) return;
 
@@ -57,10 +64,13 @@ export const postTestimonyThunk = () => async (dispatch, getState) => {
   showToast(dispatch);
   dispatch(resetFormNewTestimony());
 }
+// ******************** END POST ********************
 
+// ******************** PUT ********************
 export const updateTestimonyThunk = () => async (dispatch, getState) => {
   const { selectedTestimonyLoading, testimonies } = getState().testimonyReducer;
   const { selectedTestimony } = testimonies;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (selectedTestimonyLoading) return;
 
@@ -74,14 +84,17 @@ export const updateTestimonyThunk = () => async (dispatch, getState) => {
   const { result, error, status } = await putRequest("testimonies", formatExpectedOnRequest, token);
   if (!result?.message || status >= 400 || !!error) return dispatch(setSelectedTestimonyError({ error: `Something went wrong : ${error}` }));
 
-  dispatch(setUpdateSelectedTestimony({ testimony: { id: result.testimony.id, content: result.testimony.content, date: result.testimony.date, user_id: result.testimony.user_id } }));
+  dispatch(setUpdateSelectedTestimony({ testimony: result.testimony }));
   showToast(dispatch);
 }
+// ******************** END PUT ********************
 
+// ******************** DELETE ********************
 export const deleteTestimonyThunk = () => async (dispatch, getState) => {
   const { deleteTestimonyLoading, testimonies } = getState().testimonyReducer;
   const { selectedTestimony } = testimonies;
   const { user } = getState().userReducer;
+  // Utils -> storage.utils.js
   const token = getFromStorage("token");
   if (deleteTestimonyLoading) return;
 
@@ -99,3 +112,4 @@ export const deleteTestimonyThunk = () => async (dispatch, getState) => {
 
   showToast(dispatch);
 }
+// ******************** DELETE ********************
