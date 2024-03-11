@@ -89,66 +89,6 @@ const readOne = async (id) => {
     return { error, result };
   }
 }
-
-const readAllForAdoption = async () => {
-  const sql = `
-    SELECT entry_date, name, birthdate, sex, description, race, status, exit_date, species, picture_url, picture_caption
-    FROM animals
-    WHERE exit_date is NULL
-  `;
-
-  let result = [];
-  let error = null;
-  try {
-    result = await query(sql);
-  }
-  catch (err) {
-    error = err.message;
-  }
-  finally {
-    return { result, error };
-  }
-}
-
-const readAllBySpeciesForAdoption = async (species) => {
-  const sql = `
-    SELECT id, entry_date, name, birthdate, sex, description, race, status, exit_date, species, picture_url, picture_caption
-    FROM animals
-    WHERE species = ? AND exit_date is NULL
-  `;
-
-  let result = [];
-  let error = null;
-  try {
-    result = await query(sql, [species]);
-  }
-  catch (err) {
-    error = err.message;
-  }
-  finally {
-    return { result, error };
-  }
-}
-
-const readAllBySpecies = async (species) => {
-  const sql = `
-    SELECT id, entry_date, name, birthdate, sex, description, race, status, exit_date, species, picture_url, picture_caption
-    FROM animals
-    WHERE species = ?
-  `;
-
-  let result = [];
-  let error = null;
-  try {
-    result = await query(sql, [species]);
-  }
-  catch (err) {
-    error = err.message;
-  }
-  finally {
-    return { result, error };
-  }
-}
 // ******************** END GET ********************
 
 // ******************** PUT ********************
@@ -235,10 +175,7 @@ const deleteOne = async (id) => {
 
 export const AnimalDB = {
   create,
-  readAllForAdoption,
-  readAllBySpeciesForAdoption,
   readAll,
-  readAllBySpecies,
   readOne,
   updateDetails,
   updateExitDate,

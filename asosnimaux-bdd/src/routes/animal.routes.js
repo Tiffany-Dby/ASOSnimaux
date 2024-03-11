@@ -10,10 +10,7 @@ const initAnimalRoutes = (app) => {
   const animalRouter = express.Router();
 
   // GET
-  animalRouter.get("/adoption", AnimalController.readAllForAdoption);
-  animalRouter.get("/adoption/:species", AnimalController.readAllBySpeciesForAdoption);
   animalRouter.get("/all", AnimalController.readAll);
-  animalRouter.get("/all/:species", AnimalController.readAllBySpecies);
 
   // POST
   animalRouter.post("/", jwtMddlwr, isAdmin, AnimalController.create);

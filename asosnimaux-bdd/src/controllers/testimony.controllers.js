@@ -122,8 +122,8 @@ const deleteOne = async ({ body: { userID }, params: { testimonyID } }, res) => 
 export const TestimonyController = {
   create,
   readAllWithTheirUsername,
-  readAllByOneUser,
   readWithTheirUsername,
+  readAllByOneUser,
   readOneWithTheirUsername,
   update,
   deleteOne

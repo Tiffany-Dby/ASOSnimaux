@@ -243,10 +243,10 @@ const deleteOne = async ({ params: { id } }, res) => {
 
 export const UserController = {
   create,
-  readAll,
-  followAnimal,
-  readOne,
   signIn,
+  followAnimal,
+  readAll,
+  readOne,
   readUsersFollow,
   readUsersFollowIDs,
   updateUsername,

@@ -58,27 +58,6 @@ const readAllWithTheirUsername = async () => {
   }
 }
 
-const readAllByOneUser = async (userID) => {
-  const sql = `
-    SELECT id, content, date, user_id
-    FROM testimonies
-    WHERE user_id = ?
-    ORDER BY date DESC
-  `;
-
-  let result = [];
-  let error = null;
-  try {
-    result = await query(sql, [userID]);
-  }
-  catch (err) {
-    error = err.message;
-  }
-  finally {
-    return { result, error };
-  }
-}
-
 const readWithTheirUsername = async () => {
   const sql = `
     SELECT testimonies.id, testimonies.content, testimonies.date, testimonies.user_id, users.username, users. avatar_url,
@@ -97,6 +76,27 @@ const readWithTheirUsername = async () => {
   let error = null;
   try {
     result = await query(sql)
+  }
+  catch (err) {
+    error = err.message;
+  }
+  finally {
+    return { result, error };
+  }
+}
+
+const readAllByOneUser = async (userID) => {
+  const sql = `
+    SELECT id, content, date, user_id
+    FROM testimonies
+    WHERE user_id = ?
+    ORDER BY date DESC
+  `;
+
+  let result = [];
+  let error = null;
+  try {
+    result = await query(sql, [userID]);
   }
   catch (err) {
     error = err.message;
@@ -198,8 +198,8 @@ const isUserAuthor = async (testimonyID, userID) => {
 export const TestimonyDB = {
   create,
   readAllWithTheirUsername,
-  readAllByOneUser,
   readWithTheirUsername,
+  readAllByOneUser,
   readOneWithTheirUsername,
   update,
   deleteOne

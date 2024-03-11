@@ -23,20 +23,20 @@ const create = async (username, email, password, avatarUrl) => {
     return { result, error };
   }
 }
-// ******************** END POST ********************
 
-// ******************** GET ********************
-const readAll = async () => {
+const readByEmailOrUsername = async (emailOrUsername) => {
   const sql = `
-    SELECT id, username, email, user_role
+    SELECT id, username, email, password, avatar_url, user_role
     FROM users
-    ORDER BY user_role ASC
+    WHERE (
+      email = ? OR username = ?
+    )
   `;
 
   let result = [];
   let error = null;
   try {
-    result = await query(sql);
+    result = await query(sql, [emailOrUsername, emailOrUsername]);
   }
   catch (err) {
     error = err.message;
@@ -64,6 +64,28 @@ const followAnimal = async (userID, animalID) => {
     return { result, error };
   }
 }
+// ******************** END POST ********************
+
+// ******************** GET ********************
+const readAll = async () => {
+  const sql = `
+    SELECT id, username, email, user_role
+    FROM users
+    ORDER BY user_role ASC
+  `;
+
+  let result = [];
+  let error = null;
+  try {
+    result = await query(sql);
+  }
+  catch (err) {
+    error = err.message;
+  }
+  finally {
+    return { result, error };
+  }
+}
 
 const readOne = async (id) => {
   const sql = `
@@ -76,28 +98,6 @@ const readOne = async (id) => {
   let error = null;
   try {
     result = await query(sql, [id]);
-  }
-  catch (err) {
-    error = err.message;
-  }
-  finally {
-    return { result, error };
-  }
-}
-
-const readByEmailOrUsername = async (emailOrUsername) => {
-  const sql = `
-    SELECT id, username, email, password, avatar_url, user_role
-    FROM users
-    WHERE (
-      email = ? OR username = ?
-    )
-  `;
-
-  let result = [];
-  let error = null;
-  try {
-    result = await query(sql, [emailOrUsername, emailOrUsername]);
   }
   catch (err) {
     error = err.message;
@@ -231,10 +231,6 @@ const updateRole = async (newRole, id) => {
     return { result, error };
   }
 }
-
-const updateEmail = () => {
-
-}
 // ******************** END PUT ********************
 
 // ******************** DELETE ********************
@@ -294,10 +290,10 @@ const deleteOne = async (id) => {
 
 export const UserDB = {
   create,
-  readAll,
-  followAnimal,
-  readOne,
   readByEmailOrUsername,
+  followAnimal,
+  readAll,
+  readOne,
   readUsersFollow,
   readUsersFollowIDs,
   updateUsername,

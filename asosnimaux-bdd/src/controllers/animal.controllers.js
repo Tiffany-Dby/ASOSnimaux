@@ -77,32 +77,11 @@ const create = async (req, res) => {
 // ******************** END POST ********************
 
 // ******************** GET ********************
-const readAllForAdoption = async (req, res) => {
-  const response = await AnimalDB.readAllForAdoption();
-  const { result, error } = response;
-
-  return res.status(error ? 500 : 200).json({ message: error ? error : `Request for all animals on adoption successful`, result });
-}
-
-const readAllBySpeciesForAdoption = async ({ params: { species } }, res) => {
-  const response = await AnimalDB.readAllBySpeciesForAdoption(species);
-  const { result, error } = response;
-
-  return res.status(error ? 500 : 200).json({ message: error ? error : `Request for all ${species} on adoption successful`, result })
-}
-
 const readAll = async (req, res) => {
   const response = await AnimalDB.readAll();
   const { result, error } = response;
 
   return res.status(error ? 500 : 200).json({ message: error ? error : `Request for all animals successful`, result });
-}
-
-const readAllBySpecies = async ({ params: { species } }, res) => {
-  const response = await AnimalDB.readAllBySpecies(species);
-  const { result, error } = response;
-
-  return res.status(error ? 500 : 200).json({ message: error ? error : `Request for all ${species} successful`, result });
 }
 
 const readOne = async ({ params: { id } }, res) => {
@@ -188,12 +167,9 @@ const deleteOne = async ({ params: { id } }, res) => {
 // ******************** END DELETE ********************
 
 export const AnimalController = {
-  readAllForAdoption,
-  readAllBySpeciesForAdoption,
-  readAll,
-  readAllBySpecies,
-  readOne,
   create,
+  readAll,
+  readOne,
   updateDetails,
   updateExitDate,
   deleteOne
