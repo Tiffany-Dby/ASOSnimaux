@@ -10,7 +10,6 @@ html {
 body {
   line-height: 1.618;
   font-size: var(--font-size-n);
-  font-family: "Noto Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   color: var(--dark-brown);
   display: flex;
@@ -20,11 +19,16 @@ body {
   background: url(/imgs/Paw-bg.svg) no-repeat left top 0/1000px 1000px;
   background-color: var(--secondary-25);
 
-
   @media screen and (min-width: 767px) {
     background: url(/imgs/Paw-bg.svg) no-repeat right 35% top 0/1100px 1000px;
     background-color: var(--secondary-25);
   }
+
+}
+
+body,
+textarea {
+  font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 #root {
@@ -49,10 +53,10 @@ img {
 ul {
   margin: 0;
   padding: 0;
-}
 
-ul li {
-  list-style: none;
+  li {
+    list-style: none;
+  }
 }
 
 h1,
@@ -66,7 +70,7 @@ h1,
 h2,
 h3,
 legend {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 500;
 }
 
@@ -89,10 +93,10 @@ input[type="file"] {
 }
 
 textarea {
-  font-family: "Noto Sans", sans-serif;
   width: 100%;
   min-height: 200px;
   resize: vertical;
+  font-weight: 500;
 }
 
 .manage-icons {

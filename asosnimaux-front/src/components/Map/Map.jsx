@@ -1,12 +1,50 @@
 // Styles
 import "./map.scss";
+// React 
+import { useEffect, useRef } from "react";
+// Leaflet
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 const Map = () => {
+  const mapRef = useRef(null);
+  const LatLng = [44.85008, -0.57165];
+
+  useEffect(() => {
+    // Create map
+    mapRef.current = L.map('map', {
+      center: LatLng,
+      zoom: 13,
+      zoomControl: false
+    });
+
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }
+    ).addTo(mapRef.current);
+
+    // Add a popup (on the school as example)
+    L.marker(LatLng, { alt: "Refuge Asos'nimaux" }).addTo(mapRef.current).bindPopup(`<p style=" font-size:var(--font-size-xs); display:flex; flex-direction:column; align-items:center;"><strong>ASOS'nimaux</strong> se trouve ici !</p>`).openPopup();
+
+    // Set control position to bottom right
+    L.control.zoom({ position: 'bottomright' }).addTo(mapRef.current);
+
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+      }
+    }
+  }, []);
+
   return (
     <>
       <article className="informations__article map">
         <h3 className="informations__article__title">Où nous trouver ?</h3>
-        <iframe title="Carte intéractive avec l'addresse de l'association" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2828.612725849077!2d-0.5734848228442495!3d44.84981967421971!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd5528786a29ed39%3A0x4cf77a1537c38a4c!2s8%20Parv.%20des%20Chartrons%2C%2033000%20Bordeaux!5e0!3m2!1sfr!2sfr!4v1706353173749!5m2!1sfr!2sfr" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+        <div className="map__wrapper">
+          <div id="map" className="map__layer"></div>
+        </div>
       </article>
     </>
   );
