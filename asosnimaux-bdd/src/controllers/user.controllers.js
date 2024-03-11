@@ -173,7 +173,7 @@ const updatePassword = async ({ body: { oldPassword, newPassword, userID } }, re
 
   // Password comparison -> one sent by user and old from db
   const arePwSame = await compareHash(oldPassword, userOldPwDB);
-  if (!arePwSame) return res.status(401).json({ message: `Password doesn't match old password` });
+  if (!arePwSame) return res.status(401).json({ message: `Old password doesn't match` });
 
   // Hash new password before storing it
   const hashPwResponse = await hashPass(newPassword);

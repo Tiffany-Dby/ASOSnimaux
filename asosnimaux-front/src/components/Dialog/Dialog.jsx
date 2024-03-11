@@ -1,7 +1,7 @@
 // Styles
 import "./dialog.scss";
 // React
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPortal } from "react-dom";
 // Reducers
@@ -11,15 +11,13 @@ import { setUpdatedAvatar } from "../../redux/reducers/user.reducer";
 // Utils
 import { resetAdminForms, resetAdminSelects } from "../../utils/reset.utils";
 
-const Dialog = ({ children, resetConfirmPw }) => {
+const Dialog = ({ children, resetConfirmPw = () => { } }) => {
   const dispatch = useDispatch();
   const dialogRef = useRef(null);
 
   // Dialog Reducer
   const { isOpen } = useSelector(state => state.dialogReducer);
 
-  // Confirm password
-  const [confirmPw, setConfirmPw] = useState("");
 
   // *************** Close Dialog ***************
   // Espace key
@@ -31,6 +29,7 @@ const Dialog = ({ children, resetConfirmPw }) => {
       dispatch(resetFormNewTestimony());
       // Utils -> reset.utils.js -> reset selected (update/delete) : Article, Animal, Testimony, User
       resetAdminSelects(dispatch);
+      // User component
       dispatch(setUpdatedAvatar(""));
       resetConfirmPw();
     }
@@ -47,6 +46,7 @@ const Dialog = ({ children, resetConfirmPw }) => {
       dispatch(resetFormNewTestimony());
       // Utils -> reset.utils.js -> reset selected (update/delete) : Article, Animal, Testimony, User
       resetAdminSelects(dispatch);
+      // User component
       dispatch(setUpdatedAvatar(""));
       resetConfirmPw();
     }

@@ -15,21 +15,23 @@ import { Link } from "react-router-dom";
 import { deleteUserThunk, updateAvatarThunk, updatePasswordThunk, updateUsernameThunk } from "../../api/user.api";
 import { deleteTestimonyThunk, getOneUserTestimoniesThunk, updateTestimonyThunk } from "../../api/testimony.api";
 // Reducers
-import { resetDialogForm, setSelectedUser, setUpdatedAvatar, updateDialogForm } from "../../redux/reducers/user.reducer";
+import { resetDialogForm, setDialogError, setSelectedUser, setUpdatedAvatar, updateDialogForm } from "../../redux/reducers/user.reducer";
 import { closeDialog, setInputFields, setIsDeleteAccountForm, setIsDeleteTestimony, setIsUpdateAccountAvatar, setIsUpdateAccountForm, setIsUpdateTestimony } from "../../redux/reducers/dialog.reducer";
 import { setSelectedTestimony, updateFormSelectedTestimony } from "../../redux/reducers/testimony.reducer";
 // Constants
 import { AVATAR } from "../../constants/avatar.const";
 import { APP_ROUTES } from "../../constants/route.const";
+import { DUPLICATES } from "../../constants/errors.const";
 // Utils
 import { setToLocalDate } from "../../utils/date.utils";
 import { hasLowercase, hasMinLength, hasNumber, hasSymbol, hasUppercase, isEmailValid, isUsernameValid } from "../../utils/input.utils";
+import { getDuplicateErrorMessage } from "../../utils/error.utils";
 
 const User = () => {
   const dispatch = useDispatch();
 
   // User Reducer
-  const { user, selectedUser, dialogForms, updatedAvatar } = useSelector(state => state.userReducer);
+  const { user, selectedUser, dialogForms, dialogError, updatedAvatar, updatedAvatarError } = useSelector(state => state.userReducer);
 
   // Testimonies Reducer
   const { testimonies, allByOneUserLoading, allByOneUserError, selectedTestimonyLoading, selectedTestimonyError, deleteTestimonyLoading, deleteTestimonyError } = useSelector(state => state.testimonyReducer);
@@ -203,6 +205,7 @@ const User = () => {
 
     // Reset all visual errors on click
     handleResetErrors();
+    dispatch(setDialogError({ error: null }))
 
     if (input.id === "username") {
       if (!usernameLengthSuccess || !usernameValidSuccess) {
@@ -228,6 +231,7 @@ const User = () => {
         return;
       }
       dispatch(updatePasswordThunk());
+      setConfirmPw("");
     }
     dispatch(closeDialog());
   }
@@ -284,6 +288,12 @@ const User = () => {
           <div className="user__infos__title">
             <h2>Informations de compte</h2>
           </div>
+          {dialogError &&
+            <span className="text-error">{getDuplicateErrorMessage(dialogError, DUPLICATES)}</span>
+          }
+          {updatedAvatarError &&
+            <span className="text-error">{updatedAvatarError}</span>
+          }
           <div className="user__infos__wrapper">
             <article className="user__infos">
               <div className="infos__header">
