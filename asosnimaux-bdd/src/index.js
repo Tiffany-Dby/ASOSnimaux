@@ -11,3 +11,4 @@ initRoutes(app);
 app.listen(PORT, () => {
   console.log("Server is running on port :", PORT);
 });
+// http://localhost:9000
