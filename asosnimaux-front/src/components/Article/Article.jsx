@@ -14,7 +14,7 @@ const Article = ({ artclStyle, imgUrl, imgAlt, title, date, text }) => {
           <img loading="lazy" crossOrigin="anonymous" src={imgUrl} alt={imgAlt} />
         </div>
         <div className="article__content">
-          <h2 className="article__title">{title}</h2>
+          <h3 className="article__title">{title}</h3>
           <span className="article__date">
             <p>{date}</p>
           </span>

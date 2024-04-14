@@ -157,7 +157,8 @@ dialog {
   &:has(.admin__update-article),
   &:has(.admin__new-animal),
   &:has(.admin__update-animal),
-  &:has(.testimonies__new-testimony) {
+  &:has(.testimonies__new-testimony),
+  &:has(.user__testimonies--update) {
     max-width: 700px;
   }
 

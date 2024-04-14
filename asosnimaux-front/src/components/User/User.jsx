@@ -476,7 +476,7 @@ const User = () => {
               <div className="title-wrapper">
                 <h2>Mettre à jour un témoignage</h2>
               </div>
-              <form onSubmit={handleSubmitSelectedTestimony}>
+              <form className="user__testimonies--update" onSubmit={handleSubmitSelectedTestimony}>
                 <div className="input__wrapper">
                   <label className="input__label" htmlFor="content">Contenu</label>
                   <textarea
