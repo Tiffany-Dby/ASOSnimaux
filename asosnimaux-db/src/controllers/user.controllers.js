@@ -6,7 +6,7 @@ import { areStringsFilled } from "../utils/string.utils.js";
 import { getRandomIndex } from "../utils/randomIndex.utils.js";
 // Constants
 import { UUID } from "../constants/uuid.const.js";
-import { AVATAR } from "../../../asosnimaux-front/src/constants/avatar.const.js";
+import { AVATAR } from "../constants/avatar.const.js";
 import { ALPHANUMERIC } from "../constants/alphanumeric.const.js";
 // Validator
 import validator from "validator";
