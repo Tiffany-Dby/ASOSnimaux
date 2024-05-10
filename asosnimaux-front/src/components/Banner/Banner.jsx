@@ -16,7 +16,7 @@ const Banner = () => {
           <h1>Refuge pour animaux en Gironde</h1>
         </div>
         <div className="banner__text">
-          <p>Donnons-leur autant qu'ils nous apportent !</p>
+          <p>Ils nous offrent tant d'amour, donnons-leur tout autant en retour !</p>
           <div className="banner__buttons">
             <div className="btn-wrapper">
               <Link className="btn" to={APP_ROUTES.DONATION}>Je donne</Link>

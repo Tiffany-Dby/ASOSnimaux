@@ -31,8 +31,8 @@
   }
 
   &__text {
-    @include mxn.container("450px");
     text-align: center;
+    padding: var(--padding-s);
 
     p {
       margin-bottom: 1.5rem;
@@ -40,6 +40,7 @@
   }
 
   &__buttons {
+    @include mxn.container("450px", 0);
     @include mxn.flex;
     justify-content: space-around;
 
